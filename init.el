@@ -52,7 +52,7 @@
 	     (ibuffer-switch-to-saved-filter-groups "groups")))
 
 ;; TODO make doxymacs use use-package
-(add-to-list 'load-path "/home/SMARTODDS/pollockj/share/emacs/site-lisp")
+(add-to-list 'load-path "builds/doxymacs/install/share/emacs/site-lisp")
 (require 'doxymacs)
 (add-hook 'c-mode-common-hook'doxymacs-mode)
 (defun my-doxymacs-font-lock-hook ()
@@ -63,7 +63,7 @@
 (setq doxymacs-command-character "\\")
 
 ;; TODO make rtags use use-package
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/rtags")
+(add-to-list 'load-path "builds/rtags/install/share/emacs/site-lisp/rtags")
 (require 'rtags)
 (require 'flycheck-rtags)
 
