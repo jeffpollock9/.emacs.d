@@ -5,7 +5,10 @@ mkdir -p builds/rtags/build
 
 cd builds/rtags
 
-git clone --recurse-submodules -j4 https://github.com/Andersbakken/rtags.git
+git clone \
+    --depth 1 \
+    --recurse-submodules \
+    https://github.com/Andersbakken/rtags.git
 
 cd build
 

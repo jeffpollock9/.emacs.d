@@ -2,8 +2,6 @@
 
 My emacs setup
 
-TODO:
-- tidy up init.el (make everything use use-package)
-- script for building doxymacs
-- script for building rtags
-- fix zenburn loading
+Deps:
+- [ninja](https://github.com/ninja-build/ninja)
+- [clang](http://releases.llvm.org/download.html)

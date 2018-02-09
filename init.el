@@ -14,10 +14,9 @@
 
 (eval-when-compile
   (require 'use-package))
-(require 'diminish)
-(require 'bind-key)
 
 (tool-bar-mode 0)
+(scroll-bar-mode 0)
 
 (setq column-number-mode t)
 (setq-default fill-column 80)
@@ -51,43 +50,9 @@
 	  '(lambda ()
 	     (ibuffer-switch-to-saved-filter-groups "groups")))
 
-;; TODO make doxymacs use use-package
-(add-to-list 'load-path "builds/doxymacs/install/share/emacs/site-lisp")
-(require 'doxymacs)
-(add-hook 'c-mode-common-hook'doxymacs-mode)
-(defun my-doxymacs-font-lock-hook ()
-  (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
-      (doxymacs-font-lock)))
-(add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
-(setq doxymacs-doxygen-style "C++")
-(setq doxymacs-command-character "\\")
+(use-package diminish :ensure t)
 
-;; TODO make rtags use use-package
-(add-to-list 'load-path "builds/rtags/install/share/emacs/site-lisp/rtags")
-(require 'rtags)
-(require 'flycheck-rtags)
-
-(defun my-cpp-setup ()
-  (local-set-key (kbd "C-b") 'clang-format-buffer)
-  (local-set-key (kbd "M-.") 'rtags-find-symbol-at-point)
-  (local-set-key (kbd "M-,") 'rtags-show-target-in-other-window)
-  (local-set-key (kbd "M-i") 'rtags-include-file)
-  (local-set-key (kbd "M-n") 'rtags-next-match)
-  (local-set-key (kbd "M-p") 'rtags-previous-match)
-
-  (rtags-enable-standard-keybindings)
-  (setq rtags-autostart-diagnostics t)
-  (rtags-diagnostics)
-  (setq rtags-completions-enabled t)
-  (push 'company-rtags company-backends)
-
-  (flycheck-select-checker 'rtags)
-  (setq-local flycheck-highlighting-mode nil)
-  (setq-local flycheck-check-syntax-automatically nil)
-  )
-
-(add-hook 'c-mode-common-hook #'my-cpp-setup)
-(add-hook 'c++-mode-hook #'my-cpp-setup)
+(use-package bind-key :ensure t)
 
 (use-package zenburn-theme
   :ensure t
@@ -108,7 +73,8 @@
 
 (use-package nyan-mode
   :ensure t
-  :init (add-hook 'prog-mode-hook #'nyan-mode))
+  :init (add-hook 'prog-mode-hook #'nyan-mode)
+  :config (nyan-mode))
 
 (use-package smartparens
   :ensure t
@@ -123,11 +89,6 @@
   :diminish
   :init
   (global-undo-tree-mode 1))
-
-(use-package rainbow-delimiters
-  :ensure t
-  :diminish
-  :init (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 (use-package buffer-move
   :ensure t
@@ -169,14 +130,16 @@
   ("M-<up>" . drag-stuff-up)
   ("M-<down>" . drag-stuff-down))
 
+(use-package yasnippet-snippets :ensure t)
+
 (use-package yasnippet
   :ensure t
   :init
-  (yas-global-mode 1)
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  (yas-global-mode)
   (define-key yas-minor-mode-map (kbd "<tab>") nil)
   (define-key yas-minor-mode-map (kbd "TAB") nil)
-  (define-key yas-minor-mode-map (kbd "C-c TAB") 'yas-expand))
+  (define-key yas-minor-mode-map (kbd "C-c TAB") 'yas-expand)
+  :config (yas-reload-all))
 
 (use-package ess
   :ensure t
@@ -194,10 +157,10 @@
 
 (use-package neotree
   :ensure t
+  :bind ([f8] . neotree-toggle)
   :init
   (setq neo-window-width 40)
   (setq neo-autorefresh nil)
-  (global-set-key [f8] 'neotree-toggle)
   (neotree-show))
 
 (use-package cmake-mode
@@ -206,9 +169,7 @@
 
 (use-package cmake-font-lock
   :ensure t
-  :init
-  (autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
-  (add-hook 'cmake-mode-hook 'cmake-font-lock-activate))
+  :hook cmake-mode-hook)
 
 (use-package company
   :ensure t
@@ -250,19 +211,56 @@
   :bind
   ("C-b" . elpy-autopep8-fix-code))
 
+(use-package doxymacs
+  :load-path "~/.emacs.d/builds/doxymacs/install/share/emacs/site-lisp"
+  :init
+  (add-hook 'c-mode-common-hook'doxymacs-mode)
+  (defun my-doxymacs-font-lock-hook ()
+    (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
+	(doxymacs-font-lock)))
+  (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
+  (setq doxymacs-doxygen-style "C++")
+  (setq doxymacs-command-character "\\"))
+
+(use-package flycheck-rtags
+  :load-path load-path "~/emacs.d/builds/rtags/install/share/emacs/site-lisp/rtags")
+
+(use-package rtags
+  :load-path load-path "~/emacs.d/builds/rtags/install/share/emacs/site-lisp/rtags"
+  :init
+  (defun my-cpp-setup ()
+    (local-set-key (kbd "C-b") 'clang-format-buffer)
+    (local-set-key (kbd "M-.") 'rtags-find-symbol-at-point)
+    (local-set-key (kbd "M-,") 'rtags-show-target-in-other-window)
+    (local-set-key (kbd "M-i") 'rtags-include-file)
+    (local-set-key (kbd "M-n") 'rtags-next-match)
+    (local-set-key (kbd "M-p") 'rtags-previous-match)
+
+    (rtags-enable-standard-keybindings)
+    (setq rtags-autostart-diagnostics t)
+    (rtags-diagnostics)
+    (setq rtags-completions-enabled t)
+    (push 'company-rtags company-backends)
+
+    (flycheck-select-checker 'rtags)
+    (setq-local flycheck-highlighting-mode nil)
+    (setq-local flycheck-check-syntax-automatically nil))
+
+  (add-hook 'c-mode-common-hook #'my-cpp-setup)
+  (add-hook 'c++-mode-hook #'my-cpp-setup))
+
 ;; ispc
 (add-to-list 'auto-mode-alist '(".ispc$" . c++-mode))
 (add-to-list 'auto-mode-alist '(".isph$" . c++-mode))
 
-(add-to-list 'auto-mode-alist '("\\.md" . poly-markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.Snw" . poly-noweb+r-mode))
-(add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
-(add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
+(use-package polymode
+  :ensure t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.Snw" . poly-noweb+r-mode))
+  (add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
+  (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode)))
 
 (defun duplicate-line-or-region (&optional n)
-  "Duplicate current line, or region if active.
-   With argument N, make N copies.
-   With negative N, comment out original line and use the absolute value."
   (interactive "*p")
   (let ((use-region (use-region-p)))
     (save-excursion
