@@ -21,3 +21,7 @@ cmake ../rtags \
 ninja
 
 ninja install
+
+mkdir -p $HOME/bin
+
+ln -s $HOME/.emacs.d/builds/rtags/install/bin/* $HOME/bin/
