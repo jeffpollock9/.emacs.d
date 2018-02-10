@@ -223,10 +223,10 @@
   (setq doxymacs-command-character "\\"))
 
 (use-package flycheck-rtags
-  :load-path load-path "~/emacs.d/builds/rtags/install/share/emacs/site-lisp/rtags")
+  :load-path load-path "~/.emacs.d/builds/rtags/install/share/emacs/site-lisp/rtags")
 
 (use-package rtags
-  :load-path load-path "~/emacs.d/builds/rtags/install/share/emacs/site-lisp/rtags"
+  :load-path load-path "~/.emacs.d/builds/rtags/install/share/emacs/site-lisp/rtags"
   :init
   (defun my-cpp-setup ()
     (local-set-key (kbd "C-b") 'clang-format-buffer)
