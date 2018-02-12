@@ -90,6 +90,10 @@
   :init
   (global-undo-tree-mode 1))
 
+(use-package smooth-scrolling
+  :ensure t
+  :init (smooth-scrolling-mode 1))
+
 (use-package buffer-move
   :ensure t
   :init
