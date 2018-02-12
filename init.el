@@ -155,10 +155,6 @@
   (ess-toggle-S-assign-key t)
   (ess-toggle-S-assign-key t))
 
-(use-package ess-R-object-popup
-  :ensure t
-  :init (define-key ess-mode-map (kbd "C-c v") 'ess-R-object-popup))
-
 (use-package neotree
   :ensure t
   :bind ([f8] . neotree-toggle)
