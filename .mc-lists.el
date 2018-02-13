@@ -3,9 +3,12 @@
 
 (setq mc/cmds-to-run-for-all
       '(
-	indent-for-tab-command
-	))
+        elpy-nav-backward-indent
+        elpy-nav-forward-indent
+        indent-for-tab-command
+        ))
 
 (setq mc/cmds-to-run-once
       '(
-	))
+        iedit-switch-to-mc-mode
+        ))
