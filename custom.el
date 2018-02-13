@@ -4,6 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(delete-selection-mode 1)
+ '(inhibit-startup-screen t)
  '(markdown-command "pandoc")
  '(package-selected-packages
    (quote

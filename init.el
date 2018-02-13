@@ -51,6 +51,40 @@
 	  '(lambda ()
 	     (ibuffer-switch-to-saved-filter-groups "groups")))
 
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq indent-line-function 'insert-tab)
+(setq c-default-style "stroustrup")
+(setq c-basic-offset 4)
+(c-set-offset 'comment-intro 0)
+
+(defun my-c-mode-common-hook ()
+  (c-set-offset 'substatement-open 0)
+  (c-set-offset 'innamespace 0)
+
+  (setq c++-tab-always-indent t)
+  (setq c-basic-offset 4)
+  (setq c-indent-level 4)
+  (setq c-file-style "stroustrup")
+  (setq tab-stop-list (number-sequence 2 200 2))
+  (setq tab-width 4)
+  (setq indent-tabs-mode nil))
+
+(defun my-c++-mode-common-hook ()
+  (c++-set-offset 'substatement-open 0)
+  (c++-set-offset 'innamespace 0)
+
+  (setq c++-tab-always-indent t)
+  (setq c++-basic-offset 4)
+  (setq c++-indent-level 4)
+  (setq c++-file-style "stroustrup")
+  (setq tab-stop-list (number-sequence 2 200 2))
+  (setq tab-width 4)
+  (setq indent-tabs-mode nil))
+
+(add-hook 'c++-mode-common-hook 'my-c++-mode-common-hook)
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
 (use-package diminish :ensure t)
 
 (use-package bind-key :ensure t)
@@ -214,6 +248,7 @@
 
 (use-package doxymacs
   :load-path "~/.emacs.d/builds/doxymacs/install/share/emacs/site-lisp"
+  :diminish
   :init
   (add-hook 'c-mode-common-hook'doxymacs-mode)
   (defun my-doxymacs-font-lock-hook ()
