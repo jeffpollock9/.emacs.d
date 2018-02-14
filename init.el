@@ -54,11 +54,9 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq indent-line-function 'insert-tab)
-(setq c-default-style "stroustrup")
-(setq c-basic-offset 4)
-(c-set-offset 'comment-intro 0)
 
 (defun my-c-mode-common-hook ()
+  (c-set-offset 'comment-intro 0)
   (c-set-offset 'substatement-open 0)
   (c-set-offset 'innamespace 0)
 
@@ -70,19 +68,6 @@
   (setq tab-width 4)
   (setq indent-tabs-mode nil))
 
-(defun my-c++-mode-common-hook ()
-  (c++-set-offset 'substatement-open 0)
-  (c++-set-offset 'innamespace 0)
-
-  (setq c++-tab-always-indent t)
-  (setq c++-basic-offset 4)
-  (setq c++-indent-level 4)
-  (setq c++-file-style "stroustrup")
-  (setq tab-stop-list (number-sequence 2 200 2))
-  (setq tab-width 4)
-  (setq indent-tabs-mode nil))
-
-(add-hook 'c++-mode-common-hook 'my-c++-mode-common-hook)
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
 (use-package diminish :ensure t)
@@ -258,12 +243,9 @@
   (setq doxymacs-doxygen-style "C++")
   (setq doxymacs-command-character "\\"))
 
-(use-package flycheck-rtags
-  :load-path load-path "~/.emacs.d/builds/rtags/install/share/emacs/site-lisp/rtags")
-
 (use-package rtags
   :load-path load-path "~/.emacs.d/builds/rtags/install/share/emacs/site-lisp/rtags"
-  :init
+  :config
   (defun my-cpp-setup ()
     (local-set-key (kbd "C-b") 'clang-format-buffer)
     (local-set-key (kbd "M-.") 'rtags-find-symbol-at-point)
@@ -273,17 +255,20 @@
     (local-set-key (kbd "M-p") 'rtags-previous-match)
 
     (rtags-enable-standard-keybindings)
-    (setq rtags-autostart-diagnostics t)
-    (rtags-diagnostics)
-    (setq rtags-completions-enabled t)
+    (flycheck-select-checker 'rtags)
+
+    (setq rtags-autostart-diagnostics t
+          rtags-completions-enabled t)
     (push 'company-rtags company-backends)
 
-    (flycheck-select-checker 'rtags)
     (setq-local flycheck-highlighting-mode nil)
     (setq-local flycheck-check-syntax-automatically nil))
 
-  (add-hook 'c-mode-common-hook #'my-cpp-setup)
   (add-hook 'c++-mode-hook #'my-cpp-setup))
+
+(use-package flycheck-rtags
+  :ensure rtags
+  :load-path load-path "~/.emacs.d/builds/rtags/install/share/emacs/site-lisp/rtags")
 
 ;; ispc
 (add-to-list 'auto-mode-alist '(".ispc$" . c++-mode))
