@@ -18,9 +18,14 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+(fringe-mode 1)
+(show-paren-mode 1)
 
 (setq column-number-mode t)
+
 (setq-default fill-column 80)
+(setq-default inhibit-startup-screen t)
+(setq-default show-paren-delay 0)
 
 (global-set-key (kbd "C-#") 'comment-or-uncomment-region)
 (global-set-key (kbd "C-u") '(lambda () (interactive) (kill-line 0)))

@@ -8,6 +8,7 @@
         elpy-nav-forward-indent
         ess-smart-comma
         indent-for-tab-command
+        markdown-outdent-or-delete
         ))
 
 (setq mc/cmds-to-run-once
