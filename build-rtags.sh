@@ -5,10 +5,16 @@ mkdir -p builds/rtags/build
 
 cd builds/rtags
 
-git clone \
-    --depth 1 \
-    --recurse-submodules \
-    https://github.com/Andersbakken/rtags.git
+if [ -d "rtags" ]; then
+    cd rtags
+    git pull --recurse-submodules
+    cd  ..
+else
+    git clone \
+        --depth 1 \
+        --recurse-submodules \
+        https://github.com/Andersbakken/rtags.git
+fi
 
 cd build
 
@@ -24,4 +30,4 @@ ninja install
 
 mkdir -p $HOME/bin
 
-ln -s $HOME/.emacs.d/builds/rtags/install/bin/* $HOME/bin/
+ln -sf $HOME/.emacs.d/builds/rtags/install/bin/* $HOME/bin/
