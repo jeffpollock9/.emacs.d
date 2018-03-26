@@ -236,6 +236,8 @@
   :bind
   ("C-b" . elpy-autopep8-fix-code))
 
+(use-package pip-requirements :ensure t)
+
 (use-package doxymacs
   :load-path "~/.emacs.d/builds/doxymacs/install/share/emacs/site-lisp"
   :diminish
