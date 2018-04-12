@@ -238,6 +238,11 @@
 
 (use-package pip-requirements :ensure t)
 
+(use-package duplicate-thing
+  :ensure t
+  :bind
+  ("C-d" . duplicate-thing))
+
 (use-package doxymacs
   :load-path "~/.emacs.d/builds/doxymacs/install/share/emacs/site-lisp"
   :diminish
@@ -252,7 +257,7 @@
 
 (use-package rtags
   :load-path load-path "~/.emacs.d/builds/rtags/install/share/emacs/site-lisp/rtags"
-  :config
+  :init
   (defun my-cpp-setup ()
     (local-set-key (kbd "C-b") 'clang-format-buffer)
     (local-set-key (kbd "M-.") 'rtags-find-symbol-at-point)
@@ -260,6 +265,7 @@
     (local-set-key (kbd "M-i") 'rtags-include-file)
     (local-set-key (kbd "M-n") 'rtags-next-match)
     (local-set-key (kbd "M-p") 'rtags-previous-match)
+    (define-key c++-mode-map (kbd "C-d") 'duplicate-thing)
 
     (rtags-enable-standard-keybindings)
     (flycheck-select-checker 'rtags)
@@ -287,24 +293,3 @@
   (add-to-list 'auto-mode-alist '("\\.Snw" . poly-noweb+r-mode))
   (add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
   (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode)))
-
-(defun duplicate-line-or-region (&optional n)
-  (interactive "*p")
-  (let ((use-region (use-region-p)))
-    (save-excursion
-      (let ((text (if use-region
-                      (buffer-substring (region-beginning) (region-end))
-                    (prog1 (thing-at-point 'line)
-                      (end-of-line)
-                      (if (< 0 (forward-line 1))
-                          (newline))))))
-        (dotimes (i (abs (or n 1)))
-          (insert text))))
-    (if use-region nil
-      (let ((pos (- (point) (line-beginning-position))))
-        (if (> 0 n)
-            (comment-region (line-beginning-position) (line-end-position)))
-        (forward-line 1)
-        (forward-char pos)))))
-
-(global-set-key (kbd "C-c d")  'duplicate-line-or-region)

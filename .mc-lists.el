@@ -3,12 +3,14 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        c-electric-semi&comma
         c-electric-slash
         elpy-nav-backward-indent
         elpy-nav-forward-indent
         ess-smart-comma
         indent-for-tab-command
         markdown-outdent-or-delete
+        undo-tree-visualize
         ))
 
 (setq mc/cmds-to-run-once
