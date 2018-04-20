@@ -96,6 +96,12 @@
   ("M-x" . helm-M-x)
   ("C-x C-f" . helm-find-files))
 
+(use-package swiper
+  :ensure t
+  :diminish
+  :bind
+  ("C-s" . swiper))
+
 (use-package nyan-mode
   :ensure t
   :init (add-hook 'prog-mode-hook #'nyan-mode)
@@ -180,6 +186,8 @@
   (ess-toggle-S-assign-key t)
   (ess-toggle-S-assign-key t))
 
+(use-package julia-mode :ensure t)
+
 (use-package neotree
   :ensure t
   :bind ([f8] . neotree-toggle)
@@ -217,15 +225,6 @@
   :ensure t
   :mode (("\\.yml\\'" . yaml-mode)
          ("\\.yaml\\'" . yaml-mode)))
-
-(use-package flycheck-yamllint
-  :ensure t
-  :mode (("\\.yml\\'" . yaml-mode)
-         ("\\.yaml\\'" . yaml-mode))
-  :init
-  (eval-after-load 'flycheck
-    '(add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup))
-  (add-hook 'yaml-mode-hook 'flycheck-mode))
 
 (use-package elpy
   :ensure t
@@ -279,10 +278,6 @@
 
   (add-hook 'c++-mode-hook #'my-cpp-setup))
 
-(use-package flycheck-rtags
-  :ensure rtags
-  :load-path load-path "~/.emacs.d/builds/rtags/install/share/emacs/site-lisp/rtags")
-
 ;; ispc
 (add-to-list 'auto-mode-alist '(".ispc$" . c++-mode))
 (add-to-list 'auto-mode-alist '(".isph$" . c++-mode))
@@ -293,3 +288,25 @@
   (add-to-list 'auto-mode-alist '("\\.Snw" . poly-noweb+r-mode))
   (add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
   (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode)))
+
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+
+(use-package flycheck-julia
+  :ensure t
+  :init
+  (flycheck-julia-setup))
+
+(use-package flycheck-yamllint
+  :ensure t
+  :mode (("\\.yml\\'" . yaml-mode)
+         ("\\.yaml\\'" . yaml-mode))
+  :init
+  (eval-after-load 'flycheck
+    '(add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup))
+  (add-hook 'yaml-mode-hook 'flycheck-mode))
+
+(use-package flycheck-rtags
+  :ensure rtags
+  :load-path load-path "~/.emacs.d/builds/rtags/install/share/emacs/site-lisp/rtags")
