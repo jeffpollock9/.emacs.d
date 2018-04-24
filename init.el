@@ -206,8 +206,7 @@
 
 (use-package company
   :ensure t
-  :commands (global-company-mode)
-  :init (global-company-mode t)
+  :init (global-company-mode)
   :bind ("<C-tab>" . company-complete)
   :custom
   (company-idle-delay nil)
@@ -254,30 +253,6 @@
   (setq doxymacs-doxygen-style "C++")
   (setq doxymacs-command-character "\\"))
 
-(use-package rtags
-  :load-path load-path "~/.emacs.d/builds/rtags/install/share/emacs/site-lisp/rtags"
-  :init
-  (defun my-cpp-setup ()
-    (local-set-key (kbd "C-b") 'clang-format-buffer)
-    (local-set-key (kbd "M-.") 'rtags-find-symbol-at-point)
-    (local-set-key (kbd "M-,") 'rtags-show-target-in-other-window)
-    (local-set-key (kbd "M-i") 'rtags-include-file)
-    (local-set-key (kbd "M-n") 'rtags-next-match)
-    (local-set-key (kbd "M-p") 'rtags-previous-match)
-    (define-key c++-mode-map (kbd "C-d") 'duplicate-thing)
-
-    (rtags-enable-standard-keybindings)
-    (flycheck-select-checker 'rtags)
-
-    (setq rtags-autostart-diagnostics t
-          rtags-completions-enabled t)
-    (push 'company-rtags company-backends)
-
-    (setq-local flycheck-highlighting-mode nil)
-    (setq-local flycheck-check-syntax-automatically nil))
-
-  (add-hook 'c++-mode-hook #'my-cpp-setup))
-
 ;; ispc
 (add-to-list 'auto-mode-alist '(".ispc$" . c++-mode))
 (add-to-list 'auto-mode-alist '(".isph$" . c++-mode))
@@ -290,6 +265,7 @@
   (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode)))
 
 (use-package flycheck
+  :diminish
   :ensure t
   :init (global-flycheck-mode))
 
@@ -307,6 +283,34 @@
     '(add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup))
   (add-hook 'yaml-mode-hook 'flycheck-mode))
 
-(use-package flycheck-rtags
-  :ensure rtags
-  :load-path load-path "~/.emacs.d/builds/rtags/install/share/emacs/site-lisp/rtags")
+(use-package lsp-ui
+  :ensure t
+  :init
+  (setq lsp-ui-sideline-show-hover nil)
+  (setq lsp-ui-sideline-show-symbol t))
+
+(use-package lsp-mode
+  :ensure t
+  :diminish
+  :init
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+(use-package cquery
+  :ensure t
+  :init
+  (defun my-cpp-setup ()
+    (condition-case nil (lsp-cquery-enable) (user-error nil))
+    (local-set-key (kbd "C-b") 'clang-format-buffer)
+    (define-key c++-mode-map (kbd "C-d") 'duplicate-thing))
+  (add-hook 'c-mode-common-hook #'my-cpp-setup)
+  (setq cquery-executable "/home/SMARTODDS/pollockj/workspace/cquery/install/bin/cquery"))
+
+(use-package company-lsp
+  :ensure t
+  :init
+  (push 'company-lsp company-backends)
+  (setq company-transformers nil
+        company-lsp-async t
+        company-lsp-cache-candidates nil))
+
+;;; init.el ends here
