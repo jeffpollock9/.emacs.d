@@ -293,7 +293,8 @@
   :ensure t
   :diminish
   :init
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+  (setq lsp-highlight-symbol-at-point nil))
 
 (use-package cquery
   :ensure t
@@ -302,8 +303,7 @@
     (condition-case nil (lsp-cquery-enable) (user-error nil))
     (local-set-key (kbd "C-b") 'clang-format-buffer)
     (define-key c++-mode-map (kbd "C-d") 'duplicate-thing))
-  (add-hook 'c-mode-common-hook #'my-cpp-setup)
-  (setq cquery-executable "/home/SMARTODDS/pollockj/workspace/cquery/install/bin/cquery"))
+  (add-hook 'c-mode-common-hook #'my-cpp-setup))
 
 (use-package company-lsp
   :ensure t
