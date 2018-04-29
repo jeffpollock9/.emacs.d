@@ -1,3 +1,7 @@
+;;; init.el
+
+;;; code:
+
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 
@@ -12,8 +16,7 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(eval-when-compile
-  (require 'use-package))
+(eval-when-compile (require 'use-package))
 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -75,7 +78,10 @@
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
-(use-package diminish :ensure t)
+(use-package diminish
+  :ensure t
+  :config
+  (eval-after-load "abbrev" '(diminish 'abbrev-mode)))
 
 (use-package bind-key :ensure t)
 
@@ -227,10 +233,12 @@
 
 (use-package elpy
   :ensure t
+  :diminish
   :init
   (setq python-shell-interpreter "python3")
   (setq elpy-rpc-python-command "python3")
   (elpy-enable)
+  (delete `elpy-module-highlight-indentation elpy-modules)
   :bind
   ("C-b" . elpy-autopep8-fix-code))
 
