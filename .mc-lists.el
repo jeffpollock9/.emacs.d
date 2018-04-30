@@ -3,6 +3,9 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        c-electric-colon
+        c-electric-lt-gt
+        c-electric-paren
         c-electric-semi&comma
         c-electric-slash
         elpy-nav-backward-indent
