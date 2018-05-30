@@ -90,6 +90,8 @@
   :init
   (load-theme 'zenburn t))
 
+(use-package cuda-mode :ensure t)
+
 (use-package clang-format :ensure t)
 
 (use-package stan-snippets :ensure t)
