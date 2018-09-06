@@ -126,8 +126,8 @@
 (use-package undo-tree
   :ensure t
   :diminish
-  :init
-  (global-undo-tree-mode 1))
+  :config
+  (global-undo-tree-mode))
 
 (use-package smooth-scrolling
   :ensure t
@@ -155,6 +155,10 @@
   :ensure t
   :bind
   ("C-x g" . magit-status))
+
+(use-package magit-todos
+  :ensure t
+  :init (magit-todos-mode))
 
 (use-package iedit
   :ensure t
@@ -280,11 +284,6 @@
   :diminish
   :ensure t
   :init (global-flycheck-mode))
-
-(use-package flycheck-julia
-  :ensure t
-  :init
-  (flycheck-julia-setup))
 
 (use-package flycheck-yamllint
   :ensure t

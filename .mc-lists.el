@@ -16,8 +16,10 @@
         ess-yank
         helm-M-x
         indent-for-tab-command
+        kill-region
         markdown-outdent-or-delete
         undo-tree-visualize
+        yaml-electric-backspace
         ))
 
 (setq mc/cmds-to-run-once
