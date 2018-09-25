@@ -22,7 +22,7 @@
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (treemacs dockerfile-mode lsp-mode swiper lsp-ui company-lsp cquery counsel flycheck-julia duplicate-thing pip-requirements rtags smooth-scrolling yasnippet-snippets markdown-mode ess rainbow-delimiters zenburn nyan-mode diminish ess-site smartparens doom-themes bazel-mode sublimity pytest cuda-mode ein elpy undo-tree powerline cmake-font-lock flycheck-yamllint yaml-mode company-ycmd flycheck-ycmd ycmd buffer-move helm neotree flycheck company csv-mode chess stan-snippets zenburn-theme use-package stan-mode polymode multiple-cursors markdown-preview-mode magit latex-preview-pane iedit ess-R-object-popup drag-stuff csharp-mode cmake-mode clang-format auto-yasnippet)))
+    (julia-mode magit-todos treemacs dockerfile-mode lsp-mode swiper lsp-ui company-lsp cquery counsel duplicate-thing pip-requirements rtags smooth-scrolling yasnippet-snippets markdown-mode ess rainbow-delimiters zenburn nyan-mode diminish ess-site smartparens doom-themes bazel-mode sublimity pytest cuda-mode ein elpy undo-tree powerline cmake-font-lock flycheck-yamllint yaml-mode company-ycmd flycheck-ycmd ycmd buffer-move helm neotree flycheck company csv-mode chess stan-snippets zenburn-theme use-package stan-mode polymode multiple-cursors markdown-preview-mode magit latex-preview-pane iedit ess-R-object-popup drag-stuff csharp-mode cmake-mode clang-format auto-yasnippet)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(safe-local-variable-values (quote ((c-indent-level . 4))))
  '(vc-annotate-background "#2B2B2B")

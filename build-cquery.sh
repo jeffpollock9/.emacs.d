@@ -19,8 +19,6 @@ fi
 cd build
 
 cmake ../cquery \
-      -DCMAKE_CXX_COMPILER="g++-8" \
-      -DCMAKE_C_COMPILER="gcc-8" \
       -DCMAKE_CXX_FLAGS="-march=native" \
       -DCMAKE_BUILD_TYPE="Release" \
       -DCMAKE_INSTALL_PREFIX="../install" \
