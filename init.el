@@ -243,12 +243,12 @@
   :ensure t
   :diminish
   :init
-  (setq python-shell-interpreter "python3")
-  (setq elpy-rpc-python-command "python3")
   (elpy-enable)
   (delete `elpy-module-highlight-indentation elpy-modules)
   :bind
-  ("C-b" . elpy-autopep8-fix-code))
+  ("C-b" . elpy-autopep8-fix-code)
+  :config
+  (pyvenv-workon "emacs-dev"))
 
 (use-package pip-requirements :ensure t)
 
