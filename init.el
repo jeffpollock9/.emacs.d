@@ -190,9 +190,8 @@
 
 (use-package ess
   :ensure t
-  :init
-  (setq ess-smart-S-assign-key (kbd "C-="))
-  (require 'ess-site))
+  :init (setq ess-smart-S-assign-key nil)
+  :bind ("C-=" . ess-insert-assign))
 
 (use-package julia-mode :ensure t)
 
