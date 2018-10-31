@@ -63,6 +63,10 @@
 (setq-default tab-width 4)
 (setq indent-line-function 'insert-tab)
 
+;; for dictionary: https://stackoverflow.com/questions/8931580/hunspell-cant-open-affix-or-dictionary-files-for-dictionary-named-en-us
+(setq ispell-program-name "hunspell")
+(setq ispell-local-dictionary "en_GB")
+
 (defun my-c-mode-common-hook ()
   (c-set-offset 'comment-intro 0)
   (c-set-offset 'substatement-open 0)
