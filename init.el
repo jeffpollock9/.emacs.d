@@ -272,7 +272,10 @@
 (add-to-list 'auto-mode-alist '(".ispc$" . c++-mode))
 (add-to-list 'auto-mode-alist '(".isph$" . c++-mode))
 
-(use-package polymode
+(use-package tex
+  :ensure auctex)
+
+(use-package poly-R
   :ensure t
   :init
   (add-to-list 'auto-mode-alist '("\\.Snw" . poly-noweb+r-mode))
