@@ -89,6 +89,24 @@
 
 (use-package bind-key :ensure t)
 
+(use-package org
+  :ensure t
+  :custom
+  (org-log-done t)
+  (org-startup-indented t)
+  (org-confirm-babel-evaluate nil)
+  (org-src-fontify-natively t)
+  (org-src-tab-acts-natively t)
+  (org-hide-emphasis-markers t)
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((latex  . t)
+     (R      . t)
+     (C      . t)
+     (python . t)
+     (sh     . t))))
+
 (use-package zenburn-theme
   :ensure t
   :init
