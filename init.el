@@ -35,29 +35,29 @@
 (global-set-key (kbd "C-l") 'comint-clear-buffer)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
-(setq ibuffer-expert t)
-(setq ibuffer-show-empty-filter-groups nil)
-(setq ibuffer-saved-filter-groups
+(setq ibuffer-expert t
+      ibuffer-show-empty-filter-groups nil
+      ibuffer-saved-filter-groups
       '(("groups"
-	 ("emacs"          (mode . emacs-lisp-mode))
-	 ("python"         (mode . python-mode))
-	 ("python-console" (mode . inferior-python-mode))
-	 ("R"              (mode . ess-mode))
-	 ("stan"           (mode . stan-mode))
-	 ("R-console"      (mode . inferior-ess-mode))
+         ("emacs"          (mode . emacs-lisp-mode))
+         ("python"         (mode . python-mode))
+         ("python-console" (mode . inferior-python-mode))
+         ("R"              (mode . ess-mode))
+         ("stan"           (mode . stan-mode))
+         ("R-console"      (mode . inferior-ess-mode))
          ("C++"            (or (mode . c-mode)
-			       (mode . c++-mode)))
-	 ("cmake"          (mode . cmake-mode))
-	 ("make"           (name . "[mM]akefile"))
-	 ("magit"          (name . "\*magit"))
-	 ("help"           (or (name . "\*Help\*")
-			       (name . "\*Apropos\*")
-			       (name . "\*info\*")))
-	 )))
+                               (mode . c++-mode)))
+         ("cmake"          (mode . cmake-mode))
+         ("make"           (name . "[mM]akefile"))
+         ("magit"          (name . "\*magit"))
+         ("help"           (or (name . "\*Help\*")
+                               (name . "\*Apropos\*")
+                               (name . "\*info\*")))
+         )))
 
 (add-hook 'ibuffer-mode-hook
-	  '(lambda ()
-	     (ibuffer-switch-to-saved-filter-groups "groups")))
+          '(lambda ()
+             (ibuffer-switch-to-saved-filter-groups "groups")))
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -285,7 +285,7 @@
   (add-hook 'c-mode-common-hook'doxymacs-mode)
   (defun my-doxymacs-font-lock-hook ()
     (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
-	(doxymacs-font-lock)))
+        (doxymacs-font-lock)))
   (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
   (setq doxymacs-doxygen-style "C++")
   (setq doxymacs-command-character "\\"))
