@@ -105,7 +105,7 @@
      (R      . t)
      (C      . t)
      (python . t)
-     (sh     . t))))
+     (shell  . t))))
 
 (use-package zenburn-theme
   :ensure t
