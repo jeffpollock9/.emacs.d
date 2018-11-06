@@ -212,8 +212,20 @@
 
 (use-package ess
   :ensure t
-  :init (setq ess-smart-S-assign-key nil)
-  :bind ("C-=" . ess-insert-assign))
+  :init
+  (setq ess-smart-S-assign-key nil)
+  (defun magrittr-pipe ()
+    "insert %>%"
+    (interactive)
+    (just-one-space 1)
+    (insert "%>%")
+    (just-one-space 1))
+  :bind
+  (("C-=" . ess-insert-assign)
+   :map ess-mode-map
+   ("C->" . magrittr-pipe)
+   :map inferior-ess-mode-map
+   ("C->" . magrittr-pipe)))
 
 (use-package julia-mode :ensure t)
 

@@ -10,6 +10,7 @@
         c-electric-semi&comma
         c-electric-slash
         c-electric-star
+        c-indent-line-or-region
         elpy-nav-backward-indent
         elpy-nav-forward-indent
         ess-smart-comma
