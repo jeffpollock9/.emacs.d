@@ -105,7 +105,10 @@
      (R      . t)
      (C      . t)
      (python . t)
+     (java   . t)
      (shell  . t))))
+
+(use-package htmlize :ensure t)
 
 (use-package zenburn-theme
   :ensure t
