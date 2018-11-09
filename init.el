@@ -63,7 +63,6 @@
 (setq-default tab-width 4)
 (setq indent-line-function 'insert-tab)
 
-;; for dictionary: https://stackoverflow.com/questions/8931580/hunspell-cant-open-affix-or-dictionary-files-for-dictionary-named-en-us
 (setq ispell-program-name "hunspell")
 (setq ispell-local-dictionary "en_GB")
 
@@ -84,8 +83,13 @@
 
 (use-package diminish
   :ensure t
-  :config
-  (eval-after-load "abbrev" '(diminish 'abbrev-mode)))
+  :diminish abbrev-mode)
+
+;; see: https://sriramkswamy.github.io/dotemacs
+(defun diminish-auto-revert ()
+  (interactive)
+  (diminish 'auto-revert-mode ""))
+(add-hook 'auto-revert-mode-hook 'diminish-auto-revert)
 
 (use-package bind-key :ensure t)
 
@@ -107,6 +111,20 @@
      (python . t)
      (java   . t)
      (shell  . t))))
+
+(use-package dashboard
+  :ensure t
+  :config
+  (setq dashboard-items '((recents   . 5)
+                          (bookmarks . 5)))
+  (dashboard-setup-startup-hook))
+
+(use-package dired
+  :bind
+  (:map dired-mode-map
+        ("C-c C-e" . wdired-change-to-wdired-mode))
+  :init
+  (setq dired-listing-switches "-alh"))
 
 (use-package htmlize :ensure t)
 
@@ -282,7 +300,8 @@
   (elpy-enable)
   (delete `elpy-module-highlight-indentation elpy-modules)
   :bind
-  ("C-b" . elpy-autopep8-fix-code)
+  (:map elpy-mode-map
+        ("C-b" . elpy-autopep8-fix-code))
   :config
   (pyvenv-workon "emacs-dev"))
 
