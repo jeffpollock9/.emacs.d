@@ -27,7 +27,6 @@
 (setq column-number-mode t)
 
 (setq-default fill-column 80)
-(setq-default inhibit-startup-screen t)
 (setq-default show-paren-delay 0)
 
 (global-set-key (kbd "C-#") 'comment-or-uncomment-region)
