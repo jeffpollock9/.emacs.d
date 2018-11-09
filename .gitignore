@@ -3,3 +3,6 @@ builds/*
 elpa/*
 abbrev_defs
 network-security.data
+.cache
+recentf
+tramp
