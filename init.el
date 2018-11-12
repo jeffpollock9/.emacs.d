@@ -29,6 +29,8 @@
 (setq-default fill-column 80)
 (setq-default show-paren-delay 0)
 
+(when (fboundp 'electric-indent-mode) (electric-indent-mode -1))
+
 (global-set-key (kbd "C-#") 'comment-or-uncomment-region)
 (global-set-key (kbd "C-u") '(lambda () (interactive) (kill-line 0)))
 (global-set-key (kbd "C-l") 'comint-clear-buffer)
@@ -120,8 +122,7 @@
 
 (use-package dired
   :bind
-  (:map dired-mode-map
-        ("C-c C-e" . wdired-change-to-wdired-mode))
+  (:map dired-mode-map ("C-c C-e" . wdired-change-to-wdired-mode))
   :init
   (setq dired-listing-switches "-alh"))
 
@@ -242,10 +243,8 @@
     (just-one-space 1))
   :bind
   (("C-=" . ess-insert-assign)
-   :map ess-mode-map
-   ("C->" . magrittr-pipe)
-   :map inferior-ess-mode-map
-   ("C->" . magrittr-pipe)))
+   :map ess-mode-map ("C->" . magrittr-pipe)
+   :map inferior-ess-mode-map ("C->" . magrittr-pipe)))
 
 (use-package julia-mode :ensure t)
 
@@ -299,8 +298,7 @@
   (elpy-enable)
   (delete `elpy-module-highlight-indentation elpy-modules)
   :bind
-  (:map elpy-mode-map
-        ("C-b" . elpy-autopep8-fix-code))
+  (:map elpy-mode-map ("C-b" . elpy-autopep8-fix-code))
   :config
   (pyvenv-workon "emacs-dev"))
 
