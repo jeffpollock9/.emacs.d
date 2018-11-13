@@ -28,8 +28,7 @@
 
 (setq-default fill-column 80)
 (setq-default show-paren-delay 0)
-
-(when (fboundp 'electric-indent-mode) (electric-indent-mode -1))
+(setq-default major-mode 'text-mode)
 
 (global-set-key (kbd "C-#") 'comment-or-uncomment-region)
 (global-set-key (kbd "C-u") '(lambda () (interactive) (kill-line 0)))
