@@ -132,6 +132,10 @@
   :init
   (load-theme 'zenburn t))
 
+(use-package smart-mode-line
+  :ensure t
+  :init (sml/setup))
+
 (use-package cuda-mode :ensure t)
 
 (use-package clang-format :ensure t)
@@ -151,11 +155,6 @@
   :diminish
   :bind
   ("C-s" . swiper))
-
-(use-package nyan-mode
-  :ensure t
-  :init (add-hook 'prog-mode-hook #'nyan-mode)
-  :config (nyan-mode))
 
 (use-package smartparens
   :ensure t
@@ -264,6 +263,12 @@
 (use-package cmake-font-lock
   :ensure t
   :hook cmake-mode-hook)
+
+(use-package company-quickhelp
+  :ensure t
+  :config
+  (eval-after-load 'company
+    '(define-key company-active-map (kbd "C-c C-d") #'company-quickhelp-manual-begin)))
 
 (use-package company
   :ensure t
@@ -377,5 +382,10 @@
   (setq company-transformers nil
         company-lsp-async t
         company-lsp-cache-candidates nil))
+
+(use-package company-shell
+  :ensure t
+  :init
+  (add-to-list 'company-backends 'company-shell))
 
 ;;; init.el ends here
