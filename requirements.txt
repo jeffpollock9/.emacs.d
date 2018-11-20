@@ -1,0 +1,9 @@
+jedi
+rope
+autopep8
+yapf
+black
+numpy
+matplotlib
+scipy
+pandas

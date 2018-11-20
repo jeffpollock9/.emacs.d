@@ -93,6 +93,12 @@
 
 (use-package bind-key :ensure t)
 
+(use-package cdlatex
+  :ensure t
+  :init
+  (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+  (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex))
+
 (use-package org
   :ensure t
   :custom
