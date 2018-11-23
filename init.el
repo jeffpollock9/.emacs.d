@@ -2,396 +2,417 @@
 
 ;;; code:
 
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
+(let ((file-name-handler-alist nil))
 
-(require 'package)
-(setq package-enable-at-startup nil)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
-(package-initialize)
+  (setq use-package-verbose t)
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+  (setq gc-cons-threshold (* 1024 1024 100))
 
-(eval-when-compile (require 'use-package))
+  (setq custom-file "~/.emacs.d/custom.el")
+  (load custom-file)
 
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(fringe-mode 1)
-(show-paren-mode 1)
+  (require 'package)
+  (setq package-enable-at-startup nil)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+  (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+  (package-initialize)
 
-(setq column-number-mode t)
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
 
-(setq-default fill-column 80)
-(setq-default show-paren-delay 0)
-(setq-default major-mode 'text-mode)
+  (eval-when-compile (require 'use-package))
 
-(global-set-key (kbd "C-#") 'comment-or-uncomment-region)
-(global-set-key (kbd "C-u") '(lambda () (interactive) (kill-line 0)))
-(global-set-key (kbd "C-l") 'comint-clear-buffer)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (fringe-mode 1)
+  (show-paren-mode 1)
 
-(setq ibuffer-expert t
-      ibuffer-show-empty-filter-groups nil
-      ibuffer-saved-filter-groups
-      '(("groups"
-         ("emacs"          (mode . emacs-lisp-mode))
-         ("python"         (mode . python-mode))
-         ("python-console" (mode . inferior-python-mode))
-         ("R"              (mode . ess-mode))
-         ("stan"           (mode . stan-mode))
-         ("R-console"      (mode . inferior-ess-mode))
-         ("C++"            (or (mode . c-mode)
-                               (mode . c++-mode)))
-         ("cmake"          (mode . cmake-mode))
-         ("make"           (name . "[mM]akefile"))
-         ("magit"          (name . "\*magit"))
-         ("help"           (or (name . "\*Help\*")
-                               (name . "\*Apropos\*")
-                               (name . "\*info\*")))
-         )))
+  (setq column-number-mode t)
 
-(add-hook 'ibuffer-mode-hook
-          '(lambda ()
-             (ibuffer-switch-to-saved-filter-groups "groups")))
+  (setq-default fill-column 80)
+  (setq-default show-paren-delay 0)
+  (setq-default major-mode 'text-mode)
 
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
-(setq indent-line-function 'insert-tab)
+  (global-set-key (kbd "C-#") 'comment-or-uncomment-region)
+  (global-set-key (kbd "C-u") '(lambda () (interactive) (kill-line 0)))
+  (global-set-key (kbd "C-l") 'comint-clear-buffer)
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
 
-(setq ispell-program-name "hunspell")
-(setq ispell-local-dictionary "en_GB")
+  (setq ibuffer-expert t
+        ibuffer-show-empty-filter-groups nil
+        ibuffer-saved-filter-groups
+        '(("groups"
+           ("emacs"          (mode . emacs-lisp-mode))
+           ("python"         (mode . python-mode))
+           ("python-console" (mode . inferior-python-mode))
+           ("R"              (mode . ess-mode))
+           ("stan"           (mode . stan-mode))
+           ("R-console"      (mode . inferior-ess-mode))
+           ("C++"            (or (mode . c-mode)
+                                 (mode . c++-mode)))
+           ("cmake"          (mode . cmake-mode))
+           ("make"           (name . "[mM]akefile"))
+           ("magit"          (name . "\*magit"))
+           ("help"           (or (name . "\*Help\*")
+                                 (name . "\*Apropos\*")
+                                 (name . "\*info\*")))
+           )))
 
-(defun my-c-mode-common-hook ()
-  (c-set-offset 'comment-intro 0)
-  (c-set-offset 'substatement-open 0)
-  (c-set-offset 'innamespace 0)
+  (add-hook 'ibuffer-mode-hook
+            '(lambda ()
+               (ibuffer-switch-to-saved-filter-groups "groups")))
 
-  (setq c++-tab-always-indent t)
-  (setq c-basic-offset 4)
-  (setq c-indent-level 4)
-  (setq c-file-style "stroustrup")
-  (setq tab-stop-list (number-sequence 2 200 2))
-  (setq tab-width 4)
-  (setq indent-tabs-mode nil))
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 4)
+  (setq indent-line-function 'insert-tab)
 
-(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+  (setq ispell-program-name "hunspell")
+  (setq ispell-local-dictionary "en_GB")
 
-(use-package diminish
-  :ensure t
-  :diminish abbrev-mode)
+  (defun my-c-mode-common-hook ()
+    (c-set-offset 'comment-intro 0)
+    (c-set-offset 'substatement-open 0)
+    (c-set-offset 'innamespace 0)
 
-;; see: https://sriramkswamy.github.io/dotemacs
-(defun diminish-auto-revert ()
-  (interactive)
-  (diminish 'auto-revert-mode ""))
-(add-hook 'auto-revert-mode-hook 'diminish-auto-revert)
+    (setq c++-tab-always-indent t)
+    (setq c-basic-offset 4)
+    (setq c-indent-level 4)
+    (setq c-file-style "stroustrup")
+    (setq tab-stop-list (number-sequence 2 200 2))
+    (setq tab-width 4)
+    (setq indent-tabs-mode nil))
 
-(use-package bind-key :ensure t)
+  (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
-(use-package cdlatex
-  :ensure t
-  :init
-  (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-  (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex))
+  (use-package diminish
+    :ensure t
+    :diminish abbrev-mode)
 
-(use-package org
-  :ensure t
-  :custom
-  (org-log-done t)
-  (org-startup-indented t)
-  (org-confirm-babel-evaluate nil)
-  (org-src-fontify-natively t)
-  (org-src-tab-acts-natively t)
-  (org-hide-emphasis-markers t)
-  :config
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((latex  . t)
-     (R      . t)
-     (C      . t)
-     (python . t)
-     (java   . t)
-     (shell  . t))))
-
-(use-package dashboard
-  :ensure t
-  :config
-  (setq dashboard-items '((recents   . 5)
-                          (bookmarks . 5)))
-  (dashboard-setup-startup-hook))
-
-(use-package dired
-  :bind
-  (:map dired-mode-map ("C-c C-e" . wdired-change-to-wdired-mode))
-  :init
-  (setq dired-listing-switches "-alh"))
-
-(use-package htmlize :ensure t)
-
-(use-package zenburn-theme
-  :ensure t
-  :init
-  (load-theme 'zenburn t))
-
-(use-package smart-mode-line
-  :ensure t
-  :init (sml/setup))
-
-(use-package cuda-mode :ensure t)
-
-(use-package clang-format :ensure t)
-
-(use-package stan-snippets :ensure t)
-
-(use-package stan-mode :ensure t)
-
-(use-package helm
-  :ensure t
-  :bind
-  ("M-x" . helm-M-x)
-  ("C-x C-f" . helm-find-files))
-
-(use-package swiper
-  :ensure t
-  :diminish
-  :bind
-  ("C-s" . swiper))
-
-(use-package smartparens
-  :ensure t
-  :diminish
-  :init (smartparens-global-mode)
-  :bind
-  ("M-f" . sp-forward-sexp)
-  ("M-b" . sp-backward-sexp))
-
-(use-package undo-tree
-  :ensure t
-  :diminish
-  :config
-  (global-undo-tree-mode))
-
-(use-package smooth-scrolling
-  :ensure t
-  :init (smooth-scrolling-mode 1))
-
-(use-package buffer-move
-  :ensure t
-  :init
-  (setq buffer-move-behavior 'move)
-  :bind
-  ("C-c <up>" . buf-move-up)
-  ("C-c <down>" . buf-move-down)
-  ("C-c <left>" . buf-move-left)
-  ("C-c <right>" . buf-move-right))
-
-(use-package windmove
-  :ensure t
-  :bind
-  ("C-c 5" . windmove-up)
-  ("C-c 2" . windmove-down)
-  ("C-c 1" . windmove-left)
-  ("C-c 3" . windmove-right))
-
-(use-package magit
-  :ensure t
-  :bind
-  ("C-x g" . magit-status))
-
-(use-package magit-todos
-  :ensure t
-  :init (magit-todos-mode))
-
-(use-package iedit
-  :ensure t
-  :bind
-  ("C-c ;" . iedit-mode))
-
-(use-package multiple-cursors
-  :ensure t
-  :bind
-  ("C-c e" . mc/edit-lines)
-  ("C-c a" . mc/mark-all-symbols-like-this))
-
-(use-package drag-stuff
-  :ensure t
-  :bind
-  ("M-<up>" . drag-stuff-up)
-  ("M-<down>" . drag-stuff-down))
-
-(use-package yasnippet-snippets :ensure t)
-
-(use-package yasnippet
-  :ensure t
-  :init
-  (yas-global-mode)
-  (define-key yas-minor-mode-map (kbd "<tab>") nil)
-  (define-key yas-minor-mode-map (kbd "TAB") nil)
-  (define-key yas-minor-mode-map (kbd "C-c TAB") 'yas-expand)
-  :config (yas-reload-all))
-
-(use-package ess
-  :ensure t
-  :init
-  (setq ess-smart-S-assign-key nil)
-  (defun magrittr-pipe ()
-    "insert %>%"
+  ;; see: https://sriramkswamy.github.io/dotemacs
+  (defun diminish-auto-revert ()
     (interactive)
-    (just-one-space 1)
-    (insert "%>%")
-    (just-one-space 1))
-  :bind
-  (("C-=" . ess-insert-assign)
-   :map ess-mode-map ("C->" . magrittr-pipe)
-   :map inferior-ess-mode-map ("C->" . magrittr-pipe)))
+    (diminish 'auto-revert-mode ""))
+  (add-hook 'auto-revert-mode-hook 'diminish-auto-revert)
 
-(use-package julia-mode :ensure t)
+  (use-package bind-key
+    :ensure t)
 
-(use-package treemacs
-  :ensure t
-  :config
-  (setq treemacs-width 35
-        treemacs-show-hidden-files nil
-        treemacs-collapse-dirs 3
-        treemacs-file-event-delay 5000)
-  :bind
-  (:map global-map ("M-0" . treemacs-select-window)))
+  (use-package cdlatex
+    :defer t
+    :ensure t
+    :init
+    (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+    (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex))
 
-(use-package cmake-mode
-  :ensure t
-  :init (setq cmake-tab-width 4))
+  (use-package org
+    :defer t
+    :ensure t
+    :custom
+    (org-log-done t)
+    (org-startup-indented t)
+    (org-confirm-babel-evaluate nil)
+    (org-src-fontify-natively t)
+    (org-src-tab-acts-natively t)
+    (org-hide-emphasis-markers t)
+    :config
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((latex  . t)
+       (R      . t)
+       (C      . t)
+       (python . t)
+       (java   . t)
+       (shell  . t))))
 
-(use-package cmake-font-lock
-  :ensure t
-  :hook cmake-mode-hook)
+  (use-package dashboard
+    :ensure t
+    :config
+    (setq dashboard-items '((recents   . 5)
+                            (bookmarks . 5)))
+    (dashboard-setup-startup-hook))
 
-(use-package company-quickhelp
-  :ensure t
-  :config
-  (eval-after-load 'company
-    '(define-key company-active-map (kbd "C-c C-d") #'company-quickhelp-manual-begin)))
+  (use-package dired
+    :bind
+    (:map dired-mode-map ("C-c C-e" . wdired-change-to-wdired-mode))
+    :init
+    (setq dired-listing-switches "-alh"))
 
-(use-package company
-  :ensure t
-  :init (global-company-mode)
-  :bind ("<C-tab>" . company-complete)
-  :custom
-  (company-idle-delay nil)
-  (company-minimum-prefix-length 2)
-  (company-tooltip-limit 20)
-  (company-show-numbers t)
-  (company-dabbrev-downcase nil))
+  (use-package htmlize
+    :ensure t
+    :defer t)
 
-(use-package markdown-mode
-  :ensure t
-  :mode (("\\.markdown\\'" . markdown-mode)
-         ("\\.md\\'" . markdown-mode)))
+  (use-package zenburn-theme
+    :ensure t
+    :init
+    (load-theme 'zenburn t))
 
-(use-package yaml-mode
-  :ensure t
-  :mode (("\\.yml\\'" . yaml-mode)
-         ("\\.yaml\\'" . yaml-mode)))
+  (use-package smart-mode-line
+    :ensure t
+    :init (sml/setup))
 
-(use-package dockerfile-mode
-  :ensure t
-  :mode ("Dockerfile\\'" . dockerfile-mode))
+  (use-package cuda-mode
+    :ensure t
+    :defer t)
 
-(use-package elpy
-  :ensure t
-  :diminish
-  :init
-  (elpy-enable)
-  (delete `elpy-module-highlight-indentation elpy-modules)
-  :bind
-  (:map elpy-mode-map ("C-b" . elpy-autopep8-fix-code))
-  :config
-  (pyvenv-workon "emacs-dev"))
+  (use-package clang-format
+    :ensure t
+    :defer t)
 
-(use-package pip-requirements :ensure t)
+  (use-package stan-snippets
+    :ensure t
+    :defer t)
 
-(use-package duplicate-thing
-  :ensure t
-  :bind
-  ("C-d" . duplicate-thing))
+  (use-package stan-mode
+    :defer t
+    :ensure t)
 
-(use-package doxymacs
-  :load-path "~/.emacs.d/builds/doxymacs/install/share/emacs/site-lisp"
-  :diminish
-  :init
-  (add-hook 'c-mode-common-hook'doxymacs-mode)
-  (defun my-doxymacs-font-lock-hook ()
-    (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
-        (doxymacs-font-lock)))
-  (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
-  (setq doxymacs-doxygen-style "C++")
-  (setq doxymacs-command-character "\\"))
+  (use-package helm
+    :ensure t
+    :bind
+    ("M-x" . helm-M-x)
+    ("C-x C-f" . helm-find-files))
 
-;; ispc
-(add-to-list 'auto-mode-alist '(".ispc$" . c++-mode))
-(add-to-list 'auto-mode-alist '(".isph$" . c++-mode))
+  (use-package swiper
+    :ensure t
+    :diminish
+    :bind
+    ("C-s" . swiper))
 
-(use-package tex
-  :ensure auctex)
+  (use-package smartparens
+    :ensure t
+    :diminish
+    :init (smartparens-global-mode)
+    :bind
+    ("M-f" . sp-forward-sexp)
+    ("M-b" . sp-backward-sexp))
 
-(use-package poly-R
-  :ensure t
-  :init
-  (add-to-list 'auto-mode-alist '("\\.Snw" . poly-noweb+r-mode))
-  (add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
-  (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode)))
+  (use-package undo-tree
+    :ensure t
+    :diminish
+    :config
+    (global-undo-tree-mode))
 
-(use-package flycheck
-  :diminish
-  :ensure t
-  :init (global-flycheck-mode))
+  (use-package smooth-scrolling
+    :ensure t
+    :init (smooth-scrolling-mode 1))
 
-(use-package flycheck-yamllint
-  :ensure t
-  :mode (("\\.yml\\'" . yaml-mode)
-         ("\\.yaml\\'" . yaml-mode))
-  :init
-  (eval-after-load 'flycheck
-    '(add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup))
-  (add-hook 'yaml-mode-hook 'flycheck-mode))
+  (use-package buffer-move
+    :ensure t
+    :init
+    (setq buffer-move-behavior 'move)
+    :bind
+    ("C-c <up>" . buf-move-up)
+    ("C-c <down>" . buf-move-down)
+    ("C-c <left>" . buf-move-left)
+    ("C-c <right>" . buf-move-right))
 
-(use-package lsp-ui
-  :ensure t
-  :init
-  (setq lsp-ui-sideline-show-hover nil)
-  (setq lsp-ui-sideline-show-symbol t))
+  (use-package windmove
+    :ensure t
+    :bind
+    ("C-c 5" . windmove-up)
+    ("C-c 2" . windmove-down)
+    ("C-c 1" . windmove-left)
+    ("C-c 3" . windmove-right))
 
-(use-package lsp-mode
-  :ensure t
-  :diminish
-  :init
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-  (setq lsp-highlight-symbol-at-point nil))
+  (use-package magit
+    :ensure t
+    :bind
+    ("C-x g" . magit-status))
 
-(use-package cquery
-  :ensure t
-  :init
-  (defun my-cpp-setup ()
-    (condition-case nil (lsp-cquery-enable) (user-error nil))
-    (local-set-key (kbd "C-b") 'clang-format-buffer)
-    (define-key c++-mode-map (kbd "C-d") 'duplicate-thing))
-  (add-hook 'c-mode-common-hook #'my-cpp-setup))
+  (use-package magit-todos
+    :ensure t
+    :init (magit-todos-mode))
 
-(use-package company-lsp
-  :ensure t
-  :init
-  (push 'company-lsp company-backends)
-  (setq company-transformers nil
-        company-lsp-async t
-        company-lsp-cache-candidates nil))
+  (use-package iedit
+    :ensure t
+    :bind
+    ("C-c ;" . iedit-mode))
 
-(use-package company-shell
-  :ensure t
-  :init
-  (add-to-list 'company-backends 'company-shell))
+  (use-package multiple-cursors
+    :ensure t
+    :bind
+    ("C-c e" . mc/edit-lines)
+    ("C-c a" . mc/mark-all-symbols-like-this))
+
+  (use-package drag-stuff
+    :ensure t
+    :bind
+    ("M-<up>" . drag-stuff-up)
+    ("M-<down>" . drag-stuff-down))
+
+  (use-package yasnippet-snippets
+    :defer t
+    :ensure t)
+
+  (use-package yasnippet
+    :defer t
+    :ensure t
+    :init
+    (yas-global-mode)
+    (define-key yas-minor-mode-map (kbd "<tab>") nil)
+    (define-key yas-minor-mode-map (kbd "TAB") nil)
+    (define-key yas-minor-mode-map (kbd "C-c TAB") 'yas-expand)
+    :config (yas-reload-all))
+
+  (use-package ess
+    :ensure t
+    :defer t
+    :init
+    (setq ess-smart-S-assign-key nil)
+    (defun magrittr-pipe ()
+      "insert %>%"
+      (interactive)
+      (just-one-space 1)
+      (insert "%>%")
+      (just-one-space 1))
+    :bind
+    (("C-=" . ess-insert-assign)
+     :map ess-mode-map ("C->" . magrittr-pipe)
+     :map inferior-ess-mode-map ("C->" . magrittr-pipe)))
+
+  (use-package julia-mode
+    :defer t
+    :ensure t)
+
+  (use-package treemacs
+    :ensure t
+    :config
+    (setq treemacs-width 35
+          treemacs-show-hidden-files nil
+          treemacs-collapse-dirs 3
+          treemacs-file-event-delay 5000)
+    :bind
+    (:map global-map ("M-0" . treemacs-select-window)))
+
+  (use-package cmake-mode
+    :ensure t
+    :init (setq cmake-tab-width 4))
+
+  (use-package cmake-font-lock
+    :ensure t
+    :hook cmake-mode-hook)
+
+  (use-package company-quickhelp
+    :ensure t
+    :config
+    (eval-after-load 'company
+      '(define-key company-active-map (kbd "C-c C-d") #'company-quickhelp-manual-begin)))
+
+  (use-package company
+    :ensure t
+    :init (global-company-mode)
+    :bind ("<C-tab>" . company-complete)
+    :custom
+    (company-idle-delay nil)
+    (company-minimum-prefix-length 2)
+    (company-tooltip-limit 20)
+    (company-show-numbers t)
+    (company-dabbrev-downcase nil))
+
+  (use-package markdown-mode
+    :ensure t
+    :mode ("\\.md$" . markdown-mode))
+
+  (use-package yaml-mode
+    :ensure t
+    :mode (("\\.yml$'" . yaml-mode)
+           ("\\.yaml$'" . yaml-mode)))
+
+  (use-package dockerfile-mode
+    :ensure t
+    :mode ("Dockerfile" . dockerfile-mode))
+
+  (use-package elpy
+    :ensure t
+    :diminish
+    :init
+    (elpy-enable)
+    (delete `elpy-module-highlight-indentation elpy-modules)
+    :bind
+    (:map elpy-mode-map ("C-b" . elpy-autopep8-fix-code))
+    :config
+    (pyvenv-workon "emacs-dev"))
+
+  (use-package duplicate-thing
+    :ensure t
+    :bind
+    ("C-d" . duplicate-thing))
+
+  (use-package doxymacs
+    :load-path "~/.emacs.d/builds/doxymacs/install/share/emacs/site-lisp"
+    :diminish
+    :init
+    (add-hook 'c-mode-common-hook'doxymacs-mode)
+    (defun my-doxymacs-font-lock-hook ()
+      (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
+          (doxymacs-font-lock)))
+    (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
+    (setq doxymacs-doxygen-style "C++")
+    (setq doxymacs-command-character "\\"))
+
+  ;; ispc
+  (add-to-list 'auto-mode-alist '(".ispc$" . c++-mode))
+  (add-to-list 'auto-mode-alist '(".isph$" . c++-mode))
+
+  (use-package tex
+    :ensure auctex
+    :defer t)
+
+  (use-package poly-R
+    :ensure t
+    :mode ("\\.Rmd$" . poly-markdown+r-mode))
+
+  (use-package flycheck
+    :diminish
+    :ensure t
+    :init (global-flycheck-mode))
+
+  (use-package flycheck-yamllint
+    :ensure t
+    :mode (("\\.yml$'" . yaml-mode)
+           ("\\.yaml$'" . yaml-mode))
+    :init
+    (eval-after-load 'flycheck
+      '(add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup))
+    (add-hook 'yaml-mode-hook 'flycheck-mode))
+
+  (use-package lsp-ui
+    :ensure t
+    :init
+    (setq lsp-ui-sideline-show-hover nil)
+    (setq lsp-ui-sideline-show-symbol t))
+
+  (use-package lsp-mode
+    :ensure t
+    :diminish
+    :init
+    (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+    (setq lsp-highlight-symbol-at-point nil))
+
+  (use-package cquery
+    :ensure t
+    :init
+    (defun my-cpp-setup ()
+      (condition-case nil (lsp-cquery-enable) (user-error nil))
+      (local-set-key (kbd "C-b") 'clang-format-buffer)
+      (define-key c++-mode-map (kbd "C-d") 'duplicate-thing))
+    (add-hook 'c-mode-common-hook #'my-cpp-setup))
+
+  (use-package company-lsp
+    :ensure t
+    :init
+    (push 'company-lsp company-backends)
+    (setq company-transformers nil
+          company-lsp-async t
+          company-lsp-cache-candidates nil))
+
+  (use-package company-shell
+    :ensure t
+    :init
+    (add-to-list 'company-backends 'company-shell))
+  )
 
 ;;; init.el ends here
