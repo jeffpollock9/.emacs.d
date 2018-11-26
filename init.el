@@ -127,6 +127,9 @@
        (java   . t)
        (shell  . t))))
 
+  (use-package ox-twbs
+    :ensure t)
+
   (use-package dashboard
     :ensure t
     :config
