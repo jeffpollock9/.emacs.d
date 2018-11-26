@@ -382,6 +382,15 @@
       '(add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup))
     (add-hook 'yaml-mode-hook 'flycheck-mode))
 
+  (use-package ansi-color
+    :ensure t
+    :init
+    (defun colorize-compilation-buffer ()
+      (toggle-read-only)
+      (ansi-color-apply-on-region compilation-filter-start (point))
+      (toggle-read-only))
+    (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
+
   (use-package lsp-ui
     :ensure t
     :init
