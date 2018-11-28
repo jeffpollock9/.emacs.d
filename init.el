@@ -38,6 +38,19 @@
   (global-set-key (kbd "C-l") 'comint-clear-buffer)
   (global-set-key (kbd "C-x C-b") 'ibuffer)
 
+  (define-minor-mode resize-mode
+    "Toggle resizing of current window"
+    :init-value nil
+    :lighter " resize"
+    :keymap
+    '(([left] . shrink-window-horizontally)
+      ([right] . enlarge-window-horizontally)
+      ([up] . enlarge-window)
+      ([down] . shrink-window)
+      ([return] . resize-mode)))
+
+  (global-set-key (kbd "C-c r") 'resize-mode)
+
   (setq ibuffer-expert t
         ibuffer-show-empty-filter-groups nil
         ibuffer-saved-filter-groups
