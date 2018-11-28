@@ -151,7 +151,8 @@
     :bind
     (:map dired-mode-map ("C-c C-e" . wdired-change-to-wdired-mode))
     :init
-    (setq dired-listing-switches "-alh"))
+    (setq dired-listing-switches "-alh"
+          dired-dwim-target t))
 
   (use-package htmlize
     :ensure t
