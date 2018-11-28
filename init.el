@@ -2,11 +2,8 @@
 
 ;;; code:
 
-(let ((file-name-handler-alist nil))
-
-  (setq use-package-verbose t)
-
-  (setq gc-cons-threshold (* 1024 1024 100))
+(let ((file-name-handler-alist nil)
+      (gc-cons-threshold (* 1024 1024 100)))
 
   (setq custom-file "~/.emacs.d/custom.el")
   (load custom-file)
