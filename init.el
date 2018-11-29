@@ -147,6 +147,11 @@
                             (bookmarks . 5)))
     (dashboard-setup-startup-hook))
 
+  (use-package expand-region
+    :ensure t
+    :commands er/expand-region
+    :bind ("C--" . er/expand-region))
+
   (use-package dired
     :bind
     (:map dired-mode-map ("C-c C-e" . wdired-change-to-wdired-mode))
