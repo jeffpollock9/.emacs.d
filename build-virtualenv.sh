@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-virtualenv -p python3 ${WORKON_HOME}/emacs-dev
+virtualenv -p python3 ${WORKON_HOME}/pymacs
 
-${WORKON_HOME}/emacs-dev/bin/pip install --upgrade -r requirements.txt
+${WORKON_HOME}/pymacs/bin/pip install --upgrade -r requirements.txt

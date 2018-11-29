@@ -101,12 +101,6 @@
     :ensure t
     :diminish abbrev-mode)
 
-  ;; see: https://sriramkswamy.github.io/dotemacs
-  (defun diminish-auto-revert ()
-    (interactive)
-    (diminish 'auto-revert-mode ""))
-  (add-hook 'auto-revert-mode-hook 'diminish-auto-revert)
-
   (use-package bind-key
     :ensure t)
 
@@ -353,7 +347,7 @@
     :bind
     (:map elpy-mode-map ("C-b" . elpy-autopep8-fix-code))
     :config
-    (pyvenv-workon "emacs-dev"))
+    (pyvenv-workon "pymacs"))
 
   (use-package duplicate-thing
     :ensure t
@@ -364,7 +358,7 @@
     :load-path "~/.emacs.d/builds/doxymacs/install/share/emacs/site-lisp"
     :diminish
     :init
-    (add-hook 'c-mode-common-hook'doxymacs-mode)
+    (add-hook 'c-mode-common-hook 'doxymacs-mode)
     (defun my-doxymacs-font-lock-hook ()
       (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
           (doxymacs-font-lock)))
@@ -383,6 +377,10 @@
   (use-package poly-R
     :ensure t
     :mode ("\\.Rmd$" . poly-markdown+r-mode))
+
+  (use-package flymake
+    :diminish
+    :ensure t)
 
   (use-package flycheck
     :diminish
@@ -441,6 +439,10 @@
     :ensure t
     :init
     (add-to-list 'company-backends 'company-shell))
+
+  ;; diminish some minor modes
+  (add-hook 'ess-r-mode-hook (lambda () (diminish 'ess-r-package-mode)))
+  (add-hook 'auto-revert-mode-hook (lambda () (diminish 'auto-revert-mode)))
   )
 
 ;;; init.el ends here
