@@ -10,9 +10,9 @@
 
   (require 'package)
   (setq package-enable-at-startup nil)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+  (add-to-list 'package-archives '("melpa"     . "http://melpa.org/packages/"))
   (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+  (add-to-list 'package-archives '("gnu"       . "http://elpa.gnu.org/packages/"))
   (package-initialize)
 
   (unless (package-installed-p 'use-package)
@@ -79,8 +79,8 @@
   (setq-default tab-width 4)
   (setq indent-line-function 'insert-tab)
 
-  (setq ispell-program-name "hunspell")
-  (setq ispell-local-dictionary "en_GB")
+  (setq ispell-program-name "hunspell"
+        ispell-local-dictionary "en_GB")
 
   (defun my-c-mode-common-hook ()
     (c-set-offset 'comment-intro 0)
