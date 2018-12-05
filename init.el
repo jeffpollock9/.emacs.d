@@ -424,8 +424,8 @@
   (use-package lsp-ui
     :ensure t
     :init
-    (setq lsp-ui-sideline-show-hover nil)
-    (setq lsp-ui-sideline-show-symbol t))
+    (setq lsp-ui-sideline-show-hover nil
+          lsp-ui-sideline-show-symbol t))
 
   (use-package lsp-mode
     :ensure t
@@ -436,12 +436,14 @@
 
   (use-package cquery
     :ensure t
+    :bind
+    (:map c++-mode-map
+          ("C-b" . clang-format-buffer)
+          ("C-d" . duplicate-thing))
     :init
-    (defun my-cpp-setup ()
-      (condition-case nil (lsp-cquery-enable) (user-error nil))
-      (local-set-key (kbd "C-b") 'clang-format-buffer)
-      (define-key c++-mode-map (kbd "C-d") 'duplicate-thing))
-    (add-hook 'c-mode-common-hook #'my-cpp-setup))
+    (defun enable-cquery ()
+      (condition-case nil (lsp-cquery-enable) (user-error nil)))
+    (add-hook 'c-mode-common-hook #'enable-cquery))
 
   (use-package company-lsp
     :ensure t
