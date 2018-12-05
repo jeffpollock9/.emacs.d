@@ -131,6 +131,17 @@
        (java   . t)
        (shell  . t))))
 
+  (setq org-publish-project-alist
+        '(("jeffpollock9"
+           :base-directory "~/workspace/github.io/org"
+           :base-extension "org"
+           :publishing-directory "~/workspace/github.io/_posts/"
+           :recursive t
+           :publishing-function org-html-publish-to-html
+           :headline-levels 4
+           :html-extension "html"
+           :body-only t)))
+
   (use-package ox-twbs
     :ensure t)
 
@@ -144,7 +155,7 @@
   (use-package expand-region
     :ensure t
     :commands er/expand-region
-    :bind ("C--" . er/expand-region))
+    :bind ("M-p" . er/expand-region))
 
   (use-package dired
     :bind
@@ -187,6 +198,11 @@
     :bind
     ("M-x" . helm-M-x)
     ("C-x C-f" . helm-find-files))
+
+  (use-package helm-ag
+    :ensure t
+    :bind
+    ("C-x C-a" . helm-do-ag))
 
   (use-package swiper
     :ensure t
@@ -443,6 +459,7 @@
   ;; diminish some minor modes
   (add-hook 'ess-r-mode-hook (lambda () (diminish 'ess-r-package-mode)))
   (add-hook 'auto-revert-mode-hook (lambda () (diminish 'auto-revert-mode)))
+  (add-hook 'page-break-lines-mode-hook (lambda () (diminish 'page-break-lines-mode)))
   )
 
 ;;; init.el ends here
