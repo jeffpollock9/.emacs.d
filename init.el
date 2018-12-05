@@ -202,7 +202,7 @@
   (use-package helm-ag
     :ensure t
     :bind
-    ("C-x C-a" . helm-do-ag))
+    ("C-c C-g" . helm-do-ag))
 
   (use-package swiper
     :ensure t
@@ -440,10 +440,12 @@
     (:map c++-mode-map
           ("C-b" . clang-format-buffer)
           ("C-d" . duplicate-thing))
+    :commands lsp-cquery-enable
     :init
-    (defun enable-cquery ()
+    (defun cquery//enable ()
       (condition-case nil (lsp-cquery-enable) (user-error nil)))
-    (add-hook 'c-mode-common-hook #'enable-cquery))
+    (add-hook 'c-mode-hook #'cquery//enable)
+    (add-hook 'c++-mode-hook #'cquery//enable))
 
   (use-package company-lsp
     :ensure t
