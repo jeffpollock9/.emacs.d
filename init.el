@@ -2,6 +2,8 @@
 
 ;;; code:
 
+;; TOOD: take ideas from https://github.com/malb/emacs.d/blob/master/malb.org
+
 (let ((file-name-handler-alist nil)
       (gc-cons-threshold (* 1024 1024 100)))
 
@@ -33,10 +35,11 @@
   (setq-default show-paren-delay 0)
   (setq-default major-mode 'text-mode)
 
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
   (global-set-key (kbd "C-#") 'comment-or-uncomment-region)
   (global-set-key (kbd "C-u") '(lambda () (interactive) (kill-line 0)))
   (global-set-key (kbd "C-l") 'comint-clear-buffer)
-  (global-set-key (kbd "C-x C-b") 'ibuffer)
+  (global-set-key (kbd "M-l") 'toggle-truncate-lines)
 
   (define-minor-mode resize-mode
     "Toggle resizing of current window"
@@ -96,6 +99,11 @@
     (setq indent-tabs-mode nil))
 
   (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+  (setq global-auto-revert-non-file-buffers t
+        auto-revert-verbose nil)
+
+  (global-auto-revert-mode 1)
 
   (use-package diminish
     :ensure t
@@ -202,7 +210,7 @@
   (use-package helm-ag
     :ensure t
     :bind
-    ("C-c C-g" . helm-do-ag))
+    ("C-x C-g" . helm-do-ag))
 
   (use-package swiper
     :ensure t
@@ -416,9 +424,9 @@
     :ensure t
     :init
     (defun colorize-compilation-buffer ()
-      (toggle-read-only)
+      (read-only-mode)
       (ansi-color-apply-on-region compilation-filter-start (point))
-      (toggle-read-only))
+      (read-only-mode))
     (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
 
   (use-package lsp-ui
@@ -429,23 +437,20 @@
 
   (use-package lsp-mode
     :ensure t
+    :commands lsp
     :diminish
+    :config (require 'lsp-clients)
     :init
-    (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-    (setq lsp-highlight-symbol-at-point nil))
+    (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
-  (use-package cquery
+  (use-package ccls
     :ensure t
     :bind
     (:map c++-mode-map
           ("C-b" . clang-format-buffer)
           ("C-d" . duplicate-thing))
-    :commands lsp-cquery-enable
     :init
-    (defun cquery//enable ()
-      (condition-case nil (lsp-cquery-enable) (user-error nil)))
-    (add-hook 'c-mode-hook #'cquery//enable)
-    (add-hook 'c++-mode-hook #'cquery//enable))
+    (add-hook 'c++-mode-hook (lambda () (require 'ccls) (lsp))))
 
   (use-package company-lsp
     :ensure t
