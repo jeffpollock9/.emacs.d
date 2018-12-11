@@ -39,7 +39,6 @@
   (global-set-key (kbd "C-#") 'comment-or-uncomment-region)
   (global-set-key (kbd "C-u") '(lambda () (interactive) (kill-line 0)))
   (global-set-key (kbd "C-l") 'comint-clear-buffer)
-  (global-set-key (kbd "M-l") 'toggle-truncate-lines)
 
   (define-minor-mode resize-mode
     "Toggle resizing of current window"
@@ -119,6 +118,11 @@
     (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
     (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex))
 
+  (use-package pdf-tools
+    :ensure t
+    :config
+    (pdf-tools-install))
+
   (use-package org
     :defer t
     :ensure t
@@ -130,10 +134,16 @@
     (org-src-tab-acts-natively t)
     (org-hide-emphasis-markers t)
     :config
+    ;; TODO: some sort of default setup file which adds this
+    ;;       https://www.reddit.com/r/emacs/comments/8gnsm2/orgmode_default_document
+    ;; (setq org-html-head-extra "<style>pre { background-color: #3f3f3f; color: #dcdccc; }</style>")
+    (setq org-highlight-latex-and-related '(latex script entities))
+    (plist-put org-format-latex-options :scale 1.5)
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((latex  . t)
        (R      . t)
+       (stan   . t)
        (C      . t)
        (python . t)
        (java   . t)
