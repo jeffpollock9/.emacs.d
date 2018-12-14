@@ -39,6 +39,7 @@
   (global-set-key (kbd "C-#") 'comment-or-uncomment-region)
   (global-set-key (kbd "C-u") '(lambda () (interactive) (kill-line 0)))
   (global-set-key (kbd "C-l") 'comint-clear-buffer)
+  (global-set-key (kbd "C-c t") 'toggle-truncate-lines)
 
   (define-minor-mode resize-mode
     "Toggle resizing of current window"
@@ -220,7 +221,7 @@
   (use-package helm-ag
     :ensure t
     :bind
-    ("C-x C-g" . helm-do-ag))
+    ("C-c g" . helm-do-ag))
 
   (use-package swiper
     :ensure t
@@ -231,10 +232,7 @@
   (use-package smartparens
     :ensure t
     :diminish
-    :init (smartparens-global-mode)
-    :bind
-    ("M-f" . sp-forward-sexp)
-    ("M-b" . sp-backward-sexp))
+    :init (smartparens-global-mode))
 
   (use-package undo-tree
     :ensure t
