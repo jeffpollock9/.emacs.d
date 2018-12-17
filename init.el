@@ -112,6 +112,13 @@
   (use-package bind-key
     :ensure t)
 
+  (use-package helpful
+    :ensure t
+    :bind
+    ("C-h f" . helpful-callable)
+    ("C-h v" . helpful-variable)
+    ("C-h k" . helpful-key))
+
   (use-package cdlatex
     :defer t
     :ensure t
