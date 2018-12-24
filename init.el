@@ -383,6 +383,10 @@
     :init
     (elpy-enable)
     (delete `elpy-module-highlight-indentation elpy-modules)
+    (setq python-shell-interpreter "jupyter"
+          python-shell-interpreter-args "console --simple-prompt"
+          python-shell-prompt-detect-failure-warning nil)
+    (add-to-list 'python-shell-completion-native-disabled-interpreters "jupyter")
     :bind
     (:map elpy-mode-map ("C-b" . elpy-autopep8-fix-code))
     :config
