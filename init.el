@@ -183,13 +183,6 @@
     :commands er/expand-region
     :bind ("M-p" . er/expand-region))
 
-  (use-package dired
-    :bind
-    (:map dired-mode-map ("C-c C-e" . wdired-change-to-wdired-mode))
-    :init
-    (setq dired-listing-switches "-alh"
-          dired-dwim-target t))
-
   (use-package htmlize
     :ensure t
     :defer t)
@@ -329,6 +322,13 @@
     :defer t
     :ensure t)
 
+  (use-package dired
+    :bind
+    (:map dired-mode-map ("C-c C-e" . wdired-change-to-wdired-mode))
+    :init
+    (setq dired-listing-switches "-alh"
+          dired-dwim-target t))
+
   (use-package treemacs
     :ensure t
     :config
@@ -338,6 +338,12 @@
           treemacs-file-event-delay 5000)
     :bind
     (:map global-map ("M-0" . treemacs-select-window)))
+
+  (use-package treemacs-icons-dired
+    :ensure t
+    :config
+    (treemacs-icons-dired-mode)
+    (treemacs-resize-icons 18))
 
   (use-package cmake-mode
     :ensure t
@@ -383,10 +389,6 @@
     :init
     (elpy-enable)
     (delete `elpy-module-highlight-indentation elpy-modules)
-    (setq python-shell-interpreter "jupyter"
-          python-shell-interpreter-args "console --simple-prompt"
-          python-shell-prompt-detect-failure-warning nil)
-    (add-to-list 'python-shell-completion-native-disabled-interpreters "jupyter")
     :bind
     (:map elpy-mode-map ("C-b" . elpy-autopep8-fix-code))
     :config
@@ -410,8 +412,8 @@
     (setq doxymacs-command-character "\\"))
 
   ;; ispc
-  (add-to-list 'auto-mode-alist '(".ispc$" . c++-mode))
-  (add-to-list 'auto-mode-alist '(".isph$" . c++-mode))
+  (add-to-list 'auto-mode-alist '("\\.ispc$" . c++-mode))
+  (add-to-list 'auto-mode-alist '("\\.isph$" . c++-mode))
 
   (use-package tex
     :ensure auctex
@@ -428,7 +430,8 @@
   (use-package flycheck
     :diminish
     :ensure t
-    :init (global-flycheck-mode))
+    :init
+    (global-flycheck-mode))
 
   (use-package flycheck-yamllint
     :ensure t
@@ -448,19 +451,30 @@
       (read-only-mode))
     (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
 
+  (use-package lsp-mode
+    :ensure t
+    :diminish
+    :commands lsp)
+
   (use-package lsp-ui
     :ensure t
+    :commands lsp-ui-mode
     :init
     (setq lsp-ui-sideline-show-hover nil
           lsp-ui-sideline-show-symbol t))
 
-  (use-package lsp-mode
+  (require 'lsp-ui-flycheck)
+  (with-eval-after-load 'lsp-mode
+    (add-hook 'lsp-after-open-hook (lambda () (lsp-ui-flycheck-enable 1))))
+
+  (use-package company-lsp
     :ensure t
-    :commands lsp
-    :diminish
-    :config (require 'lsp-clients)
+    :commands company-lsp
     :init
-    (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+    (push 'company-lsp company-backends)
+    (setq company-transformers nil
+          company-lsp-async t
+          company-lsp-cache-candidates nil))
 
   (use-package ccls
     :ensure t
@@ -468,16 +482,7 @@
     (:map c++-mode-map
           ("C-b" . clang-format-buffer)
           ("C-d" . duplicate-thing))
-    :init
-    (add-hook 'c++-mode-hook (lambda () (require 'ccls) (lsp))))
-
-  (use-package company-lsp
-    :ensure t
-    :init
-    (push 'company-lsp company-backends)
-    (setq company-transformers nil
-          company-lsp-async t
-          company-lsp-cache-candidates nil))
+    :hook ((c++-mode) . (lambda () (require 'ccls) (lsp))))
 
   (use-package company-shell
     :ensure t
