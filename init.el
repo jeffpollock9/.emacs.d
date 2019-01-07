@@ -131,6 +131,9 @@
     :config
     (pdf-tools-install))
 
+  (use-package ob-ipython
+    :ensure t)
+
   (use-package org
     :defer t
     :ensure t
@@ -149,13 +152,14 @@
     (plist-put org-format-latex-options :scale 1.5)
     (org-babel-do-load-languages
      'org-babel-load-languages
-     '((latex  . t)
-       (R      . t)
-       (stan   . t)
-       (C      . t)
-       (python . t)
-       (java   . t)
-       (shell  . t))))
+     '((latex   . t)
+       (R       . t)
+       (stan    . t)
+       (C       . t)
+       (python  . t)
+       (ipython . t)
+       (java    . t)
+       (shell   . t))))
 
   (setq org-publish-project-alist
         '(("jeffpollock9"
@@ -174,7 +178,7 @@
   (use-package dashboard
     :ensure t
     :config
-    (setq dashboard-items '((recents   . 5)
+    (setq dashboard-items '((recents   . 10)
                             (bookmarks . 5)))
     (dashboard-setup-startup-hook))
 
@@ -306,7 +310,6 @@
     :ensure t
     :defer t
     :init
-    (setq ess-smart-S-assign-key nil)
     (defun magrittr-pipe ()
       "insert %>%"
       (interactive)
@@ -315,8 +318,7 @@
       (just-one-space 1))
     :bind
     (("C-=" . ess-insert-assign)
-     :map ess-mode-map ("C->" . magrittr-pipe)
-     :map inferior-ess-mode-map ("C->" . magrittr-pipe)))
+     ("C->" . magrittr-pipe)))
 
   (use-package julia-mode
     :defer t
