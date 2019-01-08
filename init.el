@@ -40,6 +40,7 @@
   (global-set-key (kbd "C-u") '(lambda () (interactive) (kill-line 0)))
   (global-set-key (kbd "C-l") 'comint-clear-buffer)
   (global-set-key (kbd "C-c t") 'toggle-truncate-lines)
+  (global-set-key (kbd "C-c d") 'delete-trailing-whitespace)
 
   (define-minor-mode resize-mode
     "Toggle resizing of current window"
@@ -111,6 +112,12 @@
 
   (use-package bind-key
     :ensure t)
+
+  (use-package which-key
+    :ensure t
+    :diminish
+    :config
+    (which-key-mode))
 
   (use-package helpful
     :ensure t
@@ -495,6 +502,8 @@
   (add-hook 'ess-r-mode-hook (lambda () (diminish 'ess-r-package-mode)))
   (add-hook 'auto-revert-mode-hook (lambda () (diminish 'auto-revert-mode)))
   (add-hook 'page-break-lines-mode-hook (lambda () (diminish 'page-break-lines-mode)))
+  (add-hook 'org-indent-mode-hook (lambda () (diminish 'org-indent-mode)))
+  (add-hook 'org-cdlatex-mode-hook (lambda () (diminish 'org-cdlatex-mode)))
   )
 
 ;;; init.el ends here

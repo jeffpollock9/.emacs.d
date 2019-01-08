@@ -12,7 +12,7 @@
  '(company-tooltip-limit 20)
  '(custom-safe-themes
    (quote
-    ("190a9882bef28d7e944aa610aa68fe1ee34ecea6127239178c7ac848754992df" default)))
+    ("ec5f697561eaf87b1d3b087dd28e61a2fc9860e4c862ea8e6b0b77bd4967d0ba" "190a9882bef28d7e944aa610aa68fe1ee34ecea6127239178c7ac848754992df" default)))
  '(delete-selection-mode 1)
  '(fci-rule-color "#383838")
  '(inhibit-startup-screen t)
@@ -28,7 +28,7 @@
  '(org-startup-indented t)
  '(package-selected-packages
    (quote
-    (ess ccls treemacs-icons-dired helpful pdf-tools helm-ag expand-region ob-ipython ox-twbs cdlatex smart-mode-line smart-line-mode company-quickhelp company-shell dashboard auto-revert-mode htmlize auctex poly-R poly-markdown julia-mode magit-todos treemacs dockerfile-mode lsp-mode swiper lsp-ui company-lsp counsel duplicate-thing pip-requirements rtags smooth-scrolling yasnippet-snippets markdown-mode rainbow-delimiters zenburn diminish ess-site smartparens bazel-mode sublimity pytest cuda-mode ein elpy undo-tree powerline cmake-font-lock flycheck-yamllint yaml-mode company-ycmd flycheck-ycmd ycmd buffer-move helm neotree flycheck company csv-mode chess stan-snippets zenburn-theme use-package stan-mode polymode multiple-cursors markdown-preview-mode magit latex-preview-pane iedit ess-R-object-popup drag-stuff csharp-mode cmake-mode clang-format auto-yasnippet)))
+    (which-key ess ccls treemacs-icons-dired helpful pdf-tools helm-ag expand-region ob-ipython ox-twbs cdlatex smart-mode-line smart-line-mode company-quickhelp company-shell dashboard auto-revert-mode htmlize auctex poly-R poly-markdown julia-mode magit-todos treemacs dockerfile-mode lsp-mode swiper lsp-ui company-lsp counsel duplicate-thing pip-requirements rtags smooth-scrolling yasnippet-snippets markdown-mode rainbow-delimiters zenburn diminish ess-site smartparens bazel-mode sublimity pytest cuda-mode ein elpy undo-tree powerline cmake-font-lock flycheck-yamllint yaml-mode company-ycmd flycheck-ycmd ycmd buffer-move helm neotree flycheck company csv-mode chess stan-snippets zenburn-theme use-package stan-mode polymode multiple-cursors markdown-preview-mode magit latex-preview-pane iedit ess-R-object-popup drag-stuff csharp-mode cmake-mode clang-format auto-yasnippet)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(safe-local-variable-values (quote ((c-indent-level . 4))))
  '(vc-annotate-background "#2B2B2B")
