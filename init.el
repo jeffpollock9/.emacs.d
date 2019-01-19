@@ -35,24 +35,23 @@
   (setq-default show-paren-delay 0)
   (setq-default major-mode 'text-mode)
 
-  (global-set-key (kbd "C-x C-b") 'ibuffer)
-  (global-set-key (kbd "C-#") 'comment-or-uncomment-region)
-  (global-set-key (kbd "C-u") '(lambda () (interactive) (kill-line 0)))
-  (global-set-key (kbd "C-l") 'comint-clear-buffer)
-  (global-set-key (kbd "C-c t") 'toggle-truncate-lines)
-  (global-set-key (kbd "C-c d") 'delete-trailing-whitespace)
-
   (define-minor-mode resize-mode
     "Toggle resizing of current window"
     :init-value nil
     :lighter " resize"
     :keymap
-    '(([left] . shrink-window-horizontally)
-      ([right] . enlarge-window-horizontally)
-      ([up] . enlarge-window)
-      ([down] . shrink-window)
+    '(([left]   . shrink-window-horizontally)
+      ([right]  . enlarge-window-horizontally)
+      ([up]     . enlarge-window)
+      ([down]   . shrink-window)
       ([return] . resize-mode)))
 
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
+  (global-set-key (kbd "C-#") 'comment-or-uncomment-region)
+  (global-set-key (kbd "C-u") '(lambda () (interactive) (kill-line 0)))
+  (global-set-key (kbd "C-l") 'comint-clear-buffer)
+  (global-set-key (kbd "C-c t") 'toggle-truncate-lines)
+  (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
   (global-set-key (kbd "C-c r") 'resize-mode)
 
   (setq ibuffer-expert t
@@ -60,6 +59,7 @@
         ibuffer-saved-filter-groups
         '(("groups"
            ("emacs"          (mode . emacs-lisp-mode))
+           ("org"            (mode . org-mode))
            ("python"         (mode . python-mode))
            ("python-console" (mode . inferior-python-mode))
            ("R"              (mode . ess-mode))
@@ -383,6 +383,9 @@
     :ensure t
     :mode ("\\.md$" . markdown-mode))
 
+  (use-package markdown-toc
+    :ensure t)
+
   (use-package yaml-mode
     :ensure t
     :mode (("\\.yml$'" . yaml-mode)
@@ -398,15 +401,16 @@
     :init
     (elpy-enable)
     (delete `elpy-module-highlight-indentation elpy-modules)
+    (elpy-set-test-runner 'elpy-test-pytest-runner)
     :bind
-    (:map elpy-mode-map ("C-b" . elpy-autopep8-fix-code))
+    (:map elpy-mode-map ("C-b" . elpy-black-fix-code))
     :config
     (pyvenv-workon "pymacs"))
 
   (use-package duplicate-thing
     :ensure t
     :bind
-    ("C-d" . duplicate-thing))
+    ("C-c d" . duplicate-thing))
 
   (use-package doxymacs
     :load-path "~/.emacs.d/builds/doxymacs/install/share/emacs/site-lisp"
