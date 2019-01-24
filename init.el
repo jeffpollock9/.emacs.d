@@ -31,7 +31,7 @@
 
   (setq column-number-mode t)
 
-  (setq-default fill-column 80)
+  (setq-default fill-column 88)
   (setq-default show-paren-delay 0)
   (setq-default major-mode 'text-mode)
 
