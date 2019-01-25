@@ -10,6 +10,8 @@ tar xf doxymacs-1.8.0.tar.gz
 
 cd doxymacs-1.8.0
 
+sed -i 's/inline/extern inline/g' c/doxymacs_parser.c
+
 ./configure --prefix "`pwd`/../install"
 
 make
