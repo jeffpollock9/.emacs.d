@@ -23,6 +23,7 @@ cmake ../ccls \
       -DCMAKE_CXX_FLAGS="-march=native" \
       -DCMAKE_BUILD_TYPE="Release" \
       -DCMAKE_INSTALL_PREFIX="../install" \
+      -DCLANG_ROOT="/usr/lib/llvm-7" \
       -G"Ninja"
 
 ninja
