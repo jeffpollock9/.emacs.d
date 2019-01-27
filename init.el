@@ -335,8 +335,13 @@
     :bind
     (:map dired-mode-map ("C-c C-e" . wdired-change-to-wdired-mode))
     :init
-    (setq dired-listing-switches "-alh"
+    (setq dired-listing-switches "-algh"
           dired-dwim-target t))
+
+  (use-package dired+
+    :load-path "~/.emacs.d/emacswiki"
+    :init
+    (setq diredp-hide-details-initially-flag nil))
 
   (use-package treemacs
     :ensure t
