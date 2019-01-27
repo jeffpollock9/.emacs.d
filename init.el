@@ -341,7 +341,11 @@
   (use-package dired+
     :load-path "~/.emacs.d/emacswiki"
     :init
-    (setq diredp-hide-details-initially-flag nil))
+    (setq diredp-hide-details-initially-flag nil)
+    :config
+    (setq dired-omit-verbose nil
+          dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\..*$")
+    (setq-default dired-omit-mode t))
 
   (use-package treemacs
     :ensure t
