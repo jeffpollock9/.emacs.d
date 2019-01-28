@@ -136,7 +136,8 @@
   (use-package pdf-tools
     :ensure t
     :config
-    (pdf-tools-install))
+    (pdf-tools-install)
+    (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
 
   (use-package ob-ipython
     :ensure t)
