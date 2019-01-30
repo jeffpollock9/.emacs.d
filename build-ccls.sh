@@ -27,9 +27,6 @@ cmake ../ccls \
       -G"Ninja"
 
 ninja
-
 ninja install
 
-mkdir -p $HOME/bin
-
-ln -sf $HOME/.emacs.d/builds/ccls/install/bin/* $HOME/bin/
+ln -sf $HOME/.emacs.d/builds/ccls/install/bin/ccls $HOME/bin/
