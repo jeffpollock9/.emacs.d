@@ -1,6 +1,5 @@
 jedi
 rope
-autopep8
 yapf
 black
 numpy
@@ -10,3 +9,6 @@ pandas
 statsmodels
 ipython
 jupyter
+mypy
+flake8
+pylint

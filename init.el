@@ -208,13 +208,18 @@
     :ensure t
     :init (sml/setup))
 
-  (use-package cuda-mode
-    :ensure t
-    :defer t)
-
   (use-package clang-format
     :ensure t
-    :defer t)
+    :defer t
+    :bind
+    (:map c++-mode-map ("C-c b" . clang-format-buffer))
+    (:map c-mode-map ("C-c b" . clang-format-buffer)))
+
+  (use-package cuda-mode
+    :ensure t
+    :defer t
+    :bind
+    (:map cuda-mode-map ("C-c b" . clang-format-buffer)))
 
   (use-package stan-snippets
     :ensure t
@@ -413,7 +418,7 @@
     (delete `elpy-module-highlight-indentation elpy-modules)
     (elpy-set-test-runner 'elpy-test-pytest-runner)
     :bind
-    (:map elpy-mode-map ("C-b" . elpy-black-fix-code))
+    (:map elpy-mode-map ("C-c b" . elpy-black-fix-code))
     :config
     (pyvenv-workon "pymacs"))
 
@@ -432,7 +437,9 @@
           (doxymacs-font-lock)))
     (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
     (setq doxymacs-doxygen-style "C++")
-    (setq doxymacs-command-character "\\"))
+    (setq doxymacs-command-character "\\")
+    :config
+    (unbind-key "C-c d" doxymacs-mode-map))
 
   ;; ispc
   (add-to-list 'auto-mode-alist '("\\.ispc$" . c++-mode))
@@ -454,7 +461,9 @@
     :diminish
     :ensure t
     :init
-    (global-flycheck-mode))
+    (global-flycheck-mode)
+    (flycheck-add-next-checker 'python-flake8 'python-mypy)
+    (flycheck-add-next-checker 'python-mypy 'python-pylint))
 
   (use-package flycheck-yamllint
     :ensure t
@@ -502,9 +511,6 @@
   (use-package ccls
     :ensure t
     :bind
-    (:map c++-mode-map
-          ("C-b" . clang-format-buffer)
-          ("C-d" . duplicate-thing))
     :hook ((c++-mode) . (lambda () (require 'ccls) (lsp))))
 
   (use-package company-shell
