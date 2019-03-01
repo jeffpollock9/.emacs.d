@@ -12,3 +12,6 @@ jupyter
 mypy
 flake8
 pylint
+pymongo
+jupyter_nbextensions_configurator
+jupyter_contrib_nbextensions

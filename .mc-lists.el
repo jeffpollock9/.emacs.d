@@ -12,6 +12,7 @@
         c-electric-slash
         c-electric-star
         c-indent-line-or-region
+        comint-delchar-or-maybe-eof
         elpy-nav-backward-indent
         elpy-nav-forward-indent
         ess-smart-comma

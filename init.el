@@ -279,10 +279,16 @@
     ("C-c 1" . windmove-left)
     ("C-c 3" . windmove-right))
 
+  (use-package string-inflection
+    :ensure t)
+
   (use-package magit
     :ensure t
     :bind
     ("C-x g" . magit-status))
+
+  (use-package magit-svn
+    :ensure t)
 
   (use-package magit-todos
     :ensure t
@@ -363,11 +369,12 @@
     :bind
     (:map global-map ("M-0" . treemacs-select-window)))
 
-  (use-package treemacs-icons-dired
-    :ensure t
-    :config
-    (treemacs-icons-dired-mode)
-    (treemacs-resize-icons 18))
+  ;; (use-package treemacs-icons-dired
+  ;;   :ensure t
+  ;;   :after treemacs dired
+  ;;   :config
+  ;;   (treemacs-icons-dired-mode)
+  ;;   (treemacs-resize-icons 18))
 
   (use-package cmake-mode
     :ensure t
