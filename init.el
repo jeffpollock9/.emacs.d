@@ -468,9 +468,7 @@
     :diminish
     :ensure t
     :init
-    (global-flycheck-mode)
-    (flycheck-add-next-checker 'python-flake8 'python-mypy)
-    (flycheck-add-next-checker 'python-mypy 'python-pylint))
+    (global-flycheck-mode))
 
   (use-package flycheck-yamllint
     :ensure t
