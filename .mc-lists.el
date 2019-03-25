@@ -21,6 +21,7 @@
         indent-for-tab-command
         kill-region
         markdown-outdent-or-delete
+        swiper
         undo-tree-visualize
         yaml-electric-backspace
         ))

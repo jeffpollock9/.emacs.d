@@ -457,8 +457,7 @@
     :defer t)
 
   (use-package poly-R
-    :ensure t
-    :mode ("\\.Rmd$" . poly-markdown+r-mode))
+    :ensure t)
 
   (use-package flymake
     :diminish
@@ -469,6 +468,15 @@
     :ensure t
     :init
     (global-flycheck-mode))
+
+  ;; (flycheck-define-checker stan
+  ;;   "A stan syntax checker using stanc"
+  ;;   :command ("stanc" "--o=/tmp/stan-flycheck.cpp" source)
+  ;;   :error-patterns
+  ;;   ((error line-start " error in '" (file-name) "' at line " line ", column " column line-end))
+  ;;   :modes stan-mode)
+
+  ;; (add-to-list 'flycheck-checkers 'stan)
 
   (use-package flycheck-yamllint
     :ensure t
