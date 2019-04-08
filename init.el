@@ -139,7 +139,7 @@
     (pdf-tools-install)
     (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
 
-  (use-package ob-ipython
+  (use-package jupyter
     :ensure t)
 
   (use-package org
@@ -165,7 +165,7 @@
        (stan    . t)
        (C       . t)
        (python  . t)
-       (ipython . t)
+       (jupyter . t)
        (java    . t)
        (shell   . t))))
 
@@ -350,14 +350,13 @@
     (setq dired-listing-switches "-algh"
           dired-dwim-target t))
 
+  (use-package dired-filter
+      :ensure t)
+
   (use-package dired+
     :load-path "~/.emacs.d/emacswiki"
     :init
-    (setq diredp-hide-details-initially-flag nil)
-    :config
-    (setq dired-omit-verbose nil
-          dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\..*$")
-    (setq-default dired-omit-mode t))
+    (setq diredp-hide-details-initially-flag nil))
 
   (use-package treemacs
     :ensure t
