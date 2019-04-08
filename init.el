@@ -139,9 +139,6 @@
     (pdf-tools-install)
     (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
 
-  (use-package jupyter
-    :ensure t)
-
   (use-package org
     :defer t
     :ensure t
@@ -165,7 +162,6 @@
        (stan    . t)
        (C       . t)
        (python  . t)
-       (jupyter . t)
        (java    . t)
        (shell   . t))))
 
