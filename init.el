@@ -429,6 +429,11 @@
     :config
     (pyvenv-workon "pymacs"))
 
+  (use-package sphinx-doc
+    :ensure t
+    :diminish
+    :hook (python-mode . sphinx-doc-mode))
+
   (use-package duplicate-thing
     :ensure t
     :bind

@@ -15,6 +15,7 @@
         comint-delchar-or-maybe-eof
         elpy-nav-backward-indent
         elpy-nav-forward-indent
+        ess-roxy-move-beginning-of-line
         ess-smart-comma
         ess-yank
         helm-M-x
