@@ -58,21 +58,20 @@
         ibuffer-show-empty-filter-groups nil
         ibuffer-saved-filter-groups
         '(("groups"
-           ("emacs"          (mode . emacs-lisp-mode))
-           ("org"            (mode . org-mode))
-           ("python"         (mode . python-mode))
-           ("python-console" (mode . inferior-python-mode))
-           ("R"              (mode . ess-mode))
-           ("stan"           (mode . stan-mode))
-           ("R-console"      (mode . inferior-ess-mode))
+           ("Emacs"          (mode . emacs-lisp-mode))
+           ("Org"            (mode . org-mode))
+           ("Python"         (mode . python-mode))
+           ("Python-console" (mode . inferior-python-mode))
+           ("R"              (mode . ess-r-mode))
+           ("R-console"      (mode . inferior-ess-r-mode))
+           ("Stan"           (mode . stan-mode))
            ("C++"            (or (mode . c-mode)
                                  (mode . c++-mode)))
-           ("cmake"          (mode . cmake-mode))
-           ("make"           (name . "[mM]akefile"))
-           ("magit"          (name . "\*magit"))
-           ("help"           (or (name . "\*Help\*")
-                                 (name . "\*Apropos\*")
-                                 (name . "\*info\*")))
+           ("Cmake"          (mode . cmake-mode))
+           ("Make"           (name . "[mM]akefile"))
+           ("Magit"          (name . "\*magit"))
+           ("Init"           (or (mode . dashboard-mode)
+                                 (name . "\*scratch\*")))
            )))
 
   (add-hook 'ibuffer-mode-hook
