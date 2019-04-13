@@ -6,3 +6,5 @@ network-security.data
 .cache
 recentf
 tramp
+transient
+eshell
