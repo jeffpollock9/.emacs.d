@@ -16,6 +16,7 @@
  '(delete-selection-mode 1)
  '(flycheck-lintr-linters
    "with_defaults(line_length_linter(88), object_length_linter(40))")
+ '(helm-ff-skip-boring-files t)
  '(inhibit-startup-screen t)
  '(markdown-command "pandoc")
  '(nrepl-message-colors
