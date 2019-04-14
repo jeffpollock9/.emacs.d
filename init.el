@@ -46,37 +46,12 @@
       ([down]   . shrink-window)
       ([return] . resize-mode)))
 
-  (global-set-key (kbd "C-x C-b") 'ibuffer)
   (global-set-key (kbd "C-#") 'comment-or-uncomment-region)
   (global-set-key (kbd "C-u") '(lambda () (interactive) (kill-line 0)))
   (global-set-key (kbd "C-l") 'comint-clear-buffer)
   (global-set-key (kbd "C-c t") 'toggle-truncate-lines)
   (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
   (global-set-key (kbd "C-c r") 'resize-mode)
-
-  (setq ibuffer-expert t
-        ibuffer-show-empty-filter-groups nil
-        ibuffer-saved-filter-groups
-        '(("groups"
-           ("Emacs"          (mode . emacs-lisp-mode))
-           ("Org"            (mode . org-mode))
-           ("Python"         (mode . python-mode))
-           ("Python-console" (mode . inferior-python-mode))
-           ("R"              (mode . ess-r-mode))
-           ("R-console"      (mode . inferior-ess-r-mode))
-           ("Stan"           (mode . stan-mode))
-           ("C++"            (or (mode . c-mode)
-                                 (mode . c++-mode)))
-           ("Cmake"          (mode . cmake-mode))
-           ("Make"           (name . "[mM]akefile"))
-           ("Magit"          (name . "\*magit"))
-           ("Init"           (or (mode . dashboard-mode)
-                                 (name . "\*scratch\*")))
-           )))
-
-  (add-hook 'ibuffer-mode-hook
-            '(lambda ()
-               (ibuffer-switch-to-saved-filter-groups "groups")))
 
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width 4)
@@ -111,6 +86,33 @@
 
   (use-package bind-key
     :ensure t)
+
+  (use-package ibuffer
+    :ensure nil
+    :bind ("C-x C-b" . ibuffer)
+    :init
+    (setq ibuffer-expert t
+          ibuffer-show-empty-filter-groups nil
+          ibuffer-saved-filter-groups
+          '(("groups"
+             ("Emacs"          (mode . emacs-lisp-mode))
+             ("Org"            (mode . org-mode))
+             ("Python"         (mode . python-mode))
+             ("Python-console" (mode . inferior-python-mode))
+             ("R"              (mode . ess-r-mode))
+             ("R-console"      (mode . inferior-ess-r-mode))
+             ("Stan"           (mode . stan-mode))
+             ("C++"            (or (mode . c-mode)
+                                   (mode . c++-mode)))
+             ("Cmake"          (mode . cmake-mode))
+             ("Make"           (name . "[mM]akefile"))
+             ("Magit"          (name . "\*magit"))
+             ("Init"           (or (mode . dashboard-mode)
+                                   (name . "\*scratch\*")))
+             )))
+
+    (add-hook 'ibuffer-mode-hook
+              '(lambda () (ibuffer-switch-to-saved-filter-groups "groups"))))
 
   (use-package which-key
     :ensure t
