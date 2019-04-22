@@ -3,6 +3,7 @@
 ;;; code:
 
 ;; TOOD: take ideas from https://github.com/malb/emacs.d/blob/master/malb.org
+;; TODO: take ideas from https://github.com/seagle0128/.emacs.d
 
 (let ((file-name-handler-alist nil)
       (gc-cons-threshold (* 1024 1024 100)))
@@ -23,17 +24,38 @@
 
   (eval-when-compile (require 'use-package))
 
+  (fset 'yes-or-no-p 'y-or-n-p)
+
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (fringe-mode 1)
   (show-paren-mode 1)
+  (size-indication-mode 1)
+  (global-auto-revert-mode 1)
 
-  (setq column-number-mode t)
+  (setq use-file-dialog nil
+        use-dialog-box nil
+        inhibit-startup-screen t
+        inhibit-startup-echo-area-message t
+        indent-line-function 'insert-tab
+        global-auto-revert-non-file-buffers t
+        auto-revert-verbose nil)
 
-  (setq-default fill-column 88)
-  (setq-default show-paren-delay 0)
-  (setq-default major-mode 'text-mode)
+  (setq ispell-program-name "hunspell"
+        ispell-local-dictionary "en_GB")
+
+  (when (boundp 'ns-pop-up-frames)
+    (setq ns-pop-up-frames nil))
+
+  (when (boundp 'x-gtk-use-system-tooltips)
+    (setq x-gtk-use-system-tooltips nil))
+
+  (setq-default fill-column 88
+                show-paren-delay 0
+                major-mode 'text-mode
+                indent-tabs-mode nil
+                tab-width 4)
 
   (define-minor-mode resize-mode
     "Toggle resizing of current window"
@@ -53,32 +75,20 @@
   (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
   (global-set-key (kbd "C-c r") 'resize-mode)
 
-  (setq-default indent-tabs-mode nil)
-  (setq-default tab-width 4)
-  (setq indent-line-function 'insert-tab)
-
-  (setq ispell-program-name "hunspell"
-        ispell-local-dictionary "en_GB")
-
   (defun my-c-mode-common-hook ()
     (c-set-offset 'comment-intro 0)
     (c-set-offset 'substatement-open 0)
     (c-set-offset 'innamespace 0)
 
-    (setq c++-tab-always-indent t)
-    (setq c-basic-offset 4)
-    (setq c-indent-level 4)
-    (setq c-file-style "stroustrup")
-    (setq tab-stop-list (number-sequence 2 200 2))
-    (setq tab-width 4)
-    (setq indent-tabs-mode nil))
+    (setq c++-tab-always-indent t
+          c-basic-offset 4
+          c-indent-level 4
+          c-file-style "stroustrup"
+          tab-stop-list (number-sequence 2 200 2)
+          tab-width 4
+          indent-tabs-mode nil))
 
   (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
-
-  (setq global-auto-revert-non-file-buffers t
-        auto-revert-verbose nil)
-
-  (global-auto-revert-mode 1)
 
   (use-package diminish
     :ensure t
@@ -88,7 +98,6 @@
     :ensure t)
 
   (use-package ibuffer
-    :ensure nil
     :bind ("C-x C-b" . ibuffer)
     :init
     (setq ibuffer-expert t
@@ -107,6 +116,8 @@
              ("Cmake"          (mode . cmake-mode))
              ("Make"           (name . "[mM]akefile"))
              ("Magit"          (name . "\*magit"))
+             ("Markdown"       (mode . markdown-mode))
+             ("Dired"          (mode . dired-mode))
              ("Init"           (or (mode . dashboard-mode)
                                    (name . "\*scratch\*")))
              )))
@@ -348,7 +359,8 @@
           dired-dwim-target t))
 
   (use-package dired-filter
-      :ensure t)
+    :diminish
+    :ensure t)
 
   (use-package dired+
     :load-path "~/.emacs.d/emacswiki"
@@ -380,22 +392,21 @@
     :ensure t
     :hook cmake-mode-hook)
 
-  (use-package company-quickhelp
-    :ensure t
-    :config
-    (eval-after-load 'company
-      '(define-key company-active-map (kbd "C-c C-d") #'company-quickhelp-manual-begin)))
-
   (use-package company
     :ensure t
     :init (global-company-mode)
     :bind ("<C-tab>" . company-complete)
-    :custom
-    (company-idle-delay nil)
-    (company-minimum-prefix-length 2)
-    (company-tooltip-limit 20)
-    (company-show-numbers t)
-    (company-dabbrev-downcase nil))
+    :config
+    (setq company-tooltip-align-annotations t
+          company-tooltip-limit 20
+          company-show-numbers t
+          company-idle-delay nil
+          company-require-match nil))
+
+  (use-package company-quickhelp
+    :ensure t
+    :init (company-quickhelp-mode)
+    :hook (global-company-mode . company-quickhelp-mode))
 
   (use-package markdown-mode
     :ensure t
@@ -413,6 +424,15 @@
     :ensure t
     :mode ("Dockerfile" . dockerfile-mode))
 
+  (use-package pyvenv
+    :ensure t
+    :bind
+    (:map pyvenv-mode-map
+          ("C-c q" . pyvenv-restart-python)
+          ("C-c o" . pyvenv-workon))
+    :config
+    (pyvenv-workon "pymacs"))
+
   (use-package elpy
     :ensure t
     :diminish
@@ -421,9 +441,7 @@
     (delete `elpy-module-highlight-indentation elpy-modules)
     (elpy-set-test-runner 'elpy-test-pytest-runner)
     :bind
-    (:map elpy-mode-map ("C-c b" . elpy-black-fix-code))
-    :config
-    (pyvenv-workon "pymacs"))
+    (:map elpy-mode-map ("C-c b" . elpy-black-fix-code)))
 
   (use-package sphinx-doc
     :ensure t
@@ -444,8 +462,8 @@
       (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
           (doxymacs-font-lock)))
     (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
-    (setq doxymacs-doxygen-style "C++")
-    (setq doxymacs-command-character "\\")
+    (setq doxymacs-doxygen-style "C++"
+          doxymacs-command-character "\\")
     :config
     (unbind-key "C-c d" doxymacs-mode-map))
 
