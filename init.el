@@ -356,7 +356,8 @@
     (:map dired-mode-map ("C-c C-e" . wdired-change-to-wdired-mode))
     :init
     (setq dired-listing-switches "-algh"
-          dired-dwim-target t))
+          dired-dwim-target t
+          dired-omit-mode t))
 
   (use-package dired-filter
     :diminish
@@ -405,7 +406,11 @@
 
   (use-package company-quickhelp
     :ensure t
-    :init (company-quickhelp-mode)
+    :after company
+    :init
+    (setq company-quickhelp-use-propertized-text t
+          company-quickhelp-max-lines 20)
+    (company-quickhelp-mode)
     :hook (global-company-mode . company-quickhelp-mode))
 
   (use-package markdown-mode
