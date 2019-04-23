@@ -239,20 +239,21 @@
 
   (use-package helm
     :ensure t
+    :init
+    (setq helm-always-two-windows nil
+          helm-display-buffer-default-height 18
+          helm-split-window-inside-p t)
     :bind
-    ("M-x" . helm-M-x)
+    ("M-x"     . helm-M-x)
+    ("C-x b"   . helm-mini)
+    ("C-s"     . helm-occur)
+    ("C-c h"   . helm-google-suggest)
     ("C-x C-f" . helm-find-files))
 
   (use-package helm-ag
     :ensure t
     :bind
     ("C-c g" . helm-do-ag))
-
-  (use-package swiper
-    :ensure t
-    :diminish
-    :bind
-    ("C-s" . swiper))
 
   (use-package smartparens
     :ensure t
