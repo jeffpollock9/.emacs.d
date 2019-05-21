@@ -29,13 +29,13 @@
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
-  (fringe-mode 1)
+  (fringe-mode 0)
   (show-paren-mode 1)
-  (size-indication-mode 1)
   (global-auto-revert-mode 1)
 
   (setq use-file-dialog nil
         use-dialog-box nil
+        column-number-mode t
         inhibit-startup-screen t
         inhibit-startup-echo-area-message t
         indent-line-function 'insert-tab
@@ -255,6 +255,11 @@
     :bind
     ("C-c g" . helm-do-ag))
 
+  (use-package helm-tramp
+    :ensure t
+    :bind
+    ("C-c s" . helm-tramp))
+
   (use-package smartparens
     :ensure t
     :diminish
@@ -325,6 +330,7 @@
     :ensure t)
 
   (use-package yasnippet
+    :diminish
     :defer t
     :ensure t
     :init
@@ -395,6 +401,7 @@
     :hook cmake-mode-hook)
 
   (use-package company
+    :diminish
     :ensure t
     :init (global-company-mode)
     :bind ("<C-tab>" . company-complete)
@@ -436,8 +443,7 @@
     (:map pyvenv-mode-map
           ("C-c q" . pyvenv-restart-python)
           ("C-c o" . pyvenv-workon))
-    :config
-    (pyvenv-workon "pymacs"))
+    :config (pyvenv-workon "pymacs"))
 
   (use-package elpy
     :ensure t
