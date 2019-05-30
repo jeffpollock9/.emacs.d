@@ -212,6 +212,13 @@
     :init
     (load-theme 'zenburn t))
 
+  (use-package monokai-theme
+    :ensure t
+    :defer t)
+
+  (use-package helm-themes
+    :ensure t)
+
   (use-package smart-mode-line
     :ensure t
     :init (sml/setup))
@@ -451,9 +458,18 @@
     :init
     (elpy-enable)
     (delete `elpy-module-highlight-indentation elpy-modules)
-    (elpy-set-test-runner 'elpy-test-pytest-runner)
     :bind
     (:map elpy-mode-map ("C-c b" . elpy-black-fix-code)))
+
+  (use-package python-pytest
+    :ensure t
+    :after elpy
+    :bind (:map elpy-mode-map ("C-c p" . python-pytest-popup))
+    :custom
+    (python-pytest-arguments
+     '("--color"
+       "--failed-first"
+       "--maxfail=5")))
 
   (use-package sphinx-doc
     :ensure t

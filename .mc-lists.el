@@ -31,4 +31,5 @@
       '(
         c-electric-pound
         iedit-switch-to-mc-mode
+        overwrite-mode
         ))
