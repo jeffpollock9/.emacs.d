@@ -2,3 +2,27 @@ Emacs.menuBar: off
 Emacs.verticalScrollBars: off
 Emacs.toolBar: off
 Emacs.font: DejaVu Sans Mono-12
+
+rofi.modi: drun,window,ssh
+rofi.sidebar-mode: true
+rofi.terminal: tilix
+rofi.ssh-client: ssh
+rofi.ssh-command: {terminal} -e "{ssh-client} {host}"
+rofi.opacity: 100
+rofi.width: 50
+rofi.lines: 12
+rofi.columns: 1
+rofi.font: DejaVu Sans Mono 12
+rofi.bw: 10
+rofi.matching: fuzzy
+rofi.location: 0
+rofi.padding: 20
+rofi.levenshtein-sort: true
+rofi.show-icons: true
+rofi.case-sensitive: false
+rofi.fuzzy: true
+rofi.line-margin: 2
+rofi.separator-style: solid
+rofi.hide-scrollbar: true
+rofi.markup-rows: false
+rofi.scrollbar-width: 8
