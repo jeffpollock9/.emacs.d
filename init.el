@@ -166,7 +166,7 @@
     ;;       https://www.reddit.com/r/emacs/comments/8gnsm2/orgmode_default_document
     ;; (setq org-html-head-extra "<style>pre { background-color: #3f3f3f; color: #dcdccc; }</style>")
     (setq org-highlight-latex-and-related '(latex script entities))
-    (plist-put org-format-latex-options :scale 1.5)
+    (plist-put org-format-latex-options :scale 1.75)
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((latex   . t)
@@ -191,7 +191,11 @@
   (use-package ox-twbs
     :ensure t)
 
+  (use-package all-the-icons
+    :ensure t)
+
   (use-package dashboard
+    :after all-the-icons
     :ensure t
     :config
     (setq dashboard-items '((recents   . 10)

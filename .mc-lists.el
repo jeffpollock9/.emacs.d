@@ -3,6 +3,7 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        TeX-insert-backslash
         c-electric-brace
         c-electric-colon
         c-electric-delete-forward
@@ -13,6 +14,8 @@
         c-electric-star
         c-indent-line-or-region
         comint-delchar-or-maybe-eof
+        diredp-next-line
+        diredp-previous-line
         elpy-nav-backward-indent
         elpy-nav-forward-indent
         ess-roxy-move-beginning-of-line
@@ -30,6 +33,8 @@
 (setq mc/cmds-to-run-once
       '(
         c-electric-pound
+        dired-unmark-backward
         iedit-switch-to-mc-mode
         overwrite-mode
+        wdired-finish-edit
         ))
