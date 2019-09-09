@@ -94,6 +94,9 @@
     :ensure t
     :diminish abbrev-mode)
 
+  (use-package crontab-mode
+    :ensure t)
+
   (use-package bind-key
     :ensure t)
 
@@ -314,10 +317,6 @@
 
   (use-package magit-svn
     :ensure t)
-
-  (use-package magit-todos
-    :ensure t
-    :init (magit-todos-mode))
 
   (use-package iedit
     :ensure t
