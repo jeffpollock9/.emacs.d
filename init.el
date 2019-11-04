@@ -154,6 +154,9 @@
     (pdf-tools-install)
     (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
 
+  (use-package jupyter
+    :ensure t)
+
   (use-package org
     :defer t
     :ensure t
@@ -177,6 +180,7 @@
        (stan    . t)
        (C       . t)
        (python  . t)
+       (jupyter . t)
        (java    . t)
        (shell   . t))))
 
@@ -193,6 +197,14 @@
 
   (use-package ox-twbs
     :ensure t)
+
+  (use-package ox-gfm
+    :ensure t)
+
+  (use-package org-re-reveal
+    :ensure t
+    :config
+    (setq org-re-reveal-root "file:///home/jeff/workspace/reveal.js"))
 
   (use-package all-the-icons
     :ensure t)
@@ -269,10 +281,18 @@
     :bind
     ("C-c g" . helm-do-ag))
 
+  (use-package tramp
+    :ensure t
+    :init
+    (setq tramp-default-method "ssh"))
+
   (use-package helm-tramp
     :ensure t
     :bind
     ("C-c s" . helm-tramp))
+
+  (use-package docker-tramp
+    :ensure t)
 
   (use-package smartparens
     :ensure t
@@ -354,14 +374,21 @@
     :ensure t
     :defer t
     :init
+    (setq ess-eval-visibly 'nowait)
     (defun magrittr-pipe ()
       "insert %>%"
       (interactive)
       (just-one-space 1)
       (insert "%>%")
       (just-one-space 1))
+    (defun dev-off ()
+      "close plot windows"
+      (interactive)
+      (let ((proc (ess-get-process)))
+        (ess-send-string proc "dev.off()")))
     :bind
     (("C-=" . ess-insert-assign)
+     ("C-c f" . dev-off)
      ("C->" . magrittr-pipe)))
 
   (use-package julia-mode

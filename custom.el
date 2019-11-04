@@ -24,6 +24,7 @@
    (quote
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(org-confirm-babel-evaluate nil)
+ '(org-export-backends (quote (md odt latex icalendar html ascii)))
  '(org-hide-emphasis-markers t)
  '(org-log-done t)
  '(org-src-fontify-natively t)
@@ -31,7 +32,7 @@
  '(org-startup-indented t)
  '(package-selected-packages
    (quote
-    (crontab-mode all-the-icons monokai-theme helm-themes python-pytest helm-tramp dired-filter sphinx-doc treemacs-icons-dired treemacs magit-svn string-inflection markdown-toc which-key ess ccls helpful pdf-tools helm-ag expand-region ob-ipython ox-twbs cdlatex smart-mode-line smart-line-mode company-quickhelp company-shell dashboard auto-revert-mode htmlize auctex poly-R poly-markdown julia-mode magit-todos dockerfile-mode lsp-mode lsp-ui company-lsp counsel duplicate-thing pip-requirements rtags smooth-scrolling yasnippet-snippets markdown-mode rainbow-delimiters zenburn diminish ess-site smartparens bazel-mode sublimity pytest cuda-mode ein elpy undo-tree powerline cmake-font-lock flycheck-yamllint yaml-mode company-ycmd flycheck-ycmd ycmd buffer-move helm neotree flycheck company csv-mode chess stan-snippets zenburn-theme use-package stan-mode polymode multiple-cursors markdown-preview-mode magit latex-preview-pane iedit ess-R-object-popup drag-stuff csharp-mode cmake-mode clang-format auto-yasnippet)))
+    (ob-jupyter jupyter org-re-reveal ox-re-reveal ox-reveal docker-tramp pyvenv ox-gfm crontab-mode all-the-icons monokai-theme helm-themes python-pytest helm-tramp dired-filter sphinx-doc treemacs-icons-dired treemacs magit-svn string-inflection markdown-toc which-key ess ccls helpful pdf-tools helm-ag expand-region ox-twbs cdlatex smart-mode-line smart-line-mode company-quickhelp company-shell dashboard auto-revert-mode htmlize auctex poly-R poly-markdown julia-mode magit-todos dockerfile-mode lsp-mode lsp-ui company-lsp counsel duplicate-thing pip-requirements rtags smooth-scrolling yasnippet-snippets markdown-mode rainbow-delimiters zenburn diminish ess-site smartparens bazel-mode sublimity pytest cuda-mode ein elpy undo-tree powerline cmake-font-lock flycheck-yamllint yaml-mode company-ycmd flycheck-ycmd ycmd buffer-move helm neotree flycheck company csv-mode chess stan-snippets zenburn-theme use-package stan-mode polymode multiple-cursors markdown-preview-mode magit latex-preview-pane iedit ess-R-object-popup drag-stuff csharp-mode cmake-mode clang-format auto-yasnippet)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(python-pytest-arguments (quote ("--color" "--failed-first" "--maxfail=5")) t)
  '(safe-local-variable-values (quote ((c-indent-level . 4))))
