@@ -155,7 +155,12 @@
     (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
 
   (use-package jupyter
-    :ensure t)
+    :defer t
+    :ensure t
+    :init
+    (use-package ob-jupyter
+      :defer t
+      :commands (org-babel-execute:jupyter-python)))
 
   (use-package org
     :defer t
@@ -202,6 +207,7 @@
     :ensure t)
 
   (use-package org-re-reveal
+    :defer t
     :ensure t
     :config
     (setq org-re-reveal-root "file:///home/jeff/workspace/reveal.js"))
