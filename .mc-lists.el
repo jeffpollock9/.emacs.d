@@ -25,6 +25,9 @@
         indent-for-tab-command
         kill-region
         markdown-outdent-or-delete
+        org-cdlatex-underscore-caret
+        org-self-insert-command
+        org-yank
         swiper
         undo-tree-visualize
         yaml-electric-backspace

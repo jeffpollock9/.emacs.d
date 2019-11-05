@@ -160,7 +160,12 @@
     :init
     (use-package ob-jupyter
       :defer t
-      :commands (org-babel-execute:jupyter-python)))
+      :commands (org-babel-execute:jupyter-python)
+      :bind
+      (:map jupyter-repl-mode-map
+            ("C-l" . jupyter-repl-clear-cells)
+            ("C-<up>" . jupyter-repl-history-previous)
+            ("C-<down>" . jupyter-repl-history-next))))
 
   (use-package org
     :defer t
