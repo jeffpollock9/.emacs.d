@@ -158,6 +158,7 @@
     :defer t
     :ensure t
     :init
+    (setq jupyter-repl-echo-eval-p t)
     (use-package ob-jupyter
       :defer t
       :commands (org-babel-execute:jupyter-python)
