@@ -25,6 +25,7 @@
         indent-for-tab-command
         kill-region
         markdown-outdent-or-delete
+        org-beginning-of-line
         org-cdlatex-underscore-caret
         org-self-insert-command
         org-yank
@@ -37,6 +38,7 @@
       '(
         c-electric-pound
         dired-unmark-backward
+        helm-occur
         iedit-switch-to-mc-mode
         overwrite-mode
         wdired-finish-edit
