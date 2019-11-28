@@ -267,13 +267,34 @@
     :bind
     (:map cuda-mode-map ("C-c b" . clang-format-buffer)))
 
-  (use-package stan-snippets
-    :ensure t
-    :defer t)
-
   (use-package stan-mode
     :defer t
-    :ensure t)
+    :ensure t
+    :mode ("\\.stan\\'" . stan-mode)
+    :hook (stan-mode . stan-mode-setup)
+    :config
+    (setq stan-indentation-offset 4))
+
+
+  (use-package company-stan
+    :defer t
+    :ensure t
+    :hook (stan-mode . company-stan-setup))
+
+  (use-package eldoc-stan
+    :ensure t
+    :defer t
+    :hook (stan-mode . eldoc-stan-setup))
+
+  (use-package flycheck-stan
+    :ensure t
+    :defer t
+    :hook (stan-mode . flycheck-stan-setup))
+
+  (use-package stan-snippets
+    :ensure t
+    :defer t
+    :hook (stan-mode . stan-snippets-initialize))
 
   (use-package helm
     :ensure t
