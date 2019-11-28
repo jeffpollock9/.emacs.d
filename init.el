@@ -177,7 +177,6 @@
     (org-confirm-babel-evaluate nil)
     (org-src-fontify-natively t)
     (org-src-tab-acts-natively t)
-    (org-hide-emphasis-markers t)
     :config
     ;; TODO: some sort of default setup file which adds this
     ;;       https://www.reddit.com/r/emacs/comments/8gnsm2/orgmode_default_document
@@ -211,6 +210,11 @@
 
   (use-package ox-gfm
     :ensure t)
+
+  (use-package org-bullets
+    :ensure t
+    :diminish
+    :hook (org-mode . org-bullets-mode))
 
   (use-package org-re-reveal
     :defer t
