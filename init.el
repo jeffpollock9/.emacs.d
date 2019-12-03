@@ -90,6 +90,14 @@
 
   (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
+  (use-package pyvenv
+    :ensure t
+    :bind
+    (:map pyvenv-mode-map
+          ("C-c q" . pyvenv-restart-python)
+          ("C-c o" . pyvenv-workon))
+    :init (pyvenv-workon "pymacs"))
+
   (use-package diminish
     :ensure t
     :diminish abbrev-mode)
@@ -511,14 +519,6 @@
     :ensure t
     :mode ("Dockerfile" . dockerfile-mode))
 
-  (use-package pyvenv
-    :ensure t
-    :bind
-    (:map pyvenv-mode-map
-          ("C-c q" . pyvenv-restart-python)
-          ("C-c o" . pyvenv-workon))
-    :config (pyvenv-workon "pymacs"))
-
   (use-package elpy
     :ensure t
     :diminish
@@ -582,15 +582,6 @@
     :ensure t
     :init
     (global-flycheck-mode))
-
-  ;; (flycheck-define-checker stan
-  ;;   "A stan syntax checker using stanc"
-  ;;   :command ("stanc" "--o=/tmp/stan-flycheck.cpp" source)
-  ;;   :error-patterns
-  ;;   ((error line-start " error in '" (file-name) "' at line " line ", column " column line-end))
-  ;;   :modes stan-mode)
-
-  ;; (add-to-list 'flycheck-checkers 'stan)
 
   (use-package flycheck-yamllint
     :ensure t
