@@ -90,6 +90,9 @@
 
   (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
+  (use-package json-mode
+    :ensure t)
+
   (use-package pyvenv
     :ensure t
     :bind
