@@ -108,6 +108,9 @@
   (use-package crontab-mode
     :ensure t)
 
+  (use-package csv-mode
+    :ensure t)
+
   (use-package bind-key
     :ensure t)
 
@@ -304,7 +307,11 @@
   (use-package flycheck-stan
     :ensure t
     :defer t
-    :hook (stan-mode . flycheck-stan-setup))
+    :hook ((stan-mode . flycheck-stan-stanc2-setup)
+           (stan-mode . flycheck-stan-stanc3-setup))
+    :config
+    (setq flycheck-stanc-executable nil
+          flycheck-stanc3-executable nil))
 
   (use-package stan-snippets
     :ensure t
@@ -550,6 +557,9 @@
     :ensure t
     :bind
     ("C-c d" . duplicate-thing))
+
+  (use-package vterm
+    :load-path "~/.emacs.d/builds/emacs-libvterm")
 
   (use-package doxymacs
     :load-path "~/.emacs.d/builds/doxymacs/install/share/emacs/site-lisp"
