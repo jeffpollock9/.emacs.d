@@ -541,7 +541,7 @@
   (use-package python-pytest
     :ensure t
     :after elpy
-    :bind (:map elpy-mode-map ("C-c p" . python-pytest-popup))
+    :bind (:map elpy-mode-map ("C-c p" . python-pytest-dispatch))
     :custom
     (python-pytest-arguments
      '("--color"

@@ -18,9 +18,12 @@
         diredp-previous-line
         elpy-nav-backward-indent
         elpy-nav-forward-indent
+        elpy-nav-indent-shift-left
+        elpy-nav-indent-shift-right
         ess-roxy-move-beginning-of-line
         ess-smart-comma
         ess-yank
+        fill-paragraph
         helm-M-x
         indent-for-tab-command
         kill-region
