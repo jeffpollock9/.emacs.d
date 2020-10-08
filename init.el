@@ -99,7 +99,9 @@
     (:map pyvenv-mode-map
           ("C-c q" . pyvenv-restart-python)
           ("C-c o" . pyvenv-workon))
-    :init (pyvenv-workon "pymacs"))
+    :init
+    (pyvenv-workon "pymacs")
+    (pyvenv-tracking-mode 1))
 
   (use-package diminish
     :ensure t
@@ -535,18 +537,15 @@
     :init
     (elpy-enable)
     (delete `elpy-module-highlight-indentation elpy-modules)
+    :custom
+    (elpy-rpc-virtualenv-path 'current)
     :bind
     (:map elpy-mode-map ("C-c b" . elpy-black-fix-code)))
 
   (use-package python-pytest
     :ensure t
     :after elpy
-    :bind (:map elpy-mode-map ("C-c p" . python-pytest-dispatch))
-    :custom
-    (python-pytest-arguments
-     '("--color"
-       "--failed-first"
-       "--maxfail=5")))
+    :bind (:map elpy-mode-map ("C-c p" . python-pytest-dispatch)))
 
   (use-package sphinx-doc
     :ensure t
