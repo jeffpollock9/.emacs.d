@@ -330,7 +330,7 @@
     ("M-x"     . helm-M-x)
     ("C-x b"   . helm-mini)
     ("C-s"     . helm-occur)
-    ("C-c h"   . helm-google-suggest)
+    ("C-c h"   . helm-comint-input-ring)
     ("C-x C-f" . helm-find-files))
 
   (use-package helm-ag
