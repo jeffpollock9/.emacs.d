@@ -100,8 +100,9 @@
           ("C-c q" . pyvenv-restart-python)
           ("C-c o" . pyvenv-workon))
     :init
-    (pyvenv-workon "pymacs")
-    (pyvenv-tracking-mode 1))
+    (pyvenv-mode 1)
+    (pyvenv-tracking-mode 1)
+    :config (pyvenv-workon "pymacs"))
 
   (use-package diminish
     :ensure t
@@ -238,11 +239,7 @@
     :config
     (setq org-re-reveal-root "file:///home/jeff/workspace/reveal.js"))
 
-  (use-package all-the-icons
-    :ensure t)
-
   (use-package dashboard
-    :after all-the-icons
     :ensure t
     :config
     (setq dashboard-items '((recents   . 10)
@@ -320,8 +317,13 @@
     :defer t
     :hook (stan-mode . stan-snippets-initialize))
 
+  (use-package helm-icons
+    :ensure t
+    :config (helm-icons-enable))
+
   (use-package helm
     :ensure t
+    :after helm-icons
     :init
     (setq helm-always-two-windows nil
           helm-display-buffer-default-height 18
@@ -531,6 +533,11 @@
     :ensure t
     :mode ("Dockerfile" . dockerfile-mode))
 
+  (use-package py-isort
+    :ensure t
+    :config
+    (setq py-isort-options '("--line-length=88" "--lines-between-types=1")))
+
   (use-package elpy
     :ensure t
     :diminish
@@ -540,7 +547,9 @@
     :custom
     (elpy-rpc-virtualenv-path 'current)
     :bind
-    (:map elpy-mode-map ("C-c b" . elpy-black-fix-code)))
+    (:map elpy-mode-map
+          ("C-c b" . elpy-black-fix-code)
+          ("C-c i" . py-isort-buffer)))
 
   (use-package python-pytest
     :ensure t

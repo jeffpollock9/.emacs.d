@@ -43,6 +43,7 @@
         dired-unmark-backward
         helm-occur
         iedit-switch-to-mc-mode
+        mouse-set-region
         overwrite-mode
         wdired-finish-edit
         ))
