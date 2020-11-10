@@ -8,6 +8,7 @@
 (let ((file-name-handler-alist nil)
       (gc-cons-threshold (* 1024 1024 100)))
 
+  (setq byte-compile-warnings '(cl-functions))
   (setq custom-file "~/.emacs.d/custom.el")
   (load custom-file)
 
@@ -242,7 +243,7 @@
   (use-package dashboard
     :ensure t
     :config
-    (setq dashboard-items '((recents   . 10)
+    (setq dashboard-items '((recents   . 20)
                             (bookmarks . 5)))
     (dashboard-setup-startup-hook))
 
@@ -483,7 +484,7 @@
 
   (use-package treemacs-icons-dired
     :ensure t
-    :after treemacs dired
+    :after dired
     :config
     (treemacs-icons-dired-mode)
     (treemacs-resize-icons 18))
