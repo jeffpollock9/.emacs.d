@@ -15,7 +15,7 @@
   (require 'package)
   (setq package-enable-at-startup nil)
   (add-to-list 'package-archives '("melpa"     . "http://melpa.org/packages/"))
-  (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+  ;;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives '("gnu"       . "http://elpa.gnu.org/packages/"))
   (package-initialize)
 
@@ -69,12 +69,25 @@
       ([down]   . shrink-window)
       ([return] . resize-mode)))
 
+  (define-minor-mode string-inflection-mode
+    "Toggle changing string case mode"
+    :init-value nil
+    :lighter " string-inflection-mode"
+    :keymap
+    '(("s"      . string-inflection-underscore)
+      ("u"      . string-inflection-upcase)
+      ("l"      . string-inflection-lisp)
+      ("c"      . string-inflection-lower-camelcase)
+      ("p"      . string-inflection-camelcase)
+      ([return] . string-inflection-mode)))
+
   (global-set-key (kbd "C-#") 'comment-or-uncomment-region)
   (global-set-key (kbd "C-u") '(lambda () (interactive) (kill-line 0)))
   (global-set-key (kbd "C-l") 'comint-clear-buffer)
   (global-set-key (kbd "C-c t") 'toggle-truncate-lines)
   (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
   (global-set-key (kbd "C-c r") 'resize-mode)
+  (global-set-key (kbd "C-c c") 'string-inflection-mode)
 
   (defun my-c-mode-common-hook ()
     (c-set-offset 'comment-intro 0)
@@ -91,8 +104,9 @@
 
   (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
-  (use-package json-mode
-    :ensure t)
+  (use-package conf-mode
+    :ensure nil
+    :hook (conf-mode . (lambda () (electric-indent-local-mode -1))))
 
   (use-package pyvenv
     :ensure t
@@ -101,9 +115,13 @@
           ("C-c q" . pyvenv-restart-python)
           ("C-c o" . pyvenv-workon))
     :init
-    (pyvenv-mode 1)
-    (pyvenv-tracking-mode 1)
-    :config (pyvenv-workon "pymacs"))
+    (pyvenv-mode)
+    (pyvenv-tracking-mode)
+    :config
+    (pyvenv-workon "pymacs"))
+
+  (use-package json-mode
+    :ensure t)
 
   (use-package diminish
     :ensure t
@@ -299,6 +317,11 @@
     :ensure t
     :hook (stan-mode . company-stan-setup))
 
+  (use-package eldoc
+    :ensure t
+    :defer t
+    :diminish)
+
   (use-package eldoc-stan
     :ensure t
     :defer t
@@ -359,12 +382,6 @@
     :diminish
     :init (smartparens-global-mode))
 
-  (use-package undo-tree
-    :ensure t
-    :diminish
-    :config
-    (global-undo-tree-mode))
-
   (use-package smooth-scrolling
     :ensure t
     :init (smooth-scrolling-mode 1))
@@ -394,9 +411,6 @@
     :ensure t
     :bind
     ("C-x g" . magit-status))
-
-  (use-package magit-svn
-    :ensure t)
 
   (use-package iedit
     :ensure t
@@ -497,27 +511,6 @@
     :ensure t
     :hook cmake-mode-hook)
 
-  (use-package company
-    :diminish
-    :ensure t
-    :init (global-company-mode)
-    :bind ("<C-tab>" . company-complete)
-    :config
-    (setq company-tooltip-align-annotations t
-          company-tooltip-limit 20
-          company-show-numbers t
-          company-idle-delay nil
-          company-require-match nil))
-
-  (use-package company-quickhelp
-    :ensure t
-    :after company
-    :init
-    (setq company-quickhelp-use-propertized-text t
-          company-quickhelp-max-lines 20)
-    (company-quickhelp-mode)
-    :hook (global-company-mode . company-quickhelp-mode))
-
   (use-package markdown-mode
     :ensure t
     :mode ("\\.md$" . markdown-mode))
@@ -534,28 +527,23 @@
     :ensure t
     :mode ("Dockerfile" . dockerfile-mode))
 
-  (use-package py-isort
+  (use-package python-pytest
+    :after python
     :ensure t
-    :config
-    (setq py-isort-options '("--line-length=88" "--lines-between-types=1")))
+    :bind (:map python-mode-map ("C-c p" . python-pytest-dispatch)))
+
+  (use-package pip-requirements
+    :ensure t
+    :hook (pip-requirements-mode . (lambda () (electric-indent-local-mode -1))))
 
   (use-package elpy
+    :after python
     :ensure t
-    :diminish
     :init
-    (elpy-enable)
-    (delete `elpy-module-highlight-indentation elpy-modules)
-    :custom
-    (elpy-rpc-virtualenv-path 'current)
-    :bind
-    (:map elpy-mode-map
-          ("C-c b" . elpy-black-fix-code)
-          ("C-c i" . py-isort-buffer)))
-
-  (use-package python-pytest
-    :ensure t
-    :after elpy
-    :bind (:map elpy-mode-map ("C-c p" . python-pytest-dispatch)))
+    (require 'elpy)
+    :bind (:map python-mode-map
+                ("C-c C-c" . elpy-shell-send-region-or-buffer)
+                ("<C-return>" . elpy-shell-send-statement-and-step)))
 
   (use-package sphinx-doc
     :ensure t
@@ -626,32 +614,43 @@
   (use-package lsp-mode
     :ensure t
     :diminish
-    :commands lsp)
-
-  (use-package lsp-ui
-    :ensure t
-    :commands lsp-ui-mode
-    :init
-    (setq lsp-ui-sideline-show-hover nil
-          lsp-ui-sideline-show-symbol t))
-
-  (require 'lsp-ui-flycheck)
-  (with-eval-after-load 'lsp-mode
-    (add-hook 'lsp-after-open-hook (lambda () (lsp-ui-flycheck-enable 1))))
-
-  (use-package company-lsp
-    :ensure t
-    :commands company-lsp
-    :init
-    (push 'company-lsp company-backends)
-    (setq company-transformers nil
-          company-lsp-async t
-          company-lsp-cache-candidates nil))
+    :hook
+    ((python-mode . lsp))
+    :config
+    (setq lsp-pyls-configuration-sources ["flake8"]
+          lsp-enable-symbol-highlighting nil)
+    (lsp-register-custom-settings
+     '(
+       ;; enable
+       ("pyls.plugins.flake8.enabled" t t)
+       ("pyls.plugins.pyls_black.enabled" t t)
+       ("pyls.plugins.pyls_isort.enabled" t t)
+       ;; disable
+       ("pyls.plugins.pycodestyle.enabled" nil t)
+       ("pyls.plugins.mccabe.enabled" nil t)
+       ("pyls.plugins.pyflakes.enabled" nil t)
+       ))
+    :bind
+    (:map lsp-mode-map
+          ("C-c b" . lsp-format-buffer)
+          ("C-c i" . lsp-describe-thing-at-point)))
 
   (use-package ccls
     :ensure t
-    :bind
-    :hook ((c++-mode) . (lambda () (require 'ccls) (lsp))))
+    :defer t
+    :hook ((c++-mode cuda-mode) . (lambda () (require 'ccls) (lsp))))
+
+  (use-package company
+    :diminish
+    :ensure t
+    :init (global-company-mode)
+    :bind ("<C-tab>" . company-complete)
+    :config
+    (setq company-tooltip-align-annotations t
+          company-tooltip-limit 20
+          company-show-numbers t
+          company-idle-delay nil
+          company-require-match nil))
 
   (use-package company-shell
     :ensure t
@@ -664,6 +663,8 @@
   (add-hook 'page-break-lines-mode-hook (lambda () (diminish 'page-break-lines-mode)))
   (add-hook 'org-indent-mode-hook (lambda () (diminish 'org-indent-mode)))
   (add-hook 'org-cdlatex-mode-hook (lambda () (diminish 'org-cdlatex-mode)))
+  (add-hook 'yas-minor-mode-hook (lambda () (diminish 'yas-minor-mode)))
+  (add-hook 'yas-major-mode-hook (lambda () (diminish 'yas-major-mode)))
   )
 
 ;;; init.el ends here
