@@ -170,6 +170,9 @@
     :config
     (which-key-mode))
 
+  (use-package bazel-mode
+    :ensure t)
+
   (use-package helpful
     :ensure t
     :bind
@@ -283,9 +286,6 @@
     :ensure t
     :defer t)
 
-  (use-package helm-themes
-    :ensure t)
-
   (use-package smart-mode-line
     :ensure t
     :init (sml/setup))
@@ -341,13 +341,13 @@
     :defer t
     :hook (stan-mode . stan-snippets-initialize))
 
-  (use-package helm-icons
-    :ensure t
-    :config (helm-icons-enable))
+  ;; (use-package helm-icons
+  ;;   :ensure t
+  ;;   :config (helm-icons-enable))
 
   (use-package helm
+    ;; :after helm-icons
     :ensure t
-    :after helm-icons
     :init
     (setq helm-always-two-windows nil
           helm-display-buffer-default-height 18
@@ -364,15 +364,15 @@
     :bind
     ("C-c g" . helm-do-ag))
 
-  (use-package tramp
-    :ensure t
-    :init
-    (setq tramp-default-method "ssh"))
-
   (use-package helm-tramp
     :ensure t
     :bind
     ("C-c s" . helm-tramp))
+
+  (use-package tramp
+    :ensure t
+    :init
+    (setq tramp-default-method "ssh"))
 
   (use-package docker-tramp
     :ensure t)
@@ -617,19 +617,11 @@
     :hook
     ((python-mode . lsp))
     :config
-    (setq lsp-pyls-configuration-sources ["flake8"]
-          lsp-enable-symbol-highlighting nil)
+    (setq lsp-enable-symbol-highlighting nil
+          lsp-headerline-breadcrumb-enable nil)
     (lsp-register-custom-settings
-     '(
-       ;; enable
-       ("pyls.plugins.flake8.enabled" t t)
-       ("pyls.plugins.pyls_black.enabled" t t)
-       ("pyls.plugins.pyls_isort.enabled" t t)
-       ;; disable
-       ("pyls.plugins.pycodestyle.enabled" nil t)
-       ("pyls.plugins.mccabe.enabled" nil t)
-       ("pyls.plugins.pyflakes.enabled" nil t)
-       ))
+     '(("pyls.plugins.pyls_mypy.enabled" t t)
+       ("pyls.plugins.pyls_mypy.live_mode" nil t)))
     :bind
     (:map lsp-mode-map
           ("C-c b" . lsp-format-buffer)

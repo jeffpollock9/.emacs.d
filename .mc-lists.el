@@ -32,6 +32,7 @@
         org-cdlatex-underscore-caret
         org-self-insert-command
         org-yank
+        picture-clear-column
         swiper
         undo-tree-visualize
         yaml-electric-backspace
