@@ -362,7 +362,8 @@
   (use-package helm-ag
     :ensure t
     :bind
-    ("C-c g" . helm-do-ag))
+    ("C-c g" . helm-do-ag)
+    ("C-c v" . helm-do-ag-project-root))
 
   (use-package helm-tramp
     :ensure t
@@ -610,6 +611,20 @@
       (ansi-color-apply-on-region compilation-filter-start (point))
       (read-only-mode))
     (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
+
+  (use-package projectile
+    :ensure t
+    :diminish
+    :init
+    (projectile-mode +1)
+    :bind
+    (:map projectile-mode-map
+          ("C-c m" . projectile-command-map)))
+
+  (use-package helm-projectile
+    :ensure t
+    :init
+    (helm-projectile-on))
 
   (use-package lsp-mode
     :ensure t
