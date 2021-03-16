@@ -282,10 +282,6 @@
     :init
     (load-theme 'zenburn t))
 
-  (use-package monokai-theme
-    :ensure t
-    :defer t)
-
   (use-package smart-mode-line
     :ensure t
     :init (sml/setup))
