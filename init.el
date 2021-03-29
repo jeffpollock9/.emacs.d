@@ -337,12 +337,12 @@
     :defer t
     :hook (stan-mode . stan-snippets-initialize))
 
-  ;; (use-package helm-icons
-  ;;   :ensure t
-  ;;   :config (helm-icons-enable))
+  (use-package helm-icons
+    :ensure t
+    :config (helm-icons-enable))
 
   (use-package helm
-    ;; :after helm-icons
+    :after helm-icons
     :ensure t
     :init
     (setq helm-always-two-windows nil
@@ -495,7 +495,7 @@
 
   (use-package treemacs-icons-dired
     :ensure t
-    :after dired
+    :after (dired dired)
     :config
     (treemacs-icons-dired-mode)
     (treemacs-resize-icons 18))
