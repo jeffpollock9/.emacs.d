@@ -116,7 +116,6 @@
           ("C-c o" . pyvenv-workon))
     :init
     (pyvenv-mode)
-    (pyvenv-tracking-mode)
     :config
     (pyvenv-workon "pymacs"))
 
@@ -577,6 +576,14 @@
     :ensure auctex
     :defer t)
 
+  (use-package sqlformat
+    :ensure t
+    :defer t
+    :config
+    (setq sqlformat-command 'sqlfluff)
+    :bind
+    (:map sql-mode-map ("C-c b" . sqlformat-buffer)))
+
   (use-package poly-R
     :ensure t)
 
@@ -613,6 +620,7 @@
     :diminish
     :init
     (projectile-mode +1)
+    (setq projectile-switch-project-action 'projectile-dired)
     :bind
     (:map projectile-mode-map
           ("C-c m" . projectile-command-map)))
@@ -630,9 +638,6 @@
     :config
     (setq lsp-enable-symbol-highlighting nil
           lsp-headerline-breadcrumb-enable nil)
-    (lsp-register-custom-settings
-     '(("pyls.plugins.pyls_mypy.enabled" t t)
-       ("pyls.plugins.pyls_mypy.live_mode" nil t)))
     :bind
     (:map lsp-mode-map
           ("C-c b" . lsp-format-buffer)
