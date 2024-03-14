@@ -17,7 +17,7 @@ mkdir -p emacs-libvterm/build
 cd emacs-libvterm/build
 
 cmake .. \
-      -DCMAKE_C_COMPILER="gcc-9" \
+      -DCMAKE_C_COMPILER="gcc" \
       -DCMAKE_C_FLAGS="-march=native" \
       -DCMAKE_BUILD_TYPE="Release" \
       -G"Ninja"

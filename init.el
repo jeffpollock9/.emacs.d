@@ -104,6 +104,38 @@
 
   (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
+
+  (setq treesit-language-source-alist
+        '(
+          (c "https://github.com/tree-sitter/tree-sitter-c")
+          (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+          (bash "https://github.com/tree-sitter/tree-sitter-bash")
+          (cmake "https://github.com/uyha/tree-sitter-cmake")
+          (html "https://github.com/tree-sitter/tree-sitter-html")
+          (json "https://github.com/tree-sitter/tree-sitter-json")
+          (make "https://github.com/alemuller/tree-sitter-make")
+          (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+          (python "https://github.com/tree-sitter/tree-sitter-python")
+          (toml "https://github.com/tree-sitter/tree-sitter-toml")
+          (yaml "https://github.com/ikatyang/tree-sitter-yaml")
+          ))
+
+  (dolist (lang treesit-language-source-alist)
+    (unless (treesit-language-available-p (car lang))
+      (treesit-install-language-grammar (car lang))))
+
+  (setq major-mode-remap-alist
+        '(
+          (yaml-mode . yaml-ts-mode)
+          (bash-mode . bash-ts-mode)
+          (json-mode . json-ts-mode)
+          (python-mode . python-ts-mode)
+          (c++-mode . c++-ts-mode)
+          (c-mode . c-ts-mode)
+          ))
+
+  (add-hook 'python-ts-mode-hook 'eglot-ensure)
+
   (use-package conf-mode
     :ensure nil
     :hook (conf-mode . (lambda () (electric-indent-local-mode -1))))
@@ -113,11 +145,9 @@
     :bind
     (:map pyvenv-mode-map
           ("C-c q" . pyvenv-restart-python)
-          ("C-c o" . pyvenv-workon))
+          ("C-c o" . pyvenv-activate))
     :init
-    (pyvenv-mode)
-    :config
-    (pyvenv-workon "pymacs"))
+    (pyvenv-mode))
 
   (use-package json-mode
     :ensure t)
@@ -168,9 +198,6 @@
     :diminish
     :config
     (which-key-mode))
-
-  (use-package bazel-mode
-    :ensure t)
 
   (use-package helpful
     :ensure t
@@ -225,7 +252,6 @@
      'org-babel-load-languages
      '((latex   . t)
        (R       . t)
-       (stan    . t)
        (C       . t)
        (python  . t)
        (jupyter . t)
@@ -370,9 +396,6 @@
     :init
     (setq tramp-default-method "ssh"))
 
-  (use-package docker-tramp
-    :ensure t)
-
   (use-package smartparens
     :ensure t
     :diminish
@@ -477,10 +500,15 @@
     :diminish
     :ensure t)
 
-  (use-package dired+
-    :load-path "~/.emacs.d/emacswiki"
-    :init
-    (setq diredp-hide-details-initially-flag nil))
+  ;; (use-package dired+
+  ;;   :load-path "~/.emacs.d/emacswiki"
+  ;;   :init
+  ;;   (setq diredp-hide-details-initially-flag nil))
+
+  (use-package vundo
+    :ensure t
+    :bind
+    (:map global-map ("C-c u" . vundo)))
 
   (use-package treemacs
     :ensure t
@@ -546,6 +574,25 @@
     :diminish
     :hook (python-mode . sphinx-doc-mode))
 
+  (use-package python-black
+    :demand t
+    :after python)
+
+  (use-package python-isort
+    :ensure t
+    :after python)
+
+  (defun my-python-format ()
+    "black + isort"
+    (interactive)
+    (python-black-buffer)
+    (python-isort-buffer)
+    )
+
+  (use-package python
+    :ensure t
+    :bind (:map python-ts-mode-map ("C-c b" . my-python-format)))
+
   (use-package duplicate-thing
     :ensure t
     :bind
@@ -554,19 +601,19 @@
   (use-package vterm
     :load-path "~/.emacs.d/builds/emacs-libvterm")
 
-  (use-package doxymacs
-    :load-path "~/.emacs.d/builds/doxymacs/install/share/emacs/site-lisp"
-    :diminish
-    :init
-    (add-hook 'c-mode-common-hook 'doxymacs-mode)
-    (defun my-doxymacs-font-lock-hook ()
-      (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
-          (doxymacs-font-lock)))
-    (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
-    (setq doxymacs-doxygen-style "C++"
-          doxymacs-command-character "\\")
-    :config
-    (unbind-key "C-c d" doxymacs-mode-map))
+  ;; (use-package doxymacs
+  ;;   :load-path "~/.emacs.d/builds/doxymacs/install/share/emacs/site-lisp"
+  ;;   :diminish
+  ;;   :init
+  ;;   (add-hook 'c-mode-common-hook 'doxymacs-mode)
+  ;;   (defun my-doxymacs-font-lock-hook ()
+  ;;     (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
+  ;;         (doxymacs-font-lock)))
+  ;;   (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
+  ;; (setq doxymacs-doxygen-style "C++"
+  ;;       doxymacs-command-character "\\")
+  ;; :config
+  ;; (unbind-key "C-c d" doxymacs-mode-map))
 
   ;; ispc
   (add-to-list 'auto-mode-alist '("\\.ispc$" . c++-mode))
@@ -630,18 +677,23 @@
     :init
     (helm-projectile-on))
 
-  (use-package lsp-mode
-    :ensure t
-    :diminish
-    :hook
-    ((python-mode . lsp))
-    :config
-    (setq lsp-enable-symbol-highlighting nil
-          lsp-headerline-breadcrumb-enable nil)
-    :bind
-    (:map lsp-mode-map
-          ("C-c b" . lsp-format-buffer)
-          ("C-c i" . lsp-describe-thing-at-point)))
+  ;; (use-package lsp-mode
+  ;;   :ensure t
+  ;;   :diminish
+  ;;   :config
+  ;;   (setq lsp-enable-symbol-highlighting nil
+  ;;         lsp-headerline-breadcrumb-enable nil)
+  ;;   :bind
+  ;;   (:map lsp-mode-map
+  ;;         ;; ("C-c b" . lsp-format-buffer)
+  ;;         ("C-c i" . lsp-describe-thing-at-point)))
+
+  ;; (use-package lsp-pyright
+  ;;   :ensure t
+  ;;   :after python
+  ;;   :hook (python-mode . (lambda ()
+  ;;                          (require 'lsp-pyright)
+  ;;                          (lsp))))
 
   (use-package ccls
     :ensure t

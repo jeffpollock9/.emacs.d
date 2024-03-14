@@ -22,14 +22,9 @@
  '(markdown-command "pandoc")
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
- '(org-confirm-babel-evaluate nil nil nil "Customized with use-package org")
  '(org-export-backends '(md odt latex icalendar html ascii))
- '(org-log-done t nil nil "Customized with use-package org")
- '(org-src-fontify-natively t nil nil "Customized with use-package org")
- '(org-src-tab-acts-natively t nil nil "Customized with use-package org")
- '(org-startup-indented t nil nil "Customized with use-package org")
  '(package-selected-packages
-   '(sqlformat helm-icons helm-projectile helm-treemacs-icons elpy dap-mode dap-python project\.el py-isort json-mode org-bullets flycheck-stan company-stan eldoc-stan magit-svn magit ob-jupyter jupyter org-re-reveal ox-re-reveal ox-reveal docker-tramp ox-gfm crontab-mode all-the-icons monokai-theme helm-themes python-pytest helm-tramp dired-filter sphinx-doc treemacs-icons-dired treemacs string-inflection markdown-toc which-key ess ccls helpful pdf-tools helm-ag expand-region ox-twbs cdlatex smart-mode-line smart-line-mode company-shell dashboard auto-revert-mode htmlize auctex poly-R poly-markdown julia-mode magit-todos dockerfile-mode lsp-mode company-lsp counsel duplicate-thing pip-requirements rtags smooth-scrolling yasnippet-snippets markdown-mode rainbow-delimiters zenburn diminish ess-site smartparens bazel-mode sublimity pytest cuda-mode ein undo-tree powerline cmake-font-lock flycheck-yamllint yaml-mode company-ycmd flycheck-ycmd ycmd buffer-move helm neotree flycheck company csv-mode chess stan-snippets zenburn-theme use-package stan-mode polymode multiple-cursors markdown-preview-mode latex-preview-pane iedit ess-R-object-popup drag-stuff csharp-mode cmake-mode clang-format auto-yasnippet))
+   '(vundo python-isort lsp-pyright python-black sqlformat helm-icons helm-projectile helm-treemacs-icons elpy dap-mode dap-python project.el py-isort json-mode org-bullets flycheck-stan company-stan eldoc-stan magit-svn magit ob-jupyter jupyter org-re-reveal ox-re-reveal ox-reveal ox-gfm crontab-mode all-the-icons monokai-theme helm-themes python-pytest helm-tramp dired-filter sphinx-doc treemacs-icons-dired treemacs string-inflection markdown-toc which-key ess ccls helpful pdf-tools helm-ag expand-region ox-twbs cdlatex smart-mode-line smart-line-mode company-shell dashboard auto-revert-mode htmlize auctex poly-R poly-markdown julia-mode magit-todos dockerfile-mode lsp-mode company-lsp counsel duplicate-thing pip-requirements rtags smooth-scrolling yasnippet-snippets markdown-mode rainbow-delimiters zenburn diminish ess-site smartparens bazel-mode sublimity pytest cuda-mode ein undo-tree powerline cmake-font-lock flycheck-yamllint yaml-mode company-ycmd flycheck-ycmd ycmd buffer-move helm neotree flycheck company csv-mode chess stan-snippets zenburn-theme use-package stan-mode polymode multiple-cursors markdown-preview-mode latex-preview-pane iedit ess-R-object-popup drag-stuff csharp-mode cmake-mode clang-format auto-yasnippet))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(vc-handled-backends nil))
 (custom-set-faces
