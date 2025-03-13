@@ -19,8 +19,7 @@ cd emacs-libvterm/build
 cmake .. \
       -DCMAKE_C_COMPILER="gcc" \
       -DCMAKE_C_FLAGS="-march=native" \
-      -DCMAKE_BUILD_TYPE="Release" \
-      -G"Ninja"
+      -DCMAKE_BUILD_TYPE="Release"
 
-ninja libvterm
-ninja
+make libvterm
+make

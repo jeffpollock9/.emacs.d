@@ -87,8 +87,6 @@
   (global-set-key (kbd "C-l") 'comint-clear-buffer)
   (global-set-key (kbd "C-c t") 'toggle-truncate-lines)
   (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
-  (global-set-key (kbd "C-c r") 'resize-mode)
-  (global-set-key (kbd "C-c c") 'string-inflection-mode)
 
   (defun my-c-mode-common-hook ()
     (c-set-offset 'comment-intro 0)
@@ -136,6 +134,15 @@
           ))
 
   (add-hook 'python-ts-mode-hook 'eglot-ensure)
+
+  (use-package eglot
+    :ensure t
+    :bind
+    ("C-c r" . eglot-rename))
+
+  (use-package eglot-booster
+	:after eglot
+	:config	(eglot-booster-mode))
 
   (use-package conf-mode
     :ensure nil
@@ -344,6 +351,11 @@
     :defer t
     :diminish)
 
+  (use-package eldoc-box
+    :ensure t
+	:after eglot
+	:bind (:map eglot-mode-map) ("C-c h" . eldoc-box-help-at-point))
+
   (use-package eldoc-stan
     :ensure t
     :defer t
@@ -366,6 +378,9 @@
   (use-package helm-icons
     :ensure t
     :config (helm-icons-enable))
+
+  (use-package all-the-icons
+    :ensure t)
 
   (use-package helm
     :after helm-icons
@@ -523,7 +538,7 @@
 
   (use-package treemacs-icons-dired
     :ensure t
-    :after (dired dired)
+    :after dired
     :config
     (treemacs-icons-dired-mode)
     (treemacs-resize-icons 18))
@@ -566,9 +581,11 @@
     :ensure t
     :init
     (require 'elpy)
-    :bind (:map python-mode-map
+    (setq python-shell-interpreter "ipython"
+          python-shell-interpreter-args "-i --simple-prompt")
+    :bind (:map python-ts-mode-map
                 ("C-c C-c" . elpy-shell-send-region-or-buffer)
-                ("<C-return>" . elpy-shell-send-statement-and-step)))
+                ("C-c l" . elpy-shell-send-statement-and-step)))
 
   (use-package sphinx-doc
     :ensure t
@@ -601,6 +618,9 @@
 
   (use-package vterm
     :load-path "~/.emacs.d/builds/emacs-libvterm")
+
+  (use-package eat
+    :ensure t)
 
   ;; (use-package doxymacs
   ;;   :load-path "~/.emacs.d/builds/doxymacs/install/share/emacs/site-lisp"
@@ -705,7 +725,7 @@
     :diminish
     :ensure t
     :init (global-company-mode)
-    :bind ("<C-tab>" . company-complete)
+    :bind ("C-c c" . company-complete)
     :config
     (setq company-tooltip-align-annotations t
           company-tooltip-limit 20
@@ -729,3 +749,4 @@
   )
 
 ;;; init.el ends here
+(put 'narrow-to-region 'disabled nil)
