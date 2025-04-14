@@ -25,6 +25,10 @@
 
   (eval-when-compile (require 'use-package))
 
+  (unless (package-installed-p 'vc-use-package)
+    (package-vc-install "https://github.com/slotThe/vc-use-package"))
+  (require 'vc-use-package)
+
   (fset 'yes-or-no-p 'y-or-n-p)
 
   (xterm-mouse-mode 1)
@@ -34,6 +38,12 @@
   (fringe-mode 0)
   (show-paren-mode 1)
   (global-auto-revert-mode 1)
+
+  (setenv "PYTHONIOENCODING" "utf-8")
+  (prefer-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-language-environment 'utf-8)
+  (set-selection-coding-system 'utf-8)
 
   (setq use-file-dialog nil
         use-dialog-box nil
@@ -87,6 +97,8 @@
   (global-set-key (kbd "C-l") 'comint-clear-buffer)
   (global-set-key (kbd "C-c t") 'toggle-truncate-lines)
   (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
+  (global-set-key (kbd "C-c r") 'resize-mode)
+  (global-set-key (kbd "C-c s") 'string-inflection-mode)
 
   (defun my-c-mode-common-hook ()
     (c-set-offset 'comment-intro 0)
@@ -135,18 +147,34 @@
 
   (add-hook 'python-ts-mode-hook 'eglot-ensure)
 
-  (use-package eglot
+  ;; Emacs minibuffer configurations.
+  (use-package emacs
+    :custom
+    ;; Support opening new minibuffers from inside existing minibuffers.
+    (enable-recursive-minibuffers t)
+    ;; Hide commands in M-x which do not work in the current mode.  Vertico
+    ;; commands are hidden in normal buffers. This setting is useful beyond
+    ;; Vertico.
+    (read-extended-command-predicate #'command-completion-default-include-p)
+    ;; Do not allow the cursor in the minibuffer prompt
+    (minibuffer-prompt-properties
+     '(read-only t cursor-intangible t face minibuffer-prompt)))
+
+  (use-package envrc
     :ensure t
-    :bind
-    ("C-c r" . eglot-rename))
+    :hook (after-init . envrc-global-mode))
 
   (use-package eglot-booster
 	:after eglot
+    :vc (eglot-booster :url "https://github.com/jdtsmith/eglot-booster")
 	:config	(eglot-booster-mode))
 
-  (use-package conf-mode
-    :ensure nil
-    :hook (conf-mode . (lambda () (electric-indent-local-mode -1))))
+  (use-package eldoc-box
+	:after eglot
+    :ensure t
+    :bind
+    (:map eglot-mode-map
+          ("C-c h" . eldoc-box-help-at-point)))
 
   (use-package pyvenv
     :ensure t
@@ -156,6 +184,10 @@
           ("C-c o" . pyvenv-activate))
     :init
     (pyvenv-mode))
+  
+  (use-package conf-mode
+    :ensure nil
+    :hook (conf-mode . (lambda () (electric-indent-local-mode -1))))
 
   (use-package json-mode
     :ensure t)
@@ -262,7 +294,7 @@
        (R       . t)
        (C       . t)
        (python  . t)
-       (jupyter . t)
+       ;;(jupyter . t)
        (java    . t)
        (shell   . t))))
 
@@ -310,10 +342,10 @@
     :ensure t
     :defer t)
 
-  (use-package zenburn-theme
+  (use-package hc-zenburn-theme
     :ensure t
     :init
-    (load-theme 'zenburn t))
+    (load-theme 'hc-zenburn t))
 
   (use-package smart-mode-line
     :ensure t
@@ -340,21 +372,10 @@
     :config
     (setq stan-indentation-offset 4))
 
-
-  (use-package company-stan
-    :defer t
-    :ensure t
-    :hook (stan-mode . company-stan-setup))
-
   (use-package eldoc
     :ensure t
     :defer t
     :diminish)
-
-  (use-package eldoc-box
-    :ensure t
-	:after eglot
-	:bind (:map eglot-mode-map) ("C-c h" . eldoc-box-help-at-point))
 
   (use-package eldoc-stan
     :ensure t
@@ -378,34 +399,6 @@
   (use-package helm-icons
     :ensure t
     :config (helm-icons-enable))
-
-  (use-package all-the-icons
-    :ensure t)
-
-  (use-package helm
-    :after helm-icons
-    :ensure t
-    :init
-    (setq helm-always-two-windows nil
-          helm-display-buffer-default-height 18
-          helm-split-window-inside-p t)
-    :bind
-    ("M-x"     . helm-M-x)
-    ("C-x b"   . helm-mini)
-    ("C-s"     . helm-occur)
-    ("C-c h"   . helm-comint-input-ring)
-    ("C-x C-f" . helm-find-files))
-
-  (use-package helm-ag
-    :ensure t
-    :bind
-    ("C-c g" . helm-do-ag)
-    ("C-c v" . helm-do-ag-project-root))
-
-  (use-package helm-tramp
-    :ensure t
-    :bind
-    ("C-c s" . helm-tramp))
 
   (use-package tramp
     :ensure t
@@ -516,11 +509,6 @@
     :diminish
     :ensure t)
 
-  ;; (use-package dired+
-  ;;   :load-path "~/.emacs.d/emacswiki"
-  ;;   :init
-  ;;   (setq diredp-hide-details-initially-flag nil))
-
   (use-package vundo
     :ensure t
     :bind
@@ -538,7 +526,7 @@
 
   (use-package treemacs-icons-dired
     :ensure t
-    :after dired
+    :after (dired dired)
     :config
     (treemacs-icons-dired-mode)
     (treemacs-resize-icons 18))
@@ -572,10 +560,6 @@
     :ensure t
     :bind (:map python-mode-map ("C-c p" . python-pytest-dispatch)))
 
-  (use-package pip-requirements
-    :ensure t
-    :hook (pip-requirements-mode . (lambda () (electric-indent-local-mode -1))))
-
   (use-package elpy
     :after python
     :ensure t
@@ -592,24 +576,8 @@
     :diminish
     :hook (python-mode . sphinx-doc-mode))
 
-  (use-package python-black
-    :demand t
-    :after python)
-
-  (use-package python-isort
-    :ensure t
-    :after python)
-
-  (defun my-python-format ()
-    "black + isort"
-    (interactive)
-    (python-black-buffer)
-    (python-isort-buffer)
-    )
-
   (use-package python
-    :ensure t
-    :bind (:map python-ts-mode-map ("C-c b" . my-python-format)))
+    :ensure t)
 
   (use-package duplicate-thing
     :ensure t
@@ -618,9 +586,6 @@
 
   (use-package vterm
     :load-path "~/.emacs.d/builds/emacs-libvterm")
-
-  (use-package eat
-    :ensure t)
 
   ;; (use-package doxymacs
   ;;   :load-path "~/.emacs.d/builds/doxymacs/install/share/emacs/site-lisp"
@@ -639,6 +604,13 @@
   ;; ispc
   (add-to-list 'auto-mode-alist '("\\.ispc$" . c++-mode))
   (add-to-list 'auto-mode-alist '("\\.isph$" . c++-mode))
+
+  (use-package lazy-ruff
+    :ensure t
+    :diminish
+    :bind (("C-c b" . lazy-ruff-lint-format-dwim))
+    :config
+    (lazy-ruff-global-mode t))
 
   (use-package tex
     :ensure auctex
@@ -693,50 +665,174 @@
     (:map projectile-mode-map
           ("C-c m" . projectile-command-map)))
 
-  (use-package helm-projectile
+  (use-package corfu
+    :ensure t
+    :custom
+    (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+    (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+    (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+    (corfu-preview-current nil)    ;; Disable current candidate preview
+    (corfu-preselect 'first)
+    (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+    :init
+    (global-corfu-mode)
+    (corfu-history-mode)
+    (corfu-popupinfo-mode))
+
+  (use-package vertico
+    :ensure t
+    :custom
+    (vertico-scroll-margin 0) ;; Different scroll margin
+    (vertico-count 20) ;; Show more candidates
+    (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
+    (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
+    :init
+    (vertico-mode))
+
+  (use-package marginalia
+    :ensure t
+    :bind (:map minibuffer-local-map ("M-A" . marginalia-cycle))
+    :init
+    (marginalia-mode))
+
+  (use-package savehist
     :ensure t
     :init
-    (helm-projectile-on))
+    (savehist-mode))
 
-  ;; (use-package lsp-mode
-  ;;   :ensure t
-  ;;   :diminish
-  ;;   :config
-  ;;   (setq lsp-enable-symbol-highlighting nil
-  ;;         lsp-headerline-breadcrumb-enable nil)
-  ;;   :bind
-  ;;   (:map lsp-mode-map
-  ;;         ;; ("C-c b" . lsp-format-buffer)
-  ;;         ("C-c i" . lsp-describe-thing-at-point)))
-
-  ;; (use-package lsp-pyright
-  ;;   :ensure t
-  ;;   :after python
-  ;;   :hook (python-mode . (lambda ()
-  ;;                          (require 'lsp-pyright)
-  ;;                          (lsp))))
-
-  (use-package ccls
+  (use-package orderless
     :ensure t
-    :defer t
-    :hook ((c++-mode cuda-mode) . (lambda () (require 'ccls) (lsp))))
+    :custom
+    (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
+    (orderless-component-separator #'orderless-escapable-split-on-space)
+    (completion-styles '(orderless basic))
+    (completion-category-defaults nil)
+    (completion-category-overrides '((file (styles partial-completion)))))
 
-  (use-package company
-    :diminish
+  (use-package wgrep
+    :ensure t)
+
+  (use-package embark
     :ensure t
-    :init (global-company-mode)
-    :bind ("C-c c" . company-complete)
+    :bind
+    (("M-." . embark-act)
+     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+    :init
+    (setq prefix-help-command #'embark-prefix-help-command)
     :config
-    (setq company-tooltip-align-annotations t
-          company-tooltip-limit 20
-          company-show-numbers t
-          company-idle-delay nil
-          company-require-match nil))
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none)))))
 
-  (use-package company-shell
+  (use-package embark-consult
     :ensure t
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
+    
+  (use-package consult
+    :ensure t
+    ;; Replace bindings. Lazily loaded by `use-package'.
+    :bind (;; C-c bindings in `mode-specific-map'
+           ("C-c M-x" . consult-mode-command)
+           ("C-c h" . consult-history)
+           ("C-c k" . consult-kmacro)
+           ("C-c m" . consult-man)
+           ("C-c i" . consult-info)
+           ([remap Info-search] . consult-info)
+           ;; C-x bindings in `ctl-x-map'
+           ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+           ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+           ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+           ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+           ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
+           ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+           ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+           ;; Custom M-# bindings for fast register access
+           ("M-#" . consult-register-load)
+           ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+           ("C-M-#" . consult-register)
+           ;; Other custom bindings
+           ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+           ;; M-g bindings in `goto-map'
+           ("M-g e" . consult-compile-error)
+           ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+           ("M-g g" . consult-goto-line)             ;; orig. goto-line
+           ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+           ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+           ("M-g m" . consult-mark)
+           ("M-g k" . consult-global-mark)
+           ("M-g i" . consult-imenu)
+           ("M-g I" . consult-imenu-multi)
+           ;; M-s bindings in `search-map'
+           ("M-s d" . consult-find)                  ;; Alternative: consult-fd
+           ("M-s c" . consult-locate)
+           ("M-s g" . consult-grep)
+           ("M-s G" . consult-git-grep)
+           ("M-s r" . consult-ripgrep)
+           ("M-s l" . consult-line)
+           ("M-s L" . consult-line-multi)
+           ("M-s k" . consult-keep-lines)
+           ("M-s u" . consult-focus-lines)
+           ;; Isearch integration
+           ("M-s e" . consult-isearch-history)
+           :map isearch-mode-map
+           ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+           ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+           ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+           ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+           ;; Minibuffer history
+           :map minibuffer-local-map
+           ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+           ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+    ;; Enable automatic preview at point in the *Completions* buffer. This is
+    ;; relevant when you use the default completion UI.
+    :hook (completion-list-mode . consult-preview-at-point-mode)
+    ;; The :init configuration is always executed (Not lazy)
     :init
-    (add-to-list 'company-backends 'company-shell))
+    ;; Tweak the register preview for `consult-register-load',
+    ;; `consult-register-store' and the built-in commands.  This improves the
+    ;; register formatting, adds thin separator lines, register sorting and hides
+    ;; the window mode line.
+    (advice-add #'register-preview :override #'consult-register-window)
+    (setq register-preview-delay 0.5)
+    ;; Use Consult to select xref locations with preview
+    (setq xref-show-xrefs-function #'consult-xref
+          xref-show-definitions-function #'consult-xref)
+    ;; Configure other variables and modes in the :config section,
+    ;; after lazily loading the package.
+    :config
+    ;; Optionally configure preview. The default value
+    ;; is 'any, such that any key triggers the preview.
+    ;; (setq consult-preview-key 'any)
+    ;; (setq consult-preview-key "M-.")
+    ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
+    ;; For some commands and buffer sources it is useful to configure the
+    ;; :preview-key on a per-command basis using the `consult-customize' macro.
+    (consult-customize
+     consult-theme :preview-key '(:debounce 0.2 any)
+     consult-ripgrep consult-git-grep consult-grep consult-man
+     consult-bookmark consult-recent-file consult-xref
+     consult--source-bookmark consult--source-file-register
+     consult--source-recent-file consult--source-project-recent-file
+     ;; :preview-key "M-."
+     :preview-key '(:debounce 0.4 any))
+    ;; Optionally configure the narrowing key.
+    ;; Both < and C-+ work reasonably well.
+    (setq consult-narrow-key "<") ;; "C-+"
+    ;; Optionally make narrowing help available in the minibuffer.
+    ;; You may want to use `embark-prefix-help-command' or which-key instead.
+    ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
+    )
+
+  (use-package kind-icon
+    :ensure t
+    :after corfu
+    :custom
+    (kind-icon-blend-background t)
+    (kind-icon-default-face 'corfu-default) ; only needed with blend-background
+    :config
+    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
   ;; diminish some minor modes
   (add-hook 'ess-r-mode-hook (lambda () (diminish 'ess-r-package-mode)))
