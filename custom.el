@@ -12,7 +12,16 @@
  '(company-show-quick-access t)
  '(company-tooltip-limit 20)
  '(custom-safe-themes
-   '("fc1275617f9c8d1c8351df9667d750a8e3da2658077cfdda2ca281a2ebc914e0" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "bd7b7c5df1174796deefce5debc2d976b264585d51852c962362be83932873d9" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "ec5f697561eaf87b1d3b087dd28e61a2fc9860e4c862ea8e6b0b77bd4967d0ba" "190a9882bef28d7e944aa610aa68fe1ee34ecea6127239178c7ac848754992df" default))
+   '("fc1275617f9c8d1c8351df9667d750a8e3da2658077cfdda2ca281a2ebc914e0"
+     "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223"
+     "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e"
+     "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa"
+     "bd7b7c5df1174796deefce5debc2d976b264585d51852c962362be83932873d9"
+     "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4"
+     "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879"
+     "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0"
+     "ec5f697561eaf87b1d3b087dd28e61a2fc9860e4c862ea8e6b0b77bd4967d0ba"
+     "190a9882bef28d7e944aa610aa68fe1ee34ecea6127239178c7ac848754992df" default))
  '(delete-selection-mode 1)
  '(fci-rule-color "#383838")
  '(flycheck-lintr-linters
@@ -25,10 +34,31 @@
  '(org-export-backends '(md odt latex icalendar html ascii))
  '(org-export-preserve-breaks t)
  '(package-selected-packages
-   '(wgrep embark-consult envrc consult marginalia orderless vertico hc-zenburn-theme lazy-ruff corfu eldoc-box modus-themes vc-use-package eglot-booster vundo python-isort lsp-pyright python-black sqlformat helm-icons helm-projectile helm-treemacs-icons elpy dap-mode dap-python project.el py-isort json-mode org-bullets flycheck-stan company-stan eldoc-stan magit-svn magit ob-jupyter jupyter org-re-reveal ox-re-reveal ox-reveal ox-gfm crontab-mode all-the-icons monokai-theme helm-themes python-pytest helm-tramp dired-filter sphinx-doc treemacs-icons-dired treemacs string-inflection markdown-toc which-key ess ccls helpful pdf-tools helm-ag expand-region ox-twbs cdlatex smart-mode-line smart-line-mode company-shell dashboard auto-revert-mode htmlize auctex poly-R poly-markdown julia-mode magit-todos dockerfile-mode lsp-mode company-lsp counsel duplicate-thing pip-requirements rtags smooth-scrolling yasnippet-snippets markdown-mode rainbow-delimiters zenburn diminish ess-site smartparens bazel-mode sublimity pytest cuda-mode ein undo-tree powerline cmake-font-lock flycheck-yamllint yaml-mode company-ycmd flycheck-ycmd ycmd buffer-move helm neotree flycheck company csv-mode chess stan-snippets zenburn-theme use-package stan-mode polymode multiple-cursors markdown-preview-mode latex-preview-pane iedit ess-R-object-popup drag-stuff csharp-mode cmake-mode clang-format auto-yasnippet))
+   '(all-the-icons auctex auto-revert-mode auto-yasnippet bazel-mode buffer-move ccls
+                   cdlatex chess clang-format cmake-font-lock cmake-mode company
+                   company-lsp company-shell company-stan company-ycmd consult corfu
+                   counsel crontab-mode csharp-mode csv-mode cuda-mode dap-mode
+                   dap-python dashboard diminish dired-filter dockerfile-mode drag-stuff
+                   duplicate-thing eglot-booster ein eldoc-box eldoc-stan elpy
+                   embark-consult envrc ess ess-R-object-popup ess-site expand-region
+                   flycheck flycheck-stan flycheck-yamllint flycheck-ycmd
+                   hc-zenburn-theme helm helm-ag helm-icons helm-projectile helm-themes
+                   helm-tramp helm-treemacs-icons helpful htmlize iedit json-mode
+                   julia-mode jupyter latex-preview-pane lazy-ruff lsp-mode lsp-pyright
+                   magit magit-svn magit-todos marginalia markdown-mode
+                   markdown-preview-mode markdown-toc modus-themes monokai-theme
+                   mood-line moody multiple-cursors neotree ob-jupyter orderless
+                   org-bullets org-re-reveal ox-gfm ox-re-reveal ox-reveal ox-twbs
+                   pdf-tools pip-requirements poly-R poly-markdown polymode powerline
+                   project.el py-isort pytest python-black python-isort python-pytest
+                   rainbow-delimiters rtags smart-line-mode smart-mode-line smartparens
+                   smooth-scrolling sphinx-doc sqlformat stan-mode stan-snippets
+                   string-inflection sublimity treemacs treemacs-icons-dired undo-tree
+                   use-package vc-use-package vertico vundo wgrep which-key yaml-mode
+                   yasnippet-snippets ycmd zenburn zenburn-theme))
  '(package-vc-selected-packages
-   '((eglot-booster :url "https://github.com/jdtsmith/eglot-booster")
-     (vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package")))
+   '((vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package")
+     (eglot-booster :url "https://github.com/jdtsmith/eglot-booster")))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838")))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

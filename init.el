@@ -69,17 +69,6 @@
                 indent-tabs-mode nil
                 tab-width 4)
 
-  (define-minor-mode resize-mode
-    "Toggle resizing of current window"
-    :init-value nil
-    :lighter " resize"
-    :keymap
-    '(([left]   . shrink-window-horizontally)
-      ([right]  . enlarge-window-horizontally)
-      ([up]     . enlarge-window)
-      ([down]   . shrink-window)
-      ([return] . resize-mode)))
-
   (define-minor-mode string-inflection-mode
     "Toggle changing string case mode"
     :init-value nil
@@ -93,12 +82,8 @@
       ([return] . string-inflection-mode)))
 
   (global-set-key (kbd "C-#") 'comment-or-uncomment-region)
-  (global-set-key (kbd "C-u") '(lambda () (interactive) (kill-line 0)))
   (global-set-key (kbd "C-l") 'comint-clear-buffer)
-  (global-set-key (kbd "C-c t") 'toggle-truncate-lines)
   (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
-  (global-set-key (kbd "C-c r") 'resize-mode)
-  (global-set-key (kbd "C-c s") 'string-inflection-mode)
 
   (defun my-c-mode-common-hook ()
     (c-set-offset 'comment-intro 0)
@@ -162,10 +147,19 @@
 
   (use-package envrc
     :ensure t
+    :diminish
     :hook (after-init . envrc-global-mode))
+
+  (use-package eglot
+    :ensure t
+    :diminish
+    :bind
+    (:map eglot-mode-map
+          ("C-c r" . eglot-rename)))
 
   (use-package eglot-booster
 	:after eglot
+    :diminish
     :vc (eglot-booster :url "https://github.com/jdtsmith/eglot-booster")
 	:config	(eglot-booster-mode))
 
@@ -184,7 +178,7 @@
           ("C-c o" . pyvenv-activate))
     :init
     (pyvenv-mode))
-  
+
   (use-package conf-mode
     :ensure nil
     :hook (conf-mode . (lambda () (electric-indent-local-mode -1))))
@@ -232,19 +226,6 @@
 
     (add-hook 'ibuffer-mode-hook
               '(lambda () (ibuffer-switch-to-saved-filter-groups "groups"))))
-
-  (use-package which-key
-    :ensure t
-    :diminish
-    :config
-    (which-key-mode))
-
-  (use-package helpful
-    :ensure t
-    :bind
-    ("C-h f" . helpful-callable)
-    ("C-h v" . helpful-variable)
-    ("C-h k" . helpful-key))
 
   (use-package cdlatex
     :defer t
@@ -347,9 +328,12 @@
     :init
     (load-theme 'hc-zenburn t))
 
-  (use-package smart-mode-line
+  (use-package mood-line
     :ensure t
-    :init (sml/setup))
+    :config
+    (mood-line-mode)
+    :custom
+    (mood-line-glyph-alist mood-line-glyphs-fira-code))
 
   (use-package clang-format
     :ensure t
@@ -395,10 +379,6 @@
     :ensure t
     :defer t
     :hook (stan-mode . stan-snippets-initialize))
-
-  (use-package helm-icons
-    :ensure t
-    :config (helm-icons-enable))
 
   (use-package tramp
     :ensure t
@@ -608,9 +588,7 @@
   (use-package lazy-ruff
     :ensure t
     :diminish
-    :bind (("C-c b" . lazy-ruff-lint-format-dwim))
-    :config
-    (lazy-ruff-global-mode t))
+    :bind (("C-c b" . lazy-ruff-lint-format-dwim)))
 
   (use-package tex
     :ensure auctex
@@ -703,7 +681,7 @@
   (use-package orderless
     :ensure t
     :custom
-    (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
+    ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
     (orderless-component-separator #'orderless-escapable-split-on-space)
     (completion-styles '(orderless basic))
     (completion-category-defaults nil)
@@ -729,10 +707,9 @@
     :ensure t
     :hook
     (embark-collect-mode . consult-preview-at-point-mode))
-    
+
   (use-package consult
     :ensure t
-    ;; Replace bindings. Lazily loaded by `use-package'.
     :bind (;; C-c bindings in `mode-specific-map'
            ("C-c M-x" . consult-mode-command)
            ("C-c h" . consult-history)
@@ -825,12 +802,19 @@
     ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
     )
 
+  (use-package helpful
+    :ensure t
+    :bind
+    ("C-h f" . helpful-callable)
+    ("C-h v" . helpful-variable)
+    ("C-h k" . helpful-key))
+
   (use-package kind-icon
     :ensure t
     :after corfu
     :custom
     (kind-icon-blend-background t)
-    (kind-icon-default-face 'corfu-default) ; only needed with blend-background
+    (kind-icon-default-face 'corfu-default)
     :config
     (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
@@ -841,7 +825,7 @@
   (add-hook 'org-indent-mode-hook (lambda () (diminish 'org-indent-mode)))
   (add-hook 'org-cdlatex-mode-hook (lambda () (diminish 'org-cdlatex-mode)))
   (add-hook 'yas-minor-mode-hook (lambda () (diminish 'yas-minor-mode)))
-  (add-hook 'yas-major-mode-hook (lambda () (diminish 'yas-major-mode)))
+  (add-hook 'yas-major-mode-hook (lambda () (diminish 'yas-majormode)))
   )
 
 ;;; init.el ends here
