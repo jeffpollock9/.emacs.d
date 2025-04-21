@@ -307,10 +307,17 @@
     :config
     (setq org-re-reveal-root "file:///home/jeff/workspace/reveal.js"))
 
+  (use-package nerd-icons
+    :ensure t
+    :custom
+    (nerd-icons-font-family "Symbols Nerd Font Mono"))
+
   (use-package dashboard
     :ensure t
+    :after nerd-icons
     :config
-    (setq dashboard-items '((recents   . 20)
+    (setq dashboard-items '((projects  . 5)
+                            (recents   . 20)
                             (bookmarks . 5)))
     (dashboard-setup-startup-hook))
 
@@ -323,17 +330,14 @@
     :ensure t
     :defer t)
 
-  (use-package hc-zenburn-theme
+  (use-package modus-themes
     :ensure t
     :init
-    (load-theme 'hc-zenburn t))
+    (load-theme 'modus-vivendi-tinted t))
 
-  (use-package mood-line
+  (use-package doom-modeline
     :ensure t
-    :config
-    (mood-line-mode)
-    :custom
-    (mood-line-glyph-alist mood-line-glyphs-fira-code))
+    :init (doom-modeline-mode 1))
 
   (use-package clang-format
     :ensure t
@@ -655,7 +659,13 @@
     :init
     (global-corfu-mode)
     (corfu-history-mode)
-    (corfu-popupinfo-mode))
+    (corfu-popupinfo-mode)
+    (corfu-indexed-mode)
+    (dotimes (i 10)
+      (define-key corfu-mode-map
+                  (kbd (format "M-%s" i))
+                  (kbd (format "C-%s <tab>" i))))
+    )
 
   (use-package vertico
     :ensure t

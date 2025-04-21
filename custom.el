@@ -34,28 +34,20 @@
  '(org-export-backends '(md odt latex icalendar html ascii))
  '(org-export-preserve-breaks t)
  '(package-selected-packages
-   '(all-the-icons auctex auto-revert-mode auto-yasnippet bazel-mode buffer-move ccls
-                   cdlatex chess clang-format cmake-font-lock cmake-mode company
-                   company-lsp company-shell company-stan company-ycmd consult corfu
-                   counsel crontab-mode csharp-mode csv-mode cuda-mode dap-mode
-                   dap-python dashboard diminish dired-filter dockerfile-mode drag-stuff
-                   duplicate-thing eglot-booster ein eldoc-box eldoc-stan elpy
-                   embark-consult envrc ess ess-R-object-popup ess-site expand-region
-                   flycheck flycheck-stan flycheck-yamllint flycheck-ycmd
-                   hc-zenburn-theme helm helm-ag helm-icons helm-projectile helm-themes
-                   helm-tramp helm-treemacs-icons helpful htmlize iedit json-mode
-                   julia-mode jupyter latex-preview-pane lazy-ruff lsp-mode lsp-pyright
-                   magit magit-svn magit-todos marginalia markdown-mode
-                   markdown-preview-mode markdown-toc modus-themes monokai-theme
-                   mood-line moody multiple-cursors neotree ob-jupyter orderless
-                   org-bullets org-re-reveal ox-gfm ox-re-reveal ox-reveal ox-twbs
-                   pdf-tools pip-requirements poly-R poly-markdown polymode powerline
-                   project.el py-isort pytest python-black python-isort python-pytest
-                   rainbow-delimiters rtags smart-line-mode smart-mode-line smartparens
-                   smooth-scrolling sphinx-doc sqlformat stan-mode stan-snippets
-                   string-inflection sublimity treemacs treemacs-icons-dired undo-tree
-                   use-package vc-use-package vertico vundo wgrep which-key yaml-mode
-                   yasnippet-snippets ycmd zenburn zenburn-theme))
+   '(all-the-icons auctex buffer-move ccls cdlatex clang-format cmake-font-lock
+                   company-shell company-stan corfu crontab-mode csv-mode cuda-mode
+                   dap-mode dashboard diminish dired-filter dockerfile-mode
+                   doom-modeline drag-stuff duplicate-thing eglot-booster eldoc-box
+                   eldoc-stan elpy embark-consult envrc ess expand-region flycheck-stan
+                   flycheck-yamllint fzf hc-zenburn-theme helm-ag helm-icons
+                   helm-projectile helm-tramp helpful iedit json-mode julia-mode jupyter
+                   kind-icon lazy-ruff magit marginalia markdown-toc modus-themes
+                   mood-line moody multiple-cursors orderless org-bullets org-re-reveal
+                   ox-gfm ox-twbs pdf-tools pip-requirements poly-R python-black
+                   python-isort python-pytest smart-mode-line smartparens
+                   smooth-scrolling sphinx-doc sqlformat stan-snippets string-inflection
+                   treemacs-icons-dired vc-use-package vertico vundo wgrep which-key
+                   yaml-mode yasnippet-snippets zenburn-theme))
  '(package-vc-selected-packages
    '((vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package")
      (eglot-booster :url "https://github.com/jdtsmith/eglot-booster")))
