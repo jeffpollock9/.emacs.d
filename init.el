@@ -145,6 +145,10 @@
     (minibuffer-prompt-properties
      '(read-only t cursor-intangible t face minibuffer-prompt)))
 
+  (use-package copilot
+    :ensure t
+    :vc (copilot :url "https://github.com/copilot-emacs/copilot.el"))
+
   (use-package envrc
     :ensure t
     :diminish
