@@ -150,7 +150,15 @@
     :diminish
     :hook (after-init . envrc-global-mode))
 
+  (use-package markdown-mode
+    :ensure t
+    :mode ("\\.md$" . markdown-mode))
+
+  (use-package markdown-toc
+    :ensure t)
+
   (use-package eglot
+    :after markdown-mode
     :ensure t
     :diminish
     :bind
@@ -316,9 +324,10 @@
     :ensure t
     :after nerd-icons
     :config
-    (setq dashboard-items '((projects  . 5)
-                            (recents   . 20)
-                            (bookmarks . 5)))
+    (setq dashboard-projects-backend 'projectile)
+    (setq dashboard-items '((projects . 5) (recents . 20) (bookmarks . 51)))
+    (setq dashboard-display-icons-p t)
+    (setq dashboard-icon-type 'nerd-icons)
     (dashboard-setup-startup-hook))
 
   (use-package expand-region
@@ -523,13 +532,6 @@
     :ensure t
     :hook cmake-mode-hook)
 
-  (use-package markdown-mode
-    :ensure t
-    :mode ("\\.md$" . markdown-mode))
-
-  (use-package markdown-toc
-    :ensure t)
-
   (use-package yaml-mode
     :ensure t
     :mode (("\\.yml$'" . yaml-mode)
@@ -603,6 +605,7 @@
     :defer t
     :config
     (setq sqlformat-command 'sqlfluff)
+    (setq sqlformat-args '("--dialect" "clickhouse"))
     :bind
     (:map sql-mode-map ("C-c b" . sqlformat-buffer)))
 
@@ -615,9 +618,7 @@
 
   (use-package flycheck
     :diminish
-    :ensure t
-    :init
-    (global-flycheck-mode))
+    :ensure t)
 
   (use-package flycheck-yamllint
     :ensure t
