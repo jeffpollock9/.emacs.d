@@ -149,6 +149,9 @@
     :ensure t
     :vc (copilot :url "https://github.com/copilot-emacs/copilot.el"))
 
+  (use-package copilot-chat
+    :ensure t)
+
   (use-package envrc
     :ensure t
     :diminish
@@ -652,6 +655,28 @@
     (:map projectile-mode-map
           ("C-c m" . projectile-command-map)))
 
+  (use-package fussy
+    :ensure t
+    :after eglot
+    :config
+    (fussy-setup)
+    (fussy-eglot-setup))
+
+  (use-package fzf-native
+    :ensure t
+    :vc (fzf-native :url "https://github.com/dangduc/fzf-native")
+    :config
+    (setq fussy-score-fn 'fussy-fzf-native-score)
+    (fzf-native-load-dyn))
+
+  (advice-add 'corfu--capf-wrapper :before 'fussy-wipe-cache)
+
+  (add-hook 'corfu-mode-hook
+            (lambda ()
+              (setq-local fussy-max-candidate-limit 5000
+                          fussy-default-regex-fn 'fussy-pattern-first-letter
+                          fussy-prefer-prefix nil)))
+
   (use-package corfu
     :ensure t
     :custom
@@ -676,9 +701,8 @@
     :ensure t
     :custom
     (vertico-scroll-margin 0) ;; Different scroll margin
-    (vertico-count 20) ;; Show more candidates
-    (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
     (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
+    (vertico-resize nil)
     :init
     (vertico-mode))
 
