@@ -170,7 +170,27 @@
     :diminish
     :bind
     (:map eglot-mode-map
-          ("C-c r" . eglot-rename)))
+          ("C-c r" . eglot-rename))
+    :config
+    (add-to-list 'eglot-server-programs '(
+      (python-mode python-ts-mode)
+         "basedpyright-langserver" "--stdio"
+         ))
+    (setq-default
+       eglot-workspace-configuration
+       '(:basedpyright (
+           :typeCheckingMode "basic"
+         )
+         :basedpyright.analysis (
+           :diagnosticSeverityOverrides (
+             :reportUnusedCallResult "none"
+             :reportUnknownMemberType "none"
+           )
+           :inlayHints (
+             :variableTypes :json-false
+           )
+         )))
+    )
 
   (use-package eglot-booster
 	:after eglot
@@ -598,10 +618,26 @@
   (add-to-list 'auto-mode-alist '("\\.ispc$" . c++-mode))
   (add-to-list 'auto-mode-alist '("\\.isph$" . c++-mode))
 
-  (use-package lazy-ruff
+  (use-package reformatter
     :ensure t
-    :diminish
-    :bind (("C-c b" . lazy-ruff-lint-format-dwim)))
+    :config
+    (reformatter-define ruff-format
+      :program "ruff"
+      :args `("format" "--stdin-filename" ,buffer-file-name "-"))
+    (reformatter-define ruff-check
+      :program "ruff"
+      :args `("check" "--fix" "--stdin-filename" ,buffer-file-name "-"))
+    )
+
+  (defun ruff-all ()
+    "ruff check --fix & ruff format"
+    (interactive)
+    (ruff-check-buffer)
+    (ruff-format-buffer))
+
+  (use-package python
+    :bind (:map python-ts-mode-map
+                ("C-c b" . ruff-all)))
 
   (use-package tex
     :ensure auctex
