@@ -33,22 +33,7 @@
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(org-export-backends '(md odt latex icalendar html ascii))
  '(org-export-preserve-breaks t)
- '(package-selected-packages
-   '(all-the-icons auctex buffer-move ccls cdlatex clang-format cmake-font-lock
-                   company-shell company-stan copilot copilot-chat corfu crontab-mode
-                   csv-mode cuda-mode dap-mode dashboard diminish dired-filter
-                   dockerfile-mode doom-modeline drag-stuff duplicate-thing
-                   eglot-booster eldoc-box eldoc-stan elpy embark-consult environ envrc
-                   ess expand-region flycheck-stan flycheck-yamllint fussy fzf
-                   fzf-native hc-zenburn-theme helm-ag helm-icons helm-projectile
-                   helm-tramp helpful iedit json-mode julia-mode jupyter kind-icon magit
-                   marginalia markdown-toc modus-themes mood-line moody multiple-cursors
-                   orderless org-bullets org-re-reveal ox-gfm ox-twbs pdf-tools
-                   pip-requirements poly-R python-black python-isort python-pytest
-                   smart-mode-line smartparens smooth-scrolling sphinx-doc sqlformat
-                   sqlup-mode stan-snippets string-inflection treemacs-icons-dired
-                   vc-use-package vertico vundo wgrep which-key yaml-mode
-                   yasnippet-snippets zenburn-theme))
+ '(package-selected-packages nil)
  '(package-vc-selected-packages
    '((fzf-native :url "https://github.com/dangduc/fzf-native")
      (vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package")
