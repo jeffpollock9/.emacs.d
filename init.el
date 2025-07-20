@@ -96,10 +96,10 @@
 
   (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
-
   (setq treesit-language-source-alist
         '(
           (c "https://github.com/tree-sitter/tree-sitter-c")
+          (cython "https://github.com/b0o/tree-sitter-cython")
           (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
           (bash "https://github.com/tree-sitter/tree-sitter-bash")
           (cmake "https://github.com/uyha/tree-sitter-cmake")
@@ -624,6 +624,9 @@
 
   (use-package vterm
     :load-path "~/.emacs.d/builds/emacs-libvterm")
+
+  (use-package cython-mode
+    :load-path "~/.emacs.d/lisp")
 
   ;; (use-package doxymacs
   ;;   :load-path "~/.emacs.d/builds/doxymacs/install/share/emacs/site-lisp"
