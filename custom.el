@@ -33,7 +33,17 @@
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(org-export-backends '(md odt latex icalendar html ascii))
  '(org-export-preserve-breaks t)
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(aio auctex buffer-move cdlatex clang-format cmake-font-lock corfu crontab-mode
+         csv-mode cuda-mode dashboard diminish dired-filter dockerfile-mode
+         doom-modeline drag-stuff duplicate-thing eglot-booster eldoc-box eldoc-stan
+         elpy embark-consult envrc expand-region flycheck-stan flycheck-yamllint fussy
+         fzf-native helpful iedit json-mode julia-mode jupyter kind-icon magit
+         marginalia markdown-toc modus-themes multiple-cursors orderless org-bullets
+         org-re-reveal ox-gfm ox-twbs pdf-tools poly-R projectile python-pytest request
+         shell-maker smartparens smooth-scrolling sphinx-doc sqlformat stan-snippets
+         string-inflection treemacs-icons-dired vc-use-package vertico vundo wgrep
+         yaml-mode yasnippet-snippets))
  '(package-vc-selected-packages
    '((fzf-native :url "https://github.com/dangduc/fzf-native")
      (vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package")
