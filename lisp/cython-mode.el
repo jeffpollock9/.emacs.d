@@ -65,6 +65,8 @@
    :feature 'function
    '((function_definition
       name: (identifier) @font-lock-function-name-face)
+     (c_function_definition
+      name: (identifier) @font-lock-function-name-face)
      (class_definition
       name: (identifier) @font-lock-type-face))
 
@@ -147,6 +149,10 @@
      ((parent-is "module") column-0 0)
      ((parent-is "class_definition") parent-bol cython-mode-indent-offset)
      ((parent-is "function_definition") parent-bol cython-mode-indent-offset)
+     ;; Cython-specific function definitions
+     ((parent-is "c_function_definition") parent-bol cython-mode-indent-offset)
+     ((parent-is "cpdef_function_definition") parent-bol cython-mode-indent-offset)
+     ((parent-is "cdef_function_definition") parent-bol cython-mode-indent-offset)
      ((parent-is "if_statement") parent-bol cython-mode-indent-offset)
      ((parent-is "elif_clause") parent-bol cython-mode-indent-offset)
      ((parent-is "else_clause") parent-bol cython-mode-indent-offset)
