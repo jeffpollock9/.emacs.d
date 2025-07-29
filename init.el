@@ -127,6 +127,7 @@
           ))
 
   (add-hook 'python-ts-mode-hook 'eglot-ensure)
+  (add-hook 'c++-ts-mode-hook 'eglot-ensure)
 
   ;; Emacs minibuffer configurations.
   (use-package emacs
@@ -159,12 +160,23 @@
     :diminish
     :bind
     (:map eglot-mode-map
-          ("C-c r" . eglot-rename))
+          ("C-c r" . eglot-rename)
+          ("C-c f" . eglot-code-action-quickfix)
+          )
+    (:map c++-ts-mode-map
+          ("C-c b" . eglot-format-buffer))
     :config
-    (add-to-list 'eglot-server-programs '(
-      (python-mode python-ts-mode)
-         "basedpyright-langserver" "--stdio"
-         ))
+    ;; c++
+    (add-to-list 'eglot-server-programs
+                 '((c++-mode c++-ts-mode) . ("clangd"
+                                            "--background-index"
+                                            "--clang-tidy"
+                                            "--completion-style=detailed"
+                                            "--function-arg-placeholders"
+                                            "--header-insertion=iwyu")))
+    ;; python
+    (add-to-list 'eglot-server-programs '((python-mode python-ts-mode)
+                                          "basedpyright-langserver" "--stdio"))
     (setq-default
        eglot-workspace-configuration
        '(:basedpyright (
@@ -364,18 +376,9 @@
     :ensure t
     :init (doom-modeline-mode 1))
 
-  (use-package clang-format
-    :ensure t
-    :defer t
-    :bind
-    (:map c++-mode-map ("C-c b" . clang-format-buffer))
-    (:map c-mode-map ("C-c b" . clang-format-buffer)))
-
   (use-package cuda-mode
     :ensure t
-    :defer t
-    :bind
-    (:map cuda-mode-map ("C-c b" . clang-format-buffer)))
+    :defer t)
 
   (use-package stan-mode
     :defer t
@@ -535,7 +538,6 @@
         (ess-send-string proc "dev.off()")))
     :bind
     (("C-=" . ess-insert-assign)
-     ("C-c f" . dev-off)
      ("C->" . magrittr-pipe)))
 
   (use-package julia-mode
