@@ -96,35 +96,13 @@
 
   (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
-  (setq treesit-language-source-alist
-        '(
-          (c "https://github.com/tree-sitter/tree-sitter-c")
-          (cython "https://github.com/b0o/tree-sitter-cython")
-          (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
-          (bash "https://github.com/tree-sitter/tree-sitter-bash")
-          (cmake "https://github.com/uyha/tree-sitter-cmake")
-          (html "https://github.com/tree-sitter/tree-sitter-html")
-          (json "https://github.com/tree-sitter/tree-sitter-json")
-          (make "https://github.com/alemuller/tree-sitter-make")
-          (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-          (python "https://github.com/tree-sitter/tree-sitter-python")
-          (toml "https://github.com/tree-sitter/tree-sitter-toml")
-          (yaml "https://github.com/ikatyang/tree-sitter-yaml")
-          ))
-
-  (dolist (lang treesit-language-source-alist)
-    (unless (treesit-language-available-p (car lang))
-      (treesit-install-language-grammar (car lang))))
-
-  (setq major-mode-remap-alist
-        '(
-          (yaml-mode . yaml-ts-mode)
-          (bash-mode . bash-ts-mode)
-          (json-mode . json-ts-mode)
-          (python-mode . python-ts-mode)
-          (c++-mode . c++-ts-mode)
-          (c-mode . c-ts-mode)
-          ))
+  (use-package treesit-auto
+    :ensure t
+    :custom
+    (treesit-auto-install t)
+    :config
+    (treesit-auto-add-to-auto-mode-alist 'all)
+    (global-treesit-auto-mode))
 
   (add-hook 'python-ts-mode-hook 'eglot-ensure)
   (add-hook 'c++-ts-mode-hook 'eglot-ensure)
@@ -163,7 +141,7 @@
           ("C-c r" . eglot-rename)
           ("C-c f" . eglot-code-action-quickfix)
           )
-    (:map c++-ts-mode-map
+    (:map c++-mode-map
           ("C-c b" . eglot-format-buffer))
     :config
     ;; c++
