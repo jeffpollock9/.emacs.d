@@ -34,10 +34,10 @@
  '(org-export-backends '(md odt latex icalendar html ascii))
  '(org-export-preserve-breaks t)
  '(package-selected-packages
-   '(aio auctex buffer-move cdlatex clang-format cmake-font-lock corfu crontab-mode
-         csv-mode cuda-mode dashboard diminish dired-filter dockerfile-mode
-         doom-modeline drag-stuff duplicate-thing eglot-booster eldoc-box eldoc-stan
-         elpy embark-consult envrc expand-region flycheck-stan flycheck-yamllint fussy
+   '(aio auctex buffer-move c++-ts-mode cdlatex clang-format corfu crontab-mode csv-mode
+         cuda-mode dashboard diminish dired-filter dockerfile-mode doom-modeline
+         drag-stuff duplicate-thing eglot-booster eldoc-box eldoc-stan elpy
+         embark-consult envrc expand-region flycheck-stan flycheck-yamllint fussy
          fzf-native helpful iedit json-mode julia-mode jupyter kind-icon magit
          marginalia markdown-toc modus-themes multiple-cursors orderless org-bullets
          org-re-reveal ox-gfm ox-twbs pdf-tools poly-R projectile python-pytest request

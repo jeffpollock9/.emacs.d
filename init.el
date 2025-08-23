@@ -92,9 +92,14 @@
           c-file-style "stroustrup"
           tab-stop-list (number-sequence 2 200 2)
           tab-width 4
-          indent-tabs-mode nil))
+          indent-tabs-mode nil)
 
+    )
+
+  (add-hook 'c-ts-mode-common-hook 'my-c-mode-common-hook)
+  (add-hook 'c++-ts-mode-common-hook 'my-c-mode-common-hook)
   (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+  (add-hook 'c++-mode-common-hook 'my-c-mode-common-hook)
 
   (use-package treesit-auto
     :ensure t
@@ -104,6 +109,7 @@
     (treesit-auto-add-to-auto-mode-alist 'all)
     (global-treesit-auto-mode))
 
+  (add-hook 'cmake-ts-mode-hook 'eglot-ensure)
   (add-hook 'python-ts-mode-hook 'eglot-ensure)
   (add-hook 'c++-ts-mode-hook 'eglot-ensure)
 
@@ -140,8 +146,6 @@
     (:map eglot-mode-map
           ("C-c r" . eglot-rename)
           ("C-c f" . eglot-code-action-quickfix)
-          )
-    (:map c++-mode-map
           ("C-c b" . eglot-format-buffer))
     :config
     ;; c++
@@ -556,13 +560,15 @@
     (treemacs-icons-dired-mode)
     (treemacs-resize-icons 18))
 
-  (use-package cmake-mode
+  (use-package c-ts-mode
     :ensure t
-    :init (setq cmake-tab-width 4))
+    :config
+    (setq c-ts-mode-indent-offset 4))
 
-  (use-package cmake-font-lock
+  (use-package cmake-ts-mode
     :ensure t
-    :hook cmake-mode-hook)
+    :config
+    (setq cmake-ts-mode-indent-offset 4))
 
   (use-package yaml-mode
     :ensure t
