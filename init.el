@@ -649,9 +649,13 @@
     (ruff-check-buffer)
     (ruff-format-buffer))
 
-  (use-package python
-    :bind (:map python-ts-mode-map
-                ("C-c b" . ruff-all)))
+  (defun my-eglot-format-advice (orig-fun &rest args)
+    "Use ruff for Python formatting."
+    (if (eq major-mode 'python-ts-mode)
+        (ruff-all)
+      (apply orig-fun args)))
+
+  (advice-add 'eglot-format-buffer :around #'my-eglot-format-advice)
 
   (use-package tex
     :ensure auctex
@@ -694,6 +698,11 @@
       (ansi-color-apply-on-region compilation-filter-start (point))
       (read-only-mode))
     (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
+
+(require 'ansi-color)
+(defun display-ansi-colors ()
+  (interactive)
+  (ansi-color-apply-on-region (point-min) (point-max)))
 
   (use-package projectile
     :ensure t
