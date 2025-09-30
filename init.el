@@ -81,25 +81,21 @@
   (global-set-key (kbd "C-l") 'comint-clear-buffer)
   (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
 
-  (defun my-c-mode-common-hook ()
-    (c-set-offset 'comment-intro 0)
-    (c-set-offset 'substatement-open 0)
-    (c-set-offset 'innamespace 0)
+  (use-package c++-ts-mode
+    :ensure nil ;; emacs built-in
+    :preface
+    (defun my/c-ts-indent-style()
+      `(;; do not indent namespace children
+        ((n-p-gp nil "declaration_list" "namespace_definition") parent-bol 0)
 
-    (setq c++-tab-always-indent t
-          c-basic-offset 4
-          c-indent-level 4
-          c-file-style "stroustrup"
-          tab-stop-list (number-sequence 2 200 2)
-          tab-width 4
-          indent-tabs-mode nil)
-
-    )
-
-  (add-hook 'c-ts-mode-common-hook 'my-c-mode-common-hook)
-  (add-hook 'c++-ts-mode-common-hook 'my-c-mode-common-hook)
-  (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
-  (add-hook 'c++-mode-common-hook 'my-c-mode-common-hook)
+        ;; append to bsd style
+        ,@(alist-get 'bsd (c-ts-mode--indent-styles 'cpp))))
+    :bind (:map c++-ts-mode-map
+                ("M-<up>" . treesit-beginning-of-defun)
+                ("M-<down>" . treesit-end-of-defun))
+    :config
+    (setq c-ts-mode-indent-offset 4)
+    (setq c-ts-mode-indent-style #'my/c-ts-indent-style))
 
   (use-package treesit-auto
     :ensure t
@@ -155,7 +151,7 @@
                                             "--clang-tidy"
                                             "--completion-style=detailed"
                                             "--function-arg-placeholders"
-                                            "--header-insertion=iwyu")))
+                                            "--header-insertion=never")))
     ;; python
     (add-to-list 'eglot-server-programs '((python-mode python-ts-mode)
                                           "basedpyright-langserver" "--stdio"))
@@ -570,11 +566,6 @@
     :config
     (setq cmake-ts-mode-indent-offset 4))
 
-  (use-package yaml-mode
-    :ensure t
-    :mode (("\\.yml$'" . yaml-mode)
-           ("\\.yaml$'" . yaml-mode)))
-
   (use-package dockerfile-mode
     :ensure t
     :mode ("Dockerfile" . dockerfile-mode))
@@ -683,12 +674,15 @@
 
   (use-package flycheck-yamllint
     :ensure t
-    :mode (("\\.yml$'" . yaml-mode)
-           ("\\.yaml$'" . yaml-mode))
+    :mode (("\\.yml$'" . yaml-ts-mode)
+           ("\\.yaml$'" . yaml-ts-mode))
     :init
     (eval-after-load 'flycheck
       '(add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup))
     (add-hook 'yaml-mode-hook 'flycheck-mode))
+
+  (add-to-list 'auto-mode-alist '("\\.clang-tidy\\'" . yaml-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.clang-format\\'" . yaml-ts-mode))
 
   (use-package ansi-color
     :ensure t
@@ -699,10 +693,10 @@
       (read-only-mode))
     (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
 
-(require 'ansi-color)
-(defun display-ansi-colors ()
-  (interactive)
-  (ansi-color-apply-on-region (point-min) (point-max)))
+  (require 'ansi-color)
+  (defun display-ansi-colors ()
+    (interactive)
+    (ansi-color-apply-on-region (point-min) (point-max)))
 
   (use-package projectile
     :ensure t
