@@ -1,8 +1,11 @@
-;;; init.el
+;;; init.el --- Emacs configuration
 
-;;; code:
+;;; Commentary:
+;; Personal Emacs configuration
 
-;; TOOD: take ideas from https://github.com/malb/emacs.d/blob/master/malb.org
+;;; Code:
+
+;; TODO: take ideas from https://github.com/malb/emacs.d/blob/master/malb.org
 ;; TODO: take ideas from https://github.com/seagle0128/.emacs.d
 
 (let ((file-name-handler-alist nil)
@@ -81,22 +84,6 @@
   (global-set-key (kbd "C-l") 'comint-clear-buffer)
   (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
 
-  (use-package c++-ts-mode
-    :ensure nil ;; emacs built-in
-    :preface
-    (defun my/c-ts-indent-style()
-      `(;; do not indent namespace children
-        ((n-p-gp nil "declaration_list" "namespace_definition") parent-bol 0)
-
-        ;; append to bsd style
-        ,@(alist-get 'bsd (c-ts-mode--indent-styles 'cpp))))
-    :bind (:map c++-ts-mode-map
-                ("M-<up>" . treesit-beginning-of-defun)
-                ("M-<down>" . treesit-end-of-defun))
-    :config
-    (setq c-ts-mode-indent-offset 4)
-    (setq c-ts-mode-indent-style #'my/c-ts-indent-style))
-
   (use-package treesit-auto
     :ensure t
     :custom
@@ -104,6 +91,35 @@
     :config
     (treesit-auto-add-to-auto-mode-alist 'all)
     (global-treesit-auto-mode))
+
+  (use-package c-ts-mode
+    :ensure nil
+    :preface
+    (defun my/c-ts-indent-style()
+      `(;; do not indent namespace children
+        ((n-p-gp nil "declaration_list" "namespace_definition") parent-bol 0)
+
+        ;; append to bsd style
+        ,@(alist-get 'bsd (c-ts-mode--indent-styles 'cpp))))
+    :config
+    (setq c-ts-mode-indent-offset 4)
+    (setq c-ts-mode-indent-style #'my/c-ts-indent-style)
+
+    ;; Enable C++ module syntax highlighting
+    (setq c-ts-mode-enable-modules t)
+
+    ;; Add module keywords to font-lock
+    (defun my/c++-ts-mode-setup ()
+      "Setup C++ tree-sitter mode with module support."
+      (when (treesit-available-p)
+        ;; Add module-specific keywords to font-lock
+        (font-lock-add-keywords
+         nil
+         '(("\\<\\(import\\|export\\|module\\)\\>" . font-lock-keyword-face)))))
+
+    (add-hook 'c++-ts-mode-hook #'my/c++-ts-mode-setup))
+
+  (add-to-list 'auto-mode-alist '("\\.cppm\\'" . c++-ts-mode))
 
   (add-hook 'cmake-ts-mode-hook 'eglot-ensure)
   (add-hook 'python-ts-mode-hook 'eglot-ensure)
@@ -134,6 +150,20 @@
   (use-package markdown-toc
     :ensure t)
 
+  (use-package inheritenv
+    :vc (:url "https://github.com/purcell/inheritenv" :rev :newest))
+
+  (use-package claude-code
+    :ensure t
+    :vc (:url "https://github.com/stevemolitor/claude-code.el" :rev :newest)
+    :config
+    (claude-code-mode)
+    (setq claude-code-terminal-backend 'vterm)
+    (setq claude-code-program "/home/jeff/.npm-global/bin/claude")
+    :bind-keymap ("C-c c" . claude-code-command-map)
+    :bind
+    (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode)))
+
   (use-package eglot
     :after markdown-mode
     :ensure t
@@ -147,11 +177,14 @@
     ;; c++
     (add-to-list 'eglot-server-programs
                  '((c++-mode c++-ts-mode) . ("clangd"
+                                            "--experimental-modules-support"
                                             "--background-index"
                                             "--clang-tidy"
                                             "--completion-style=detailed"
                                             "--function-arg-placeholders"
-                                            "--header-insertion=never")))
+                                            "--header-insertion=never"
+                                            "--log=error"
+                                            "--pch-storage=memory")))
     ;; python
     (add-to-list 'eglot-server-programs '((python-mode python-ts-mode)
                                           "basedpyright-langserver" "--stdio"))
@@ -551,15 +584,10 @@
 
   (use-package treemacs-icons-dired
     :ensure t
-    :after (dired dired)
+    :after dired
     :config
     (treemacs-icons-dired-mode)
     (treemacs-resize-icons 18))
-
-  (use-package c-ts-mode
-    :ensure t
-    :config
-    (setq c-ts-mode-indent-offset 4))
 
   (use-package cmake-ts-mode
     :ensure t

@@ -34,21 +34,21 @@
  '(org-export-backends '(md odt latex icalendar html ascii))
  '(org-export-preserve-breaks t)
  '(package-selected-packages
-   '(aio auctex buffer-move c++-ts-mode cdlatex clang-format corfu crontab-mode csv-mode
-         cuda-mode dashboard diminish dired-filter dockerfile-mode doom-modeline
-         drag-stuff duplicate-thing eglot-booster eldoc-box eldoc-stan elpy
-         embark-consult envrc expand-region flycheck-stan flycheck-yamllint fussy
-         fzf-native helpful iedit json-mode julia-mode jupyter kind-icon magit
-         marginalia markdown-toc modus-themes multiple-cursors orderless org-bullets
-         org-re-reveal ox-gfm ox-twbs pdf-tools poly-R projectile python-pytest request
-         shell-maker smartparens smooth-scrolling sphinx-doc sqlformat stan-snippets
-         string-inflection treemacs-icons-dired treesit-auto vc-use-package vertico
-         vundo wgrep yaml-mode yasnippet-snippets))
+   '(aio auctex buffer-move c++-ts-mode cdlatex clang-format claude-code corfu crontab-mode
+         csv-mode cuda-mode dashboard diminish dired-filter dockerfile-mode
+         doom-modeline drag-stuff duplicate-thing eglot eglot-booster eldoc-box
+         eldoc-stan elpy embark-consult envrc expand-region flycheck-stan
+         flycheck-yamllint fussy fzf-native helpful iedit json-mode julia-mode jupyter
+         kind-icon magit marginalia markdown-toc modus-themes multiple-cursors orderless
+         org-bullets org-re-reveal ox-gfm ox-twbs pdf-tools poly-R projectile
+         python-pytest request shell-maker smartparens smooth-scrolling sphinx-doc
+         sqlformat stan-snippets string-inflection treemacs-icons-dired treesit
+         treesit-auto vc-use-package vertico vundo wgrep yaml-mode yasnippet-snippets))
  '(package-vc-selected-packages
-   '((fzf-native :url "https://github.com/dangduc/fzf-native")
+   '((claude-code :url "https://github.com/stevemolitor/claude-code.el")
+     (fzf-native :url "https://github.com/dangduc/fzf-native")
      (vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package")
-     (eglot-booster :url "https://github.com/jdtsmith/eglot-booster")))
- '(pdf-view-midnight-colors '("#DCDCCC" . "#383838")))
+     (eglot-booster :url "https://github.com/jdtsmith/eglot-booster"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
