@@ -84,6 +84,21 @@
   (global-set-key (kbd "C-l") 'comint-clear-buffer)
   (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
 
+  (use-package pulsar
+    :ensure t
+    :bind
+    ( :map global-map
+      ("C-x l" . pulsar-pulse-line) ; overrides `count-lines-page'
+      ("C-x L" . pulsar-highlight-permanently-dwim)) ; or use `pulsar-highlight-temporarily-dwim'
+    :init
+    (pulsar-global-mode 1)
+    :config
+    (setq pulsar-delay 0.055)
+    (setq pulsar-iterations 5)
+    (setq pulsar-face 'pulsar-green)
+    (setq pulsar-region-face 'pulsar-yellow)
+    (setq pulsar-highlight-face 'pulsar-magenta))
+
   (use-package treesit-auto
     :ensure t
     :custom
@@ -153,13 +168,15 @@
   (use-package inheritenv
     :vc (:url "https://github.com/purcell/inheritenv" :rev :newest))
 
+  (use-package eat
+    :ensure t)
+
   (use-package claude-code
     :ensure t
     :vc (:url "https://github.com/stevemolitor/claude-code.el" :rev :newest)
     :config
     (claude-code-mode)
-    (setq claude-code-terminal-backend 'vterm)
-    (setq claude-code-program "/home/jeff/.npm-global/bin/claude")
+    (setq claude-code-terminal-backend 'eat)
     :bind-keymap ("C-c c" . claude-code-command-map)
     :bind
     (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode)))
@@ -186,22 +203,8 @@
                                             "--log=error"
                                             "--pch-storage=memory")))
     ;; python
-    (add-to-list 'eglot-server-programs '((python-mode python-ts-mode)
-                                          "basedpyright-langserver" "--stdio"))
-    (setq-default
-       eglot-workspace-configuration
-       '(:basedpyright (
-           :typeCheckingMode "basic"
-         )
-         :basedpyright.analysis (
-           :diagnosticSeverityOverrides (
-             :reportUnusedCallResult "none"
-             :reportUnknownMemberType "none"
-           )
-           :inlayHints (
-             :variableTypes :json-false
-           )
-         )))
+    (add-to-list 'eglot-server-programs
+                 '((python-mode python-ts-mode) . ("ty" "server")))
     )
 
   (use-package eglot-booster
@@ -358,6 +361,11 @@
     :ensure t
     :custom
     (nerd-icons-font-family "Symbols Nerd Font Mono"))
+
+  (use-package nerd-icons-completion
+    :ensure t
+    :config
+    (nerd-icons-completion-mode))
 
   (use-package dashboard
     :ensure t
@@ -590,9 +598,13 @@
     (treemacs-resize-icons 18))
 
   (use-package cmake-ts-mode
-    :ensure t
     :config
-    (setq cmake-ts-mode-indent-offset 4))
+    (setq cmake-ts-mode-indent-offset 4)
+    (add-hook 'cmake-ts-mode-hook
+              (defun setup-neocmakelsp ()
+                (require 'eglot)
+                (add-to-list 'eglot-server-programs `((cmake-ts-mode) . ("neocmakelsp" "stdio")))
+                (eglot-ensure))))
 
   (use-package dockerfile-mode
     :ensure t
@@ -830,6 +842,7 @@
 
   (use-package consult
     :ensure t
+    ;; Replace bindings. Lazily loaded by `use-package'.
     :bind (;; C-c bindings in `mode-specific-map'
            ("C-c M-x" . consult-mode-command)
            ("C-c h" . consult-history)
@@ -853,6 +866,7 @@
            ("M-y" . consult-yank-pop)                ;; orig. yank-pop
            ;; M-g bindings in `goto-map'
            ("M-g e" . consult-compile-error)
+           ("M-g r" . consult-grep-match)
            ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
            ("M-g g" . consult-goto-line)             ;; orig. goto-line
            ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
@@ -882,23 +896,25 @@
            :map minibuffer-local-map
            ("M-s" . consult-history)                 ;; orig. next-matching-history-element
            ("M-r" . consult-history))                ;; orig. previous-matching-history-element
-    ;; Enable automatic preview at point in the *Completions* buffer. This is
-    ;; relevant when you use the default completion UI.
-    :hook (completion-list-mode . consult-preview-at-point-mode)
+
     ;; The :init configuration is always executed (Not lazy)
     :init
+
     ;; Tweak the register preview for `consult-register-load',
     ;; `consult-register-store' and the built-in commands.  This improves the
     ;; register formatting, adds thin separator lines, register sorting and hides
     ;; the window mode line.
     (advice-add #'register-preview :override #'consult-register-window)
     (setq register-preview-delay 0.5)
+
     ;; Use Consult to select xref locations with preview
     (setq xref-show-xrefs-function #'consult-xref
           xref-show-definitions-function #'consult-xref)
+
     ;; Configure other variables and modes in the :config section,
     ;; after lazily loading the package.
     :config
+
     ;; Optionally configure preview. The default value
     ;; is 'any, such that any key triggers the preview.
     ;; (setq consult-preview-key 'any)
@@ -910,13 +926,15 @@
      consult-theme :preview-key '(:debounce 0.2 any)
      consult-ripgrep consult-git-grep consult-grep consult-man
      consult-bookmark consult-recent-file consult-xref
-     consult--source-bookmark consult--source-file-register
-     consult--source-recent-file consult--source-project-recent-file
+     consult-source-bookmark consult-source-file-register
+     consult-source-recent-file consult-source-project-recent-file
      ;; :preview-key "M-."
      :preview-key '(:debounce 0.4 any))
+
     ;; Optionally configure the narrowing key.
     ;; Both < and C-+ work reasonably well.
     (setq consult-narrow-key "<") ;; "C-+"
+
     ;; Optionally make narrowing help available in the minibuffer.
     ;; You may want to use `embark-prefix-help-command' or which-key instead.
     ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
@@ -937,6 +955,41 @@
     (kind-icon-default-face 'corfu-default)
     :config
     (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+  (use-package rmsbolt
+    :ensure t
+    :defer t
+    :config
+    (setq rmsbolt-command "clang++"))
+
+  (use-package fancy-compilation
+    :ensure t
+    :config
+    (setq fancy-compilation-override-colors nil)
+    (fancy-compilation-mode)
+    :bind)
+
+  (use-package compile-multi
+    :ensure t
+    :bind ("C-c x" . compile-multi))
+
+  (use-package compile-multi-embark
+    :ensure t
+    :after (compile-multi embark)
+    :config
+    (compile-multi-embark-mode))
+
+  (use-package consult-compile-multi
+    :ensure t
+    :after (compile-multi consult)
+    :config
+    (consult-compile-multi-mode))
+
+  (use-package compile-multi-nerd-icons
+    :ensure t
+    :after nerd-icons-completion
+    :after compile-multi
+    :demand t)
 
   ;; diminish some minor modes
   (add-hook 'ess-r-mode-hook (lambda () (diminish 'ess-r-package-mode)))

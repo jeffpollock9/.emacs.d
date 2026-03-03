@@ -34,21 +34,326 @@
  '(org-export-backends '(md odt latex icalendar html ascii))
  '(org-export-preserve-breaks t)
  '(package-selected-packages
-   '(aio auctex buffer-move c++-ts-mode cdlatex clang-format claude-code corfu crontab-mode
-         csv-mode cuda-mode dashboard diminish dired-filter dockerfile-mode
-         doom-modeline drag-stuff duplicate-thing eglot eglot-booster eldoc-box
-         eldoc-stan elpy embark-consult envrc expand-region flycheck-stan
-         flycheck-yamllint fussy fzf-native helpful iedit json-mode julia-mode jupyter
-         kind-icon magit marginalia markdown-toc modus-themes multiple-cursors orderless
-         org-bullets org-re-reveal ox-gfm ox-twbs pdf-tools poly-R projectile
-         python-pytest request shell-maker smartparens smooth-scrolling sphinx-doc
-         sqlformat stan-snippets string-inflection treemacs-icons-dired treesit
-         treesit-auto vc-use-package vertico vundo wgrep yaml-mode yasnippet-snippets))
+   '(auctex buffer-move cdlatex clang-format claude-code compile-multi-embark
+            compile-multi-nerd-icons consult-compile-multi corfu coterm crontab-mode
+            csv-mode cuda-mode dashboard diminish dired-filter dockerfile-mode
+            doom-modeline drag-stuff duplicate-thing eat eglot-booster eldoc-box
+            eldoc-stan elpy embark-consult envrc expand-region fancy-compilation
+            flycheck-stan flycheck-yamllint fussy fzf-native god-mode helpful iedit
+            json-mode julia-mode jupyter kind-icon magit marginalia markdown-toc
+            modus-themes multiple-cursors orderless org-bullets org-re-reveal ox-gfm
+            ox-twbs pdf-tools poly-R projectile pulsar python-pytest rmsbolt smartparens
+            smooth-scrolling sphinx-doc sqlformat stan-snippets string-inflection
+            treemacs-icons-dired treesit-auto vertico vundo wgrep yaml-mode
+            yasnippet-snippets))
  '(package-vc-selected-packages
    '((claude-code :url "https://github.com/stevemolitor/claude-code.el")
      (fzf-native :url "https://github.com/dangduc/fzf-native")
      (vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package")
-     (eglot-booster :url "https://github.com/jdtsmith/eglot-booster"))))
+     (eglot-booster :url "https://github.com/jdtsmith/eglot-booster")))
+ '(safe-local-variable-values
+   '((compile-multi-config
+      (t ("snipycpp::pytest" . "cd snipycpp && uv run --no-progress --reinstall pytest")
+         ("snipycpp::pytest-benchmark"
+          . "cd snipycpp && uv run --no-progress --reinstall pytest --benchmark-enable")
+         ("snipycpp::clean" . "rm -rf snipycpp/build")
+         ("snipycpp::cmake" . "cd snipycpp && cmake --preset release")
+         ("snipycpp::catch-test"
+          . "cd snipycpp/build/release && ninja && ./tests/test_runner")
+         ("snipy::pytest" . "cd ../snipy && pytest")))
+     (compile-multi-config
+      (t ("snipycpp::pytest" . "cd snipycpp && uv run --no-progress --reinstall pytest")
+         ("snipycpp::pytest-benchmark"
+          . "cd snipycpp && uv run --no-progress --reinstall pytest --benchmark-enable")
+         ("snipycpp::clean" . "rm -rf snipycpp/build")
+         ("snipycpp::cmake" . "cmake --preset release")
+         ("snipycpp::catch-test" . "cd build/release && ninja && ./tests/test_runner")
+         ("snipy::pytest" . "cd ../snipy && pytest")))
+     (compile-multi-config
+      (t
+       (#("snipycpp::pytest" 0 1
+          (compile-multi--task "uv run --no-progress --reinstall pytest" consult--type
+                               snipycpp))
+        . "uv run --no-progress --reinstall pytest")
+       (#("snipycpp::pytest-benchmark" 0 1
+          (compile-multi--task
+           "uv run --no-progress --reinstall pytest --benchmark-enable" consult--type
+           snipycpp))
+        . "uv run --no-progress --reinstall pytest --benchmark-enable")
+       (#("snipycpp::clean" 0 1
+          (compile-multi--task "rm -rf build" consult--type snipycpp))
+        . "rm -rf build")
+       (#("snipycpp::cmake" 0 1
+          (compile-multi--task "cmake --preset release" consult--type snipycpp))
+        . "cmake --preset release")
+       (#("snipycpp::catch-test" 0 1
+          (compile-multi--task "cd build/release && ninja && ./tests/test_runner"
+                               consult--type snipycpp))
+        . "cd build/release && ninja && ./tests/test_runner")
+       (#("snipy::pytest" 0 1
+          (compile-multi--task "cd ../snipy && pytest" consult--type snipy))
+        . "cd ../snipy && pytest")))
+     (projectile-project-compilation-dir . ".")
+     (compile-multi-config
+      (t
+       (#("snipycpp::pytest" 0 1
+          (compile-multi--task
+           "cd ~/git/longshot/strategy/snipycpp && uv run --no-progress --reinstall pytest"
+           consult--type snipycpp))
+        . "cd ~/git/longshot/strategy/snipycpp && uv run --no-progress --reinstall pytest")
+       (#("snipycpp::pytest-benchmark" 0 1
+          (compile-multi--task
+           "cd ~/git/longshot/strategy/snipycpp && uv run --no-progress --reinstall pytest --benchmark-enable"
+           consult--type snipycpp))
+        . "cd ~/git/longshot/strategy/snipycpp && uv run --no-progress --reinstall pytest --benchmark-enable")
+       (#("snipycpp::clean" 0 1
+          (compile-multi--task "rm -rf ~/git/longshot/strategy/snipycpp/build"
+                               consult--type snipycpp))
+        . "rm -rf ~/git/longshot/strategy/snipycpp/build")
+       (#("snipycpp::cmake" 0 1
+          (compile-multi--task
+           "cd ~/git/longshot/strategy/snipycpp && cmake --preset release" consult--type
+           snipycpp))
+        . "cd ~/git/longshot/strategy/snipycpp && cmake --preset release")
+       (#("snipycpp::catch-test" 0 1
+          (compile-multi--task
+           "cd ~/git/longshot/strategy/snipycpp/build/release && ninja && ./tests/test_runner"
+           consult--type snipycpp))
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && ninja && ./tests/test_runner")
+       (#("snipy::pytest" 0 1
+          (compile-multi--task "cd ~/git/longshot/strategy/snipy && pytest"
+                               consult--type snipy))
+        . "cd ~/git/longshot/strategy/snipy && pytest")))
+     (compile-multi-config
+      (t
+       ("snipycpp::pytest"
+        . "cd ~/git/longshot/strategy/snipycpp && uv run --no-progress --reinstall pytest")
+       ("snipycpp::pytest-benchmark"
+        . "cd ~/git/longshot/strategy/snipycpp && uv run --no-progress --reinstall pytest --benchmark-enable")
+       ("snipycpp::clean" . "rm -rf ~/git/longshot/strategy/snipycpp/build")
+       ("snipycpp::cmake"
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && cmake --preset release")
+       ("snipycpp::catch-test"
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && ninja && ./tests/test_runner")
+       ("snipy::pytest" . "cd ~/git/longshot/strategy/snipy && pytest")))
+     (compile-multi-config
+      (t
+       ("snipycpp::pytest"
+        . "cd ~/git/longshot/strategy/snipycpp && uv run --no-progress --reinstall pytest")
+       ("snipycpp::pytest-benchmark"
+        . "cd ~/git/longshot/strategy/snipycpp && uv run --no-progress --reinstall pytest --benchmark-enable")
+       ("snipycpp::clean" . "rm -rf ~/git/longshot/strategy/snipycpp/build")
+       ("snipycpp::cmake"
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && cmake --preset release")
+       ("snipycpp::catch-test"
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && ninja && ./tests/test_runner")
+       ("snipy::pytest"
+        . "cd ~/git/longshot/strategy/snipy && uv run --no-progress --reinstall pytest")))
+     (compile-multi-config
+      (t
+       ("snipycpp::pytest"
+        . "cd ~/git/longshot/strategy/snipycpp && uv run --no-progress --reinstall pytest")
+       ("snipycpp::pytest-benchmark"
+        . "cd ~/git/longshot/strategy/snipycpp && uv run --no-progress --reinstall pytest --benchmark-enable")
+       ("snipycpp::clean" . "rm -rf ~/git/longshot/strategy/snipycpp/build")
+       ("snipycpp::cmake"
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && cmake --preset release")
+       ("snipycpp::catch-test"
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && ninja && ./tests/test_runner")))
+     (compile-multi-config
+      (t
+       ("snipycpp::pytest"
+        . "cd ~/git/longshot/strategy/snipycpp && uv run --no-progress --reinstall pytest")
+       ("snipycpp::pytest-benchmark"
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && uv run --no-progress --reinstall pytest --benchmark-enable")
+       ("snipycpp::clean" . "rm -rf ~/git/longshot/strategy/snipycpp/build")
+       ("snipycpp::cmake"
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && cmake --preset release")
+       ("snipycpp::catch-test"
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && ninja && ./tests/test_runner")))
+     (compile-multi-config
+      (t
+       (#("snipycpp::pytest" 0 1
+          (compile-multi--task
+           "cd ~/git/longshot/strategy/snipycpp/build/release && uv run --no-progress --reinstall pytest"
+           consult--type snipycpp))
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && uv run --no-progress --reinstall pytest")
+       (#("snipycpp::pytest-benchmark" 0 1
+          (compile-multi--task
+           "cd ~/git/longshot/strategy/snipycpp/build/release && uv run --no-progress --reinstall pytest --benchmark-enable"
+           consult--type snipycpp))
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && uv run --no-progress --reinstall pytest --benchmark-enable")
+       (#("snipycpp::clean" 0 1
+          (compile-multi--task "rm -rf ~/git/longshot/strategy/snipycpp/build"
+                               consult--type snipycpp))
+        . "rm -rf ~/git/longshot/strategy/snipycpp/build")
+       (#("snipycpp::cmake" 0 1
+          (compile-multi--task
+           "cd ~/git/longshot/strategy/snipycpp/build/release && cmake --preset release"
+           consult--type snipycpp))
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && cmake --preset release")
+       (#("snipycpp::catch-test" 0 1
+          (compile-multi--task
+           "cd ~/git/longshot/strategy/snipycpp/build/release && ninja && ./tests/test_runner"
+           consult--type snipycpp))
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && ninja && ./tests/test_runner")))
+     (compile-multi-config
+      (t
+       ("pytest"
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && uv run --no-progress --reinstall pytest")
+       ("pytest-benchmark"
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && uv run --no-progress --reinstall pytest --benchmark-enable")
+       ("clean" . "rm -rf ~/git/longshot/strategy/snipycpp/build")
+       ("cmake"
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && cmake --preset release")
+       ("catch-test"
+        . "cd ~/git/longshot/strategy/snipycpp/build/release && ninja && ./tests/test_runner")))
+     (compile-multi-config
+      (t ("pytest" . "uv run --no-progress --reinstall pytest")
+         ("pytest-benchmark"
+          . "cd ~/git/longshot/strategy/snipycpp/build/release && uv run --no-progress --reinstall pytest --benchmark-enable")
+         ("clean" . "rm -rf ~/git/longshot/strategy/snipycpp/build")
+         ("cmake"
+          . "cd ~/git/longshot/strategy/snipycpp/build/release && cmake --preset release")
+         ("catch-test"
+          . "cd ~/git/longshot/strategy/snipycpp/build/release && ninja && ./tests/test_runner")))
+     (compile-multi-config
+      (t ("pytest" . "uv run --no-progress --reinstall pytest")
+         ("pytest-benchmark"
+          . "uv run --no-progress --reinstall pytest --benchmark-enable")
+         ("clean" . "rm -rf ~/git/longshot/strategy/snipycpp/build")
+         ("cmake"
+          . "cd ~/git/longshot/strategy/snipycpp/build/release && cmake --preset release")
+         ("catch-test"
+          . "cd ~/git/longshot/strategy/snipycpp/build/release && ninja && ./tests/test_runner")))
+     (compile-multi-config
+      (t ("pytest" . "uv run --no-progress --reinstall pytest")
+         ("pytest-benchmark"
+          . "uv run --no-progress --reinstall pytest --benchmark-enable")
+         ("clean" . "rm -rf ~/git/longshot/strategy/snipycpp/build/release/build")
+         ("cmake"
+          . "cd ~/git/longshot/strategy/snipycpp/build/release && cmake --preset release")
+         ("catch-test"
+          . "cd ~/git/longshot/strategy/snipycpp/build/release && ninja && ./tests/test_runner")))
+     (compile-multi-config
+      (t ("pytest" . "uv run --no-progress --reinstall pytest")
+         ("pytest-benchmark"
+          . "uv run --no-progress --reinstall pytest --benchmark-enable")
+         ("clean" . "rm -rf build")
+         ("cmake"
+          . "cd ~/git/longshot/strategy/snipycpp/build/release && cmake --preset release")
+         ("catch-test"
+          . "cd ~/git/longshot/strategy/snipycpp/build/release && ninja && ./tests/test_runner")))
+     (compile-multi-config
+      (t ("pytest" . "uv run --no-progress --reinstall pytest")
+         ("pytest-benchmark"
+          . "uv run --no-progress --reinstall pytest --benchmark-enable")
+         ("clean" . "rm -rf build") ("cmake" . "cmake --preset release")
+         ("catch-test"
+          . "cd ~/git/longshot/strategy/snipycpp/build/release && ninja && ./tests/test_runner")))
+     (compile-multi-config
+      (t ("pytest" . "uv run --no-progress --reinstall pytest")
+         ("pytest-benchmark"
+          . "uv run --no-progress --reinstall pytest --benchmark-enable")
+         ("clean" . "rm -rf build") ("cmake" . "cmake --preset release")
+         ("catch-test"
+          . "cd ~/git/longshot/strategy/build/release && ninja && ./tests/test_runner")))
+     (compile-multi-config
+      (t
+       (#("pytest" 0 1 (compile-multi--task "uv run --no-progress --reinstall pytest"))
+        . "uv run --no-progress --reinstall pytest")
+       (#("pytest-benchmark" 0 1
+          (compile-multi--task
+           "uv run --no-progress --reinstall pytest --benchmark-enable"))
+        . "uv run --no-progress --reinstall pytest --benchmark-enable")
+       (#("clean" 0 1 (compile-multi--task "rm -rf build")) . "rm -rf build")
+       (#("cmake" 0 1 (compile-multi--task "cmake --preset release"))
+        . "cmake --preset release")
+       (#("catch-test" 0 1
+          (compile-multi--task "cd build/release && ninja && ./tests/test_runner"))
+        . "cd build/release && ninja && ./tests/test_runner")))
+     (compile-multi-config
+      (t ("snipycpp::pytest" . "cd snipycpp && uv run --no-progress --reinstall pytest")
+         ("snipycpp::pytest-benchmark"
+          . "cd snipycpp && uv run --no-progress --reinstall pytest --benchmark-enable")
+         ("snipycpp::catch-test"
+          . "cd snipycpp/build/release && ninja && ./tests/test_runner")
+         ("snipycpp::catch-test"
+          . "cd snipycpp/build/release && ninja && ./tests/test_runner")))
+     (compile-multi-config
+      (t
+       (#("snipycpp::pytest" 0 1
+          (compile-multi--task "cd snipycpp && uv run --no-progress --reinstall pytest"
+                               consult--type snipycpp))
+        . "cd snipycpp && uv run --no-progress --reinstall pytest")
+       (#("snipycpp::pytest-benchmark" 0 1
+          (compile-multi--task
+           "cd snipycpp && uv run --no-progress --reinstall pytest --benchmark-enable"
+           consult--type snipycpp))
+        . "cd snipycpp && uv run --no-progress --reinstall pytest --benchmark-enable")
+       (#("snipycpp::catch-test" 0 1
+          (compile-multi--task
+           "cd snipycpp/build/release && ninja && ./tests/test_runner" consult--type
+           snipycpp))
+        . "cd snipycpp/build/release && ninja && ./tests/test_runner")))
+     (compile-multi-config
+      (t
+       (#("snipycpp::pytest" 0 1
+          (compile-multi--task "cd snipycpp && uv run --no-progress --reinstall pytest"
+                               consult--type snipycpp))
+        . "cd snipycpp && uv run --no-progress --reinstall pytest")
+       (#("snipycpp::pytest-benchmark" 0 1
+          (compile-multi--task
+           "cd snipycpp && uv run --no-progress --reinstall pytest --benchmark-enable"
+           consult--type snipycpp))
+        . "cd snipycpp && uv run --no-progress --reinstall pytest --benchmark-enable")
+       (#("snipycpp::release::catch-test" 0 1
+          (compile-multi--task "" consult--type snipycpp)))))
+     (compile-multi-config
+      (t
+       (#("snipycpp::pytest" 0 1
+          (compile-multi--task "cd snipycpp && uv run --no-progress --reinstall pytest"
+                               consult--type snipycpp))
+        . "cd snipycpp && uv run --no-progress --reinstall pytest")
+       (#("snipycpp::pytest-benchmark" 0 1
+          (compile-multi--task
+           "cd snipycpp && uv run --no-progress --reinstall pytest --benchmark-enable"
+           consult--type snipycpp))
+        . "cd snipycpp && uv run --no-progress --reinstall pytest --benchmark-enable")
+       (#("snipycpp::::release::catch-test" 0 1
+          (compile-multi--task "" consult--type snipycpp)))))
+     (compile-multi-config
+      (t ("snipycpp::pytest" . "cd snipycpp && uv run --no-progress --reinstall pytest")
+         ("snipycpp::pytest-benchmark"
+          . "cd snipycpp && uv run --no-progress --reinstall pytest --benchmark-enable")))
+     (compile-multi-config
+      (t
+       (#("snipycpp::pytest" 0 1
+          (compile-multi--task "cd snipycpp && uv run --no-progress --reinstall pytest"
+                               consult--type snipycpp))
+        . "cd snipycpp && uv run --no-progress --reinstall pytest")
+       (#("snipycpp::pytest-benchmark" 0 1
+          (compile-multi--task
+           "cd snipycpp && uv run --reinstall pytest --benchmark-enable" consult--type
+           snipycpp))
+        . "cd snipycpp && uv run --reinstall pytest --benchmark-enable")))
+     (compile-multi-config
+      (t
+       (#("snipycpp::pytest" 0 1
+          (compile-multi--task "cd snipycpp && uv run --reinstall pytest" consult--type
+                               snipycpp))
+        . "cd snipycpp && uv run --reinstall pytest")
+       (#("snipycpp::pytest-benchmark" 0 1
+          (compile-multi--task
+           "cd snipycpp && uv run --reinstall pytest --benchmark-enable" consult--type
+           snipycpp))
+        . "cd snipycpp && uv run --reinstall pytest --benchmark-enable")))
+     (compile-multi-config
+      (t ("build::release" . "cmake --build build -j$(nproc)")
+         ("build::debug" . "cmake --build build-debug -j$(nproc)")
+         ("test::all" . "cd build && ctest --output-on-failure")
+         ("test::verbose" . "cd build && ctest -V")
+         ("clean" . "cmake --build build --target clean"))))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
