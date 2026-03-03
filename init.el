@@ -17,9 +17,8 @@
 
   (require 'package)
   (setq package-enable-at-startup nil)
-  (add-to-list 'package-archives '("melpa"     . "http://melpa.org/packages/"))
-  ;;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-  (add-to-list 'package-archives '("gnu"       . "http://elpa.gnu.org/packages/"))
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+  (add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/"))
   (package-initialize)
 
   (unless (package-installed-p 'use-package)
@@ -28,7 +27,7 @@
 
   (eval-when-compile (require 'use-package))
 
-  (fset 'yes-or-no-p 'y-or-n-p)
+  (defalias 'yes-or-no-p 'y-or-n-p)
 
   (xterm-mouse-mode 1)
   (menu-bar-mode -1)
@@ -258,14 +257,17 @@
           '(("groups"
              ("Emacs"          (mode . emacs-lisp-mode))
              ("Org"            (mode . org-mode))
-             ("Python"         (mode . python-mode))
+             ("Python"         (or (mode . python-mode)
+                                   (mode . python-ts-mode)))
              ("Python-console" (mode . inferior-python-mode))
              ("R"              (mode . ess-r-mode))
              ("R-console"      (mode . inferior-ess-r-mode))
              ("Stan"           (mode . stan-mode))
              ("C++"            (or (mode . c-mode)
-                                   (mode . c++-mode)))
-             ("Cmake"          (mode . cmake-mode))
+                                   (mode . c++-mode)
+                                   (mode . c++-ts-mode)))
+             ("Cmake"          (or (mode . cmake-mode)
+                                   (mode . cmake-ts-mode)))
              ("Make"           (name . "[mM]akefile"))
              ("Magit"          (name . "\*magit"))
              ("Markdown"       (mode . markdown-mode))
@@ -275,7 +277,7 @@
              )))
 
     (add-hook 'ibuffer-mode-hook
-              '(lambda () (ibuffer-switch-to-saved-filter-groups "groups"))))
+              (lambda () (ibuffer-switch-to-saved-filter-groups "groups"))))
 
   (use-package cdlatex
     :defer t
@@ -530,7 +532,6 @@
 
   (use-package yasnippet
     :diminish
-    :defer t
     :ensure t
     :init
     (yas-global-mode)
@@ -568,8 +569,8 @@
     (:map dired-mode-map ("C-c C-e" . wdired-change-to-wdired-mode))
     :init
     (setq dired-listing-switches "-algh"
-          dired-dwim-target t
-          dired-omit-mode t))
+          dired-dwim-target t)
+    (add-hook 'dired-mode-hook #'dired-omit-mode))
 
   (use-package dired-filter
     :diminish
@@ -645,20 +646,6 @@
   (use-package cython-mode
     :load-path "~/.emacs.d/lisp")
 
-  ;; (use-package doxymacs
-  ;;   :load-path "~/.emacs.d/builds/doxymacs/install/share/emacs/site-lisp"
-  ;;   :diminish
-  ;;   :init
-  ;;   (add-hook 'c-mode-common-hook 'doxymacs-mode)
-  ;;   (defun my-doxymacs-font-lock-hook ()
-  ;;     (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
-  ;;         (doxymacs-font-lock)))
-  ;;   (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
-  ;; (setq doxymacs-doxygen-style "C++"
-  ;;       doxymacs-command-character "\\")
-  ;; :config
-  ;; (unbind-key "C-c d" doxymacs-mode-map))
-
   ;; ispc
   (add-to-list 'auto-mode-alist '("\\.ispc$" . c++-mode))
   (add-to-list 'auto-mode-alist '("\\.isph$" . c++-mode))
@@ -714,8 +701,8 @@
 
   (use-package flycheck-yamllint
     :ensure t
-    :mode (("\\.yml$'" . yaml-ts-mode)
-           ("\\.yaml$'" . yaml-ts-mode))
+    :mode (("\\.yml\\'" . yaml-ts-mode)
+           ("\\.yaml\\'" . yaml-ts-mode))
     :init
     (eval-after-load 'flycheck
       '(add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup))
@@ -733,9 +720,9 @@
       (read-only-mode))
     (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
 
-  (require 'ansi-color)
   (defun display-ansi-colors ()
     (interactive)
+    (require 'ansi-color)
     (ansi-color-apply-on-region (point-min) (point-max)))
 
   (use-package projectile
@@ -966,8 +953,7 @@
     :ensure t
     :config
     (setq fancy-compilation-override-colors nil)
-    (fancy-compilation-mode)
-    :bind)
+    (fancy-compilation-mode))
 
   (use-package compile-multi
     :ensure t
@@ -998,8 +984,12 @@
   (add-hook 'org-indent-mode-hook (lambda () (diminish 'org-indent-mode)))
   (add-hook 'org-cdlatex-mode-hook (lambda () (diminish 'org-cdlatex-mode)))
   (add-hook 'yas-minor-mode-hook (lambda () (diminish 'yas-minor-mode)))
-  (add-hook 'yas-major-mode-hook (lambda () (diminish 'yas-majormode)))
+  (add-hook 'yas-major-mode-hook (lambda () (diminish 'yas-major-mode)))
+
+  (put 'narrow-to-region 'disabled nil)
   )
 
+(add-hook 'emacs-startup-hook
+          (lambda () (setq gc-cons-threshold (* 1024 1024 2))))
+
 ;;; init.el ends here
-(put 'narrow-to-region 'disabled nil)
