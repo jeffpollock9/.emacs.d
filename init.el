@@ -342,6 +342,9 @@
            :html-extension "html"
            :body-only t)))
 
+  (use-package jenkinsfile-mode
+    :ensure t)
+
   (use-package ox-twbs
     :ensure t)
 
@@ -614,15 +617,20 @@
   (use-package python-pytest
     :after python
     :ensure t
-    :bind (:map python-mode-map ("C-c p" . python-pytest-dispatch)))
+    :bind (:map python-ts-mode-map ("C-c p" . python-pytest-dispatch))
+    :init
+    (setq python-pytest-executable "uv run pytest"))
 
   (use-package elpy
     :after python
     :ensure t
     :init
     (require 'elpy)
-    (setq python-shell-interpreter "ipython"
-          python-shell-interpreter-args "-i --simple-prompt")
+    (setq python-shell-interpreter "uv"
+          python-shell-interpreter-args "run --with ipython ipython -i --simple-prompt"
+          python-shell-prompt-detect-enabled nil
+          python-shell-prompt-regexp ">>> "
+          python-shell-prompt-block-regexp "\\.\\.\\. ")
     :bind (:map python-ts-mode-map
                 ("C-c C-c" . elpy-shell-send-region-or-buffer)
                 ("C-c l" . elpy-shell-send-statement-and-step)))
@@ -639,6 +647,9 @@
     :ensure t
     :bind
     ("C-c d" . duplicate-thing))
+
+  (use-package ghostel
+    :ensure t)
 
   (use-package vterm
     :load-path "~/.emacs.d/builds/emacs-libvterm")
@@ -707,6 +718,53 @@
     (eval-after-load 'flycheck
       '(add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup))
     (add-hook 'yaml-mode-hook 'flycheck-mode))
+
+  (use-package flyover
+    :ensure t
+    :hook ((flycheck-mode . flyover-mode)
+           (flymake-mode . flyover-mode))
+    :custom
+    ;; Checker settings
+    (flyover-checkers '(flycheck flymake))
+    (flyover-levels '(error warning info))
+
+    ;; Appearance
+    (flyover-use-theme-colors t)
+    (flyover-background-lightness 45)
+
+    ;; Text tinting
+    (flyover-text-tint 'lighter)
+    (flyover-text-tint-percent 50)
+
+    ;; Icon tinting (foreground and background)
+    (flyover-icon-tint 'lighter)
+    (flyover-icon-tint-percent 50)
+    (flyover-icon-background-tint 'darker)
+    (flyover-icon-background-tint-percent 50)
+
+    ;; Border styles: none, pill, arrow, slant, slant-inv, flames, pixels
+    (flyover-border-style 'none)
+    (flyover-border-match-icon t)
+
+    ;; Display settings
+    (flyover-hide-checker-name t)
+    (flyover-show-virtual-line t)
+    (flyover-virtual-line-type 'line-no-arrow)
+    (flyover-line-position-offset 1)
+
+    ;; Message wrapping
+    (flyover-wrap-messages t)
+    (flyover-max-line-length 120)
+
+    ;; Performance
+    (flyover-debounce-interval 0.2)
+    (flyover-cursor-debounce-interval 0.3)
+
+    ;; Display mode (controls cursor-based visibility)
+    (flyover-display-mode 'show-only-on-same-line)
+
+    ;; Completion integration
+    (flyover-hide-during-completion t))
 
   (add-to-list 'auto-mode-alist '("\\.clang-tidy\\'" . yaml-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.clang-format\\'" . yaml-ts-mode))
