@@ -83,6 +83,8 @@
   (global-set-key (kbd "C-l") 'comint-clear-buffer)
   (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
 
+  (setopt isearch-lazy-count t)
+
   (use-package pulsar
     :ensure t
     :bind
@@ -152,6 +154,53 @@
     (minibuffer-prompt-properties
      '(read-only t cursor-intangible t face minibuffer-prompt)))
 
+  ;; Performance tweaks.
+  (use-package emacs
+    :custom
+    ;; LSP: bigger pipe for language servers (~4 MB).
+    (read-process-output-max (* 4 1024 1024))
+    ;; Defer fontification while typing -- smoother input in big files.
+    (redisplay-skip-fontification-on-input t)
+    ;; Skip R-to-L bidi scanning; faster in huge/log buffers.
+    (bidi-inhibit-bpa t)
+    ;; No highlight in non-selected windows.
+    (highlight-nonselected-windows nil)
+    :init
+    (setq-default bidi-display-reordering 'left-to-right
+                  bidi-paragraph-direction 'left-to-right
+                  cursor-in-non-selected-windows nil))
+
+  ;; Kill ring / clipboard behaviour.
+  (use-package emacs
+    :custom
+    (save-interprogram-paste-before-kill t)
+    (kill-do-not-save-duplicates t))
+
+  ;; Window combination behaviour.
+  (use-package emacs
+    :custom
+    (window-combination-resize t))
+
+  ;; Misc quality-of-life.
+  (use-package emacs
+    :custom
+    ;; Repeat C-SPC after C-u C-SPC to keep popping the mark.
+    (set-mark-command-repeat-pop t))
+
+  ;; Auto-chmod scripts with a shebang on save.
+  (use-package files
+    :hook (after-save . executable-make-buffer-file-executable-if-script-p))
+
+  ;; Use regular string regexp syntax in re-builder.
+  (use-package re-builder
+    :custom
+    (reb-re-syntax 'string))
+
+  ;; Don't ping hostnames when opening file-at-point.
+  (use-package ffap
+    :custom
+    (ffap-machine-p-known 'reject))
+
   (use-package envrc
     :ensure t
     :diminish
@@ -193,14 +242,14 @@
     ;; c++
     (add-to-list 'eglot-server-programs
                  '((c++-mode c++-ts-mode) . ("clangd"
-                                            "--experimental-modules-support"
-                                            "--background-index"
-                                            "--clang-tidy"
-                                            "--completion-style=detailed"
-                                            "--function-arg-placeholders"
-                                            "--header-insertion=never"
-                                            "--log=error"
-                                            "--pch-storage=memory")))
+                                             "--experimental-modules-support"
+                                             "--background-index"
+                                             "--clang-tidy"
+                                             "--completion-style=detailed"
+                                             "--function-arg-placeholders"
+                                             "--header-insertion=never"
+                                             "--log=error"
+                                             "--pch-storage=memory")))
     ;; python
     (add-to-list 'eglot-server-programs
                  '((python-mode python-ts-mode) . ("ty" "server")))
@@ -852,8 +901,17 @@
 
   (use-package savehist
     :ensure t
+    :custom
+    (savehist-additional-variables '(search-ring regexp-search-ring kill-ring))
     :init
-    (savehist-mode))
+    (savehist-mode)
+    :config
+    ;; Strip text properties so the history file doesn't bloat.
+    (add-hook 'savehist-save-hook
+              (lambda ()
+                (setq kill-ring
+                      (mapcar #'substring-no-properties
+                              (cl-remove-if-not #'stringp kill-ring))))))
 
   (use-package orderless
     :ensure t
