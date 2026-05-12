@@ -826,7 +826,12 @@
     :config
     (setq fussy-compare-same-score-fn 'fussy-histlen->strlen<)
     (fussy-setup-fzf)
-    (fussy-eglot-setup))
+    (fussy-eglot-setup)
+    ;; consult-grep/ripgrep/git-grep candidates carry their file:line position
+    ;; in `face' text properties that fzf-native-score-all strips. Skip fussy
+    ;; for this category so selection/preview can read the position back.
+    (add-to-list 'completion-category-overrides
+                 '(consult-grep (styles basic))))
 
   (use-package corfu
     :ensure t
