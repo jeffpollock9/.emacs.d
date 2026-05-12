@@ -201,11 +201,6 @@
     :custom
     (ffap-machine-p-known 'reject))
 
-  (use-package envrc
-    :ensure t
-    :diminish
-    :hook (after-init . envrc-global-mode))
-
   (use-package markdown-mode
     :ensure t
     :mode ("\\.md$" . markdown-mode))
@@ -215,9 +210,6 @@
 
   (use-package inheritenv
     :vc (:url "https://github.com/purcell/inheritenv" :rev :newest))
-
-  (use-package eat
-    :ensure t)
 
   (use-package claude-code
     :ensure t
@@ -229,12 +221,30 @@
     :bind
     (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode)))
 
+  (use-package agent-shell
+    :ensure t
+    :config
+    (setq
+     agent-shell-prefer-session-resume nil
+     agent-shell-preferred-agent-config 'claude-code
+     agent-shell-anthropic-authentication (agent-shell-anthropic-make-authentication :login t)
+     agent-shell-anthropic-claude-acp-command '("/home/jeff/.npm-global/bin/claude-agent-acp"))
+    (setq agent-shell-anthropic-claude-environment
+          (agent-shell-make-environment-variables
+           :inherit-env t
+           "CLAUDE_CODE_EXECUTABLE" "/home/jeff/.local/bin/claude"))
+    )
+
+  (use-package consult-eglot
+    :ensure t)
+
   (use-package eglot
     :after markdown-mode
     :ensure t
     :diminish
     :bind
     (:map eglot-mode-map
+          ("C-c s" . consult-eglot-symbols)
           ("C-c r" . eglot-rename)
           ("C-c f" . eglot-code-action-quickfix)
           ("C-c b" . eglot-format-buffer))
@@ -246,7 +256,7 @@
                                              "--background-index"
                                              "--clang-tidy"
                                              "--completion-style=detailed"
-                                             "--function-arg-placeholders"
+                                             "--function-arg-placeholders=0"
                                              "--header-insertion=never"
                                              "--log=error"
                                              "--pch-storage=memory")))
@@ -256,10 +266,10 @@
     )
 
   (use-package eglot-booster
-	:after eglot
+    :after eglot
     :diminish
     :vc (eglot-booster :url "https://github.com/jdtsmith/eglot-booster")
-	:config	(eglot-booster-mode))
+    :config	(eglot-booster-mode))
 
   (use-package eldoc-box
 	:after eglot
@@ -420,6 +430,11 @@
     :ensure t
     :config
     (nerd-icons-completion-mode))
+
+  (use-package nerd-icons-dired
+    :ensure t
+    :hook
+    (dired-mode . nerd-icons-dired-mode))
 
   (use-package dashboard
     :ensure t
@@ -628,6 +643,23 @@
     :diminish
     :ensure t)
 
+  (use-package dired-subtree
+    :ensure t
+    :after dired
+    :bind (:map dired-mode-map ("<tab>" . dired-subtree-toggle))
+    :custom
+    (dired-subtree-use-backgrounds nil)
+    (dired-subtree-line-prefix "    ")
+    :config
+    (with-eval-after-load 'nerd-icons-dired
+      (add-hook 'dired-subtree-after-insert-hook #'nerd-icons-dired--refresh)
+      (add-hook 'dired-subtree-after-remove-hook #'nerd-icons-dired--refresh)))
+
+  (use-package jinx
+    :ensure t
+    :bind (("M-$" . jinx-correct)
+           ("C-M-$" . jinx-languages)))
+
   (use-package vundo
     :ensure t
     :bind
@@ -643,13 +675,6 @@
     :bind
     (:map global-map ("M-0" . treemacs-select-window)))
 
-  (use-package treemacs-icons-dired
-    :ensure t
-    :after dired
-    :config
-    (treemacs-icons-dired-mode)
-    (treemacs-resize-icons 18))
-
   (use-package cmake-ts-mode
     :config
     (setq cmake-ts-mode-indent-offset 4)
@@ -662,13 +687,6 @@
   (use-package dockerfile-mode
     :ensure t
     :mode ("Dockerfile" . dockerfile-mode))
-
-  (use-package python-pytest
-    :after python
-    :ensure t
-    :bind (:map python-ts-mode-map ("C-c p" . python-pytest-dispatch))
-    :init
-    (setq python-pytest-executable "uv run pytest"))
 
   (use-package elpy
     :after python
@@ -698,10 +716,13 @@
     ("C-c d" . duplicate-thing))
 
   (use-package ghostel
-    :ensure t)
-
-  (use-package vterm
-    :load-path "~/.emacs.d/builds/emacs-libvterm")
+    :ensure t
+    :demand t
+    :after projectile
+    :bind (:map projectile-command-map ("x g" . ghostel-project))
+    :config
+    (require 'ghostel-compile)
+    (ghostel-compile-global-mode 1))
 
   (use-package cython-mode
     :load-path "~/.emacs.d/lisp")
@@ -768,53 +789,6 @@
       '(add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup))
     (add-hook 'yaml-mode-hook 'flycheck-mode))
 
-  (use-package flyover
-    :ensure t
-    :hook ((flycheck-mode . flyover-mode)
-           (flymake-mode . flyover-mode))
-    :custom
-    ;; Checker settings
-    (flyover-checkers '(flycheck flymake))
-    (flyover-levels '(error warning info))
-
-    ;; Appearance
-    (flyover-use-theme-colors t)
-    (flyover-background-lightness 45)
-
-    ;; Text tinting
-    (flyover-text-tint 'lighter)
-    (flyover-text-tint-percent 50)
-
-    ;; Icon tinting (foreground and background)
-    (flyover-icon-tint 'lighter)
-    (flyover-icon-tint-percent 50)
-    (flyover-icon-background-tint 'darker)
-    (flyover-icon-background-tint-percent 50)
-
-    ;; Border styles: none, pill, arrow, slant, slant-inv, flames, pixels
-    (flyover-border-style 'none)
-    (flyover-border-match-icon t)
-
-    ;; Display settings
-    (flyover-hide-checker-name t)
-    (flyover-show-virtual-line t)
-    (flyover-virtual-line-type 'line-no-arrow)
-    (flyover-line-position-offset 1)
-
-    ;; Message wrapping
-    (flyover-wrap-messages t)
-    (flyover-max-line-length 120)
-
-    ;; Performance
-    (flyover-debounce-interval 0.2)
-    (flyover-cursor-debounce-interval 0.3)
-
-    ;; Display mode (controls cursor-based visibility)
-    (flyover-display-mode 'show-only-on-same-line)
-
-    ;; Completion integration
-    (flyover-hide-during-completion t))
-
   (add-to-list 'auto-mode-alist '("\\.clang-tidy\\'" . yaml-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.clang-format\\'" . yaml-ts-mode))
 
@@ -842,27 +816,17 @@
     (:map projectile-mode-map
           ("C-c m" . projectile-command-map)))
 
-  (use-package fussy
-    :ensure t
-    :after eglot
-    :config
-    (fussy-setup)
-    (fussy-eglot-setup))
-
   (use-package fzf-native
-    :ensure t
-    :vc (fzf-native :url "https://github.com/dangduc/fzf-native")
+    :vc (:url "https://github.com/dangduc/fzf-native" :rev :newest)
     :config
-    (setq fussy-score-fn 'fussy-fzf-native-score)
     (fzf-native-load-dyn))
 
-  (advice-add 'corfu--capf-wrapper :before 'fussy-wipe-cache)
-
-  (add-hook 'corfu-mode-hook
-            (lambda ()
-              (setq-local fussy-max-candidate-limit 5000
-                          fussy-default-regex-fn 'fussy-pattern-first-letter
-                          fussy-prefer-prefix nil)))
+  (use-package fussy
+    :vc (:url "https://github.com/jojojames/fussy" :rev :newest)
+    :config
+    (setq fussy-compare-same-score-fn 'fussy-histlen->strlen<)
+    (fussy-setup-fzf)
+    (fussy-eglot-setup))
 
   (use-package corfu
     :ensure t
@@ -881,8 +845,23 @@
     (dotimes (i 10)
       (define-key corfu-mode-map
                   (kbd (format "M-%s" i))
-                  (kbd (format "C-%s <tab>" i))))
-    )
+                  (kbd (format "C-%s <tab>" i)))))
+
+  (advice-add 'corfu--capf-wrapper :before 'fussy-wipe-cache)
+
+  (add-hook 'corfu-mode-hook
+            (lambda ()
+              (setq-local fussy-max-candidate-limit 5000
+                          fussy-default-regex-fn 'fussy-pattern-first-letter
+                          fussy-prefer-prefix nil)))
+
+  (use-package cape
+    :ensure t
+    :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
+    :init
+    (add-hook 'completion-at-point-functions #'cape-dabbrev)
+    (add-hook 'completion-at-point-functions #'cape-file)
+    (add-hook 'completion-at-point-functions #'cape-elisp-block))
 
   (use-package vertico
     :ensure t
@@ -913,22 +892,14 @@
                       (mapcar #'substring-no-properties
                               (cl-remove-if-not #'stringp kill-ring))))))
 
-  (use-package orderless
-    :ensure t
-    :custom
-    ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
-    (orderless-component-separator #'orderless-escapable-split-on-space)
-    (completion-styles '(orderless basic))
-    (completion-category-defaults nil)
-    (completion-category-overrides '((file (styles partial-completion)))))
-
   (use-package wgrep
     :ensure t)
 
   (use-package embark
     :ensure t
     :bind
-    (("M-." . embark-act)
+    (("C-." . embark-act)         ;; pick some comfortable binding
+     ("C-;" . embark-dwim)        ;; good alternative: M-.
      ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
     :init
     (setq prefix-help-command #'embark-prefix-help-command)
@@ -939,18 +910,15 @@
                    (window-parameters (mode-line-format . none)))))
 
   (use-package embark-consult
-    :ensure t
-    :hook
-    (embark-collect-mode . consult-preview-at-point-mode))
+    :ensure t)
 
   (use-package consult
     :ensure t
-    ;; Replace bindings. Lazily loaded by `use-package'.
     :bind (;; C-c bindings in `mode-specific-map'
            ("C-c M-x" . consult-mode-command)
            ("C-c h" . consult-history)
            ("C-c k" . consult-kmacro)
-           ("C-c m" . consult-man)
+           ;;("C-c m" . consult-man)
            ("C-c i" . consult-info)
            ([remap Info-search] . consult-info)
            ;; C-x bindings in `ctl-x-map'
@@ -1031,8 +999,7 @@
      consult-bookmark consult-recent-file consult-xref
      consult-source-bookmark consult-source-file-register
      consult-source-recent-file consult-source-project-recent-file
-     ;; :preview-key "M-."
-     :preview-key '(:debounce 0.4 any))
+     :preview-key "M-.")
 
     ;; Optionally configure the narrowing key.
     ;; Both < and C-+ work reasonably well.
@@ -1040,7 +1007,7 @@
 
     ;; Optionally make narrowing help available in the minibuffer.
     ;; You may want to use `embark-prefix-help-command' or which-key instead.
-    ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
+    (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
     )
 
   (use-package helpful
@@ -1059,11 +1026,40 @@
     :config
     (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
-  (use-package rmsbolt
+  (use-package beardbolt
+    :ensure t
+    :defer t
+    :vc (:url "https://github.com/joaotavora/beardbolt" :rev :newest))
+
+  (use-package nasm-mode
+    :ensure t
+    :defer t)
+
+  (use-package disaster
     :ensure t
     :defer t
     :config
-    (setq rmsbolt-command "clang++"))
+    (setq disaster-objdump
+          (string-join
+           '("objdump"
+             "-d"
+             "-M intel"
+             "-Sl"
+             "-C"
+             "--no-show-raw-insn"
+             "--visualize-jumps")
+           " "))
+    (setq disaster-assembly-mode 'nasm-mode)
+
+    (defun my/disaster-find-project-root (orig &optional looks file)
+      "Prefer the nearest dir with compile_commands.json over `vc-root-dir'."
+      (let* ((f (or file (buffer-file-name)))
+             (dir (and f (locate-dominating-file f "compile_commands.json"))))
+        (if dir
+            (file-name-as-directory (expand-file-name dir))
+          (funcall orig looks file))))
+    (advice-add 'disaster-find-project-root :around
+                #'my/disaster-find-project-root))
 
   (use-package fancy-compilation
     :ensure t
@@ -1109,3 +1105,7 @@
           (lambda () (setq gc-cons-threshold (* 1024 1024 2))))
 
 ;;; init.el ends here
+
+;; Local Variables:
+;; jinx-languages: "en_GB"
+;; End:

@@ -1,7 +1,7 @@
 Emacs.menuBar: off
 Emacs.verticalScrollBars: off
 Emacs.toolBar: off
-Emacs.font: DejaVu Sans Mono-12
+Emacs.font: DejaVu Sans Mono-11
 
 rofi.modi: drun,window,ssh
 rofi.sidebar-mode: true
