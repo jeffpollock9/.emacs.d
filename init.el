@@ -817,12 +817,13 @@
           ("C-c m" . projectile-command-map)))
 
   (use-package fzf-native
+    :ensure t
     :vc (:url "https://github.com/dangduc/fzf-native" :rev :newest)
     :config
     (fzf-native-load-dyn))
 
   (use-package fussy
-    :vc (:url "https://github.com/jojojames/fussy" :rev :newest)
+    :ensure t
     :config
     (setq fussy-compare-same-score-fn 'fussy-histlen->strlen<)
     (fussy-setup-fzf)
